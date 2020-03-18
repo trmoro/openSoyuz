@@ -1,4 +1,6 @@
-openSoyuz Project
+# openSoyuz Project
+
+BETA VERSION
 
 SoyuzKernel
   - OpenGL / C++ core
