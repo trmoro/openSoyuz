@@ -8,8 +8,13 @@ namespace TestProject
     {
         static void Main(string[] args)
         {
+
             //Create Engine
             Engine e = new Engine();
+
+            //Create Texture
+            Texture t = new Texture();
+            t.SetWithPath("mandelbrot.jpg");
 
             //Create Scene
             Scene s = new Scene();
@@ -26,10 +31,12 @@ namespace TestProject
 
             //Set Material
             m.Material = new Material() {
-                Color = new Vector4(0.5f, 0.5f, 0.61f, 0.9f),
+                Color = new Vector4(1f, 0.8f, 1f, 0.95f),
                 Diffuse = new Vector3(0.5f, 0.5f, 0.61f),
                 Specular = new Vector3(0.5f, 0.5f, 0.5f),
-                Shininess = 64.0f
+                Shininess = 16.0f,
+                IsTextured = true,
+                Texture = t
             };
 
             //Create Mesh
@@ -65,12 +72,12 @@ namespace TestProject
             //Lights
             s.Lights.Add(new DirectionalLight()
             {
-                Color = new Vector3(0.04f, 0.1f, 0.25f),
+                Color = new Vector3(0.12f, 0.1f, 0.25f),
                 Direction = new Vector3(-1,-1,1)
             });
 
             s.Lights.Add(new SpotLight() {
-                Color = new Vector3(0.45f, 0.35f, 0.1f),
+                Color = new Vector3(0.45f, 0.35f, 0.5f),
                 Position = new Vector3(3),
                 Direction = new Vector3(-1),
                 In_Cutoff = 0.9978f,
@@ -79,7 +86,7 @@ namespace TestProject
 
             s.Lights.Add(new PointLight()
             {
-                Color = new Vector3(0.1f,1.0f,0.4f),
+                Color = new Vector3(0.3f,1.0f,0.4f),
                 Position = new Vector3(0,0.2f,0),
                 Linear = 0.35f,
                 Quadratic = 0.44f

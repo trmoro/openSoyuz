@@ -20,19 +20,17 @@ Class SKW.Core: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :SKW.SKWObject<SK::Core>
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
-    Int32 Prefab_Shader_White IsConst : Public
     Int32 Prefab_Shader_Color IsConst : Public
     Int32 Prefab_Shader_Normal IsConst : Public
     Int32 Prefab_Shader_Mix IsConst : Public
     Int32 Prefab_Shader_Conv IsConst : Public
-    Int32 Prefab_Shader_Diffuse IsConst : Public
-    Int32 Prefab_Shader_Phong IsConst : Public
     Int32 Prefab_Shader_Lighting IsConst : Public
   Methods:
     Init(): PrivateScope, Public, HideBySig
     CreateFrameBuffer(): PrivateScope, Public, HideBySig
     CreateShader(): PrivateScope, Public, HideBySig
     CreateModel(): PrivateScope, Public, HideBySig
+    CreateTexture(): PrivateScope, Public, HideBySig
     CreateMesh(Int32): PrivateScope, Public, HideBySig
     MeshPrepareMemory(Int32, Int32, UInt32, UInt32): PrivateScope, Public, HideBySig
     MeshAddVertex(Int32, Int32, Single, Single, Single, Single, Single, Single, Single, Single): PrivateScope, Public, HideBySig
@@ -55,6 +53,12 @@ Class SKW.Core: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     SetUniformMat3(Int32, String, Single, Single, Single, Single, Single, Single, Single, Single, Single): PrivateScope, Public, HideBySig
     SetUniformFrameBuffer(Int32, String, Int32, Int32, Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig
     SetUniformFrameBuffer(Int32, String, Int32, Int32): PrivateScope, Public, HideBySig
+    SetUniformTexture(Int32, String, Int32, Int32): PrivateScope, Public, HideBySig
+    SetTextureWithDataArray(Int32, Int32, Int32, Int32, Single[]): PrivateScope, Public, HideBySig
+    SetTextureWithSourcePath(Int32, String, UInt32): PrivateScope, Public, HideBySig
+    GetTextureWidth(Int32): PrivateScope, Public, HideBySig
+    GetTextureHeight(Int32): PrivateScope, Public, HideBySig
+    GetTextureNumberOfChannel(Int32): PrivateScope, Public, HideBySig
     RenderInit(Int32, Int32): PrivateScope, Public, HideBySig
     RenderModel(Int32, Int32): PrivateScope, Public, HideBySig
     RenderFrameBufferInit(Int32, Int32): PrivateScope, Public, HideBySig

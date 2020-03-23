@@ -27,23 +27,21 @@ const char* ShaderScript::Screen_Fragment = "#version 330 core												\n\
 			discard;																						\n\
 	}																										";
 
-//White Fragment Script
-const char* ShaderScript::White_Fragment = "#version 330 core												\n\
-	in vec3 m_normal;																						\n\
-	in vec2 m_texCoord;																						\n\
-	out vec4 color;																							\n\
-	void main() {																							\n\
-		color = vec4(1, 1, 1, 1);																			\n\
-	}																										";
-
 //Color Fragment Script
 const char* ShaderScript::Color_Fragment = "#version 330 core												\n\
 	in vec3 m_normal;																						\n\
 	in vec2 m_texCoord;																						\n\
 	uniform vec4 m_color;																					\n\
-	out vec4 color;																							\n\
+	out vec4 out_color;																						\n\
+																											\n\
+	uniform int m_isTextured;																				\n\
+	uniform sampler2D m_texture;																			\n\
+																											\n\
 	void main() {																							\n\
-		color = m_color;																					\n\
+		out_color = m_color;																				\n\
+																											\n\
+		if (m_isTextured == 1)																				\n\
+			out_color *= texture2D(m_texture, m_texCoord);													\n\
 	}																										";
 
 //Normal Fragment Script
@@ -54,22 +52,6 @@ const char* ShaderScript::Normal_Fragment = "#version 330 core												\n\
 	out vec4 color;																							\n\
 	void main() {																							\n\
 		color = vec4(m_normal,1) + vec4(0.5,0.5,0.5,1);														\n\
-	}																										";
-
-//Screen Vertex Script
-const char* ShaderScript::Bias_Vertex = "#version 330 core													\n\
-	layout(location = 0) in vec3 position;																	\n\
-	layout(location = 1) in vec3 normal;																	\n\
-	layout(location = 2) in vec2 texCoord;																	\n\
-	uniform mat4 ProjViewModel;																				\n\
-	uniform mat4 RotationMatrix;																			\n\
-	out vec3 m_normal;																						\n\
-	out vec2 m_texCoord;																					\n\
-	void main() {																							\n\
-		mat4 biasMat = mat4(vec4(0.5,0,0,0.5),vec4(0,0.5,0,0.5),vec4(0,0,0.5,0.5),vec4(0,0,0,1));			\n\
-		m_texCoord = texCoord;																				\n\
-		m_normal = vec3(RotationMatrix * vec4(normal, 1.0)).xyz;											\n\
-		gl_Position = biasMat * ProjViewModel * vec4(position, 1.0);										\n\
 	}																										";
 
 //Mix Fragment Script
@@ -155,67 +137,7 @@ const char* ShaderScript::Lighting_Vertex = "#version 330 core												\n\
 		gl_Position = ProjViewModel * vec4(position, 1.0);													\n\
 	}																										";
 
-//Diffuse Fragment Script
-const char* ShaderScript::Diffuse_Fragment = "#version 330 core												\n\
-	in vec3 m_pos;																							\n\
-	in vec3 m_normal;																						\n\
-	in vec2 m_texCoord;																						\n\
-	uniform vec3 m_lightPos;																				\n\
-	uniform vec4 m_color;																					\n\
-	out vec4 color;																							\n\
-	void main() {																							\n\
-		vec3 norm = normalize(m_normal);																	\n\
-		vec3 lightDir = normalize(m_lightPos - m_pos);														\n\
-		float diff = max(dot(norm, lightDir), 0.0);															\n\
-		color = m_color * vec4(diff,diff,diff,1);															\n\
-		if(color.r < 0.1)																					\n\
-			color.r = 0.1;																					\n\
-		if(color.g < 0.1)																					\n\
-			color.g = 0.1;																					\n\
-		if(color.b < 0.1)																					\n\
-			color.b = 0.1;																					\n\
-	}																										";
-
-//Phong Fragment Script
-const char* ShaderScript::Phong_Fragment = "#version 330 core												\n\
-	in vec3 m_pos;																							\n\
-	in vec3 m_normal;																						\n\
-	in vec2 m_texCoord;																						\n\
-																											\n\
-	uniform vec4 m_color;																					\n\
-	uniform vec3 m_diffuse;																					\n\
-	uniform vec3 m_specular;																				\n\
-	uniform float m_shininess;																				\n\
-																											\n\
-	uniform vec3 m_camPos;																					\n\
-	uniform vec3 m_lightPos;																				\n\
-	uniform vec3 m_lightColor;																				\n\
-																											\n\
-	out vec4 color;																							\n\
-																											\n\
-	void main() {																							\n\
-																											\n\
-		// Ambient																							\n\
-		vec3 ambient = m_lightColor * m_color.rgb;															\n\
-																											\n\
-		// Diffuse 																							\n\
-		vec3 norm = normalize(m_normal);																	\n\
-		vec3 lightDir = normalize(m_lightPos - m_pos);														\n\
-		float diff = max(dot(norm, lightDir), 0.0);															\n\
-		vec3 diffuse = m_lightColor * (diff * m_diffuse);													\n\
-																											\n\
-		// Specular																							\n\
-		vec3 viewDir = normalize(m_camPos - m_pos);															\n\
-		vec3 reflectDir = reflect(-lightDir, norm);  														\n\
-		float spec = pow(max(dot(viewDir, reflectDir), 0.0), m_shininess);									\n\
-		vec3 specular = m_lightColor * (spec * m_specular);													\n\
-																											\n\
-		vec3 result = ambient + diffuse + specular;															\n\
-		color = vec4(result, m_color.a);																	\n\
-																											\n\
-	}																										";
-
-//"Full" Lighting Fragment Script
+//Lighting Fragment Script
 const char* ShaderScript::Lighting_Fragment = "#version 330 core											\n\
 	in vec3 m_pos;																							\n\
 	in vec3 m_normal;																						\n\
@@ -225,6 +147,9 @@ const char* ShaderScript::Lighting_Fragment = "#version 330 core											\n\
 	uniform vec3 m_diffuse;																					\n\
 	uniform vec3 m_specular;																				\n\
 	uniform float m_shininess;																				\n\
+																											\n\
+	uniform int m_isTextured;																				\n\
+	uniform sampler2D m_texture;																			\n\
 																											\n\
 	uniform vec3 m_camPos;																					\n\
 																											\n\
@@ -318,5 +243,11 @@ const char* ShaderScript::Lighting_Fragment = "#version 330 core											\n\
 		for (int i = 0; i < m_nSpotLight; i++)																\n\
 			result += calcSpotLight(m_spotLights[i]);														\n\
 																											\n\
-		out_color = vec4(result, m_color.a);																\n\																											\n\
+		out_color = vec4(result, m_color.a);																\n\
+																											\n\
+		if (m_isTextured == 1)																				\n\
+			out_color *= texture2D(m_texture, m_texCoord);													\n\
+																											\n\
+		if (out_color.a <= 0)																				\n\
+			discard;																						\n\
 	}																										";

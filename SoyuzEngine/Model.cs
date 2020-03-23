@@ -218,14 +218,14 @@ namespace Soyuz
             Normals.Add(new Vector3(-0.5f, 0.5f, 0.5f));
 
             UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(0, 0));
+            UVs.Add(new Vector2(1, 0));
+            UVs.Add(new Vector2(1, 1));
+            UVs.Add(new Vector2(0, 1));
 
             UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(0, 0));
+            UVs.Add(new Vector2(1, 0));
+            UVs.Add(new Vector2(1, 1));
+            UVs.Add(new Vector2(0, 1));
 
             //Down 2 triangles
             Indices.Add(0);

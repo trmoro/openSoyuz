@@ -16,6 +16,7 @@ namespace SK
 		m_framebuffers = std::vector<FrameBuffer*>();
 		m_shaders = std::vector<Shader*>();
 		m_models = std::vector<Model*>();
+		m_textures = std::vector<Texture*>();
 
 		m_projViewMatrix = glm::mat4(0);
 
@@ -241,6 +242,15 @@ namespace SK
 		return i;
 	}
 
+	//Create Texture
+	int Core::createTexture()
+	{
+		Texture* t = new Texture(m_log);
+		int i = (int)m_textures.size();
+		m_textures.push_back(t);
+		return i;
+	}
+
 	//Create Mesh
 	int Core::createMesh(int modelID) const
 	{
@@ -340,10 +350,6 @@ namespace SK
 	{
 		switch (prefabID)
 		{
-		case PREFAB_SHADER_WHITE:
-			m_log->add("Prefab : White Shader", LOG_OK);
-			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::White_Fragment);
-			break;
 		case PREFAB_SHADER_COLOR:
 			m_log->add("Prefab : Color Shader", LOG_OK);
 			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Color_Fragment);
@@ -359,14 +365,6 @@ namespace SK
 		case PREFAB_SHADER_CONV:
 			m_log->add("Prefab : Convolution Shader", LOG_OK);
 			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Conv_Fragment);
-			break;
-		case PREFAB_SHADER_DIFFUSE:
-			m_log->add("Prefab : Diffuse Shader", LOG_OK);
-			m_shaders[shaderID]->set(ShaderScript::Lighting_Vertex, ShaderScript::Diffuse_Fragment);
-			break;
-		case PREFAB_SHADER_PHONG:
-			m_log->add("Prefab : Phong Shader", LOG_OK);
-			m_shaders[shaderID]->set(ShaderScript::Lighting_Vertex, ShaderScript::Phong_Fragment);
 			break;
 		case PREFAB_SHADER_LIGHTING:
 			m_log->add("Prefab : Lighting Shader", LOG_OK);
@@ -427,6 +425,50 @@ namespace SK
 	{
 		glm::mat3 mat = glm::mat3(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 		m_shaders[shaderID]->setUniformMatrix3((GLchar*)name, mat);
+	}
+
+	//Set Uniform Texture
+	void Core::setUniformTexture(int shaderID, const char* name, int textureID, int textureIndex)
+	{
+		//Active Texture
+		glActiveTexture(GL_TEXTURE0 + textureIndex);
+		glEnable(GL_TEXTURE_2D);
+
+		//Bind
+		glBindTexture(GL_TEXTURE_2D, m_textures[textureID]->getID());
+
+		//Set Uniform
+		m_shaders[shaderID]->setUniformi((GLchar*)name, textureIndex);
+	}
+
+	//Set Texture with Data Array
+	void Core::setTextureWithDataArray(int textureID, unsigned int width, unsigned int height, unsigned int nChannel, float* data)
+	{
+		m_textures[textureID]->genFromDataArray(width, height, nChannel, data);
+	}
+
+	//Set Texture with Source Path
+	void Core::setTextureWithSourcePath(int textureID, const char* path, unsigned int nChannel)
+	{
+		m_textures[textureID]->genFromPath(path,nChannel);
+	}
+
+	//Get Texture Width
+	unsigned int Core::getTextureWidth(int textureID)
+	{
+		return m_textures[textureID]->getWidth();
+	}
+
+	//Get Texture Height
+	unsigned int Core::getTextureHeight(int textureID)
+	{
+		return m_textures[textureID]->getHeight();
+	}
+
+	//Get Texture Number Of Channel
+	unsigned int Core::getTextureNumberOfChannel(int textureID)
+	{
+		return m_textures[textureID]->getNumberOfChannel();
 	}
 
 	//Render FrameBuffer Init

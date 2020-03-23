@@ -69,6 +69,15 @@ namespace Soyuz
                 Engine.Core.SetUniformVec3(ShaderID, "m_specular", mat.Specular.X, mat.Specular.Y, mat.Specular.Z);
                 Engine.Core.SetUniformF(ShaderID, "m_shininess", mat.Shininess);
 
+                //Set Material Texture Uniform
+                if (mat.IsTextured)
+                {
+                    Engine.Core.SetUniformI(ShaderID, "m_isTextured", 1);
+                    Engine.Core.SetUniformTexture(ShaderID, "m_texture", mat.Texture.ID, 0);
+                }
+                else
+                    Engine.Core.SetUniformI(ShaderID, "m_isTextured", 0);
+
                 //Light List
                 List<Light> ls;
 

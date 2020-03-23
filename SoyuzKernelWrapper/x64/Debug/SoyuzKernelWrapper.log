@@ -1,4 +1,5 @@
-﻿  AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+﻿  Core.cpp
+  AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
 SoyuzKernel.lib(Shader.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
 LINK : warning LNK4286: symbol '__glewAttachShader' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(Shader.obj)'
 LINK : warning LNK4286: symbol '__glewCompileShader' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(Shader.obj)'

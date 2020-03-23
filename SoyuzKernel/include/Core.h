@@ -11,8 +11,9 @@
 #include "GLFW/glfw3.h"
 
 //GLM
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm/glm.hpp"
+#include "glm/mat4x4.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 //Log
 #include "Log.h"
@@ -32,19 +33,19 @@
 //Model
 #include "Model.h"
 
+//Texture
+#include "Texture.h"
+
 //MSAA
 #define MSAA 4
 
 //Shader Scripts
 #include "ShaderScript.h"
-#define PREFAB_SHADER_WHITE		0
-#define PREFAB_SHADER_COLOR		1
-#define PREFAB_SHADER_NORMAL	2
-#define PREFAB_SHADER_MIX		3
-#define PREFAB_SHADER_CONV		4
-#define PREFAB_SHADER_DIFFUSE	5
-#define PREFAB_SHADER_PHONG		6
-#define PREFAB_SHADER_LIGHTING	7
+#define PREFAB_SHADER_COLOR		0
+#define PREFAB_SHADER_NORMAL	1
+#define PREFAB_SHADER_MIX		2
+#define PREFAB_SHADER_CONV		3
+#define PREFAB_SHADER_LIGHTING	4
 
 namespace SK
 {
@@ -71,6 +72,9 @@ namespace SK
 
 		//Create Model
 		int createModel();
+
+		//Create Texture
+		int createTexture();
 
 		//Create Mesh
 		int createMesh(int modelID) const;
@@ -134,6 +138,24 @@ namespace SK
 
 		//Set Uniform Mat3x3
 		void setUniformMat3(int shaderID, const char* name, float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33);
+
+		//Set Uniform Texture
+		void setUniformTexture(int shaderID, const char* name, int textureID, int textureIndex);
+
+		//Set Texture with data array
+		void setTextureWithDataArray(int textureID, unsigned int width, unsigned int height, unsigned int nChannel, float* data);
+
+		//Set Texture with source path
+		void setTextureWithSourcePath(int textureID, const char* path, unsigned int nChannel);
+
+		//Get Texture Width
+		unsigned int getTextureWidth(int textureID);
+
+		//Get Texture Height
+		unsigned int getTextureHeight(int textureID);
+
+		//Get Texture Number Of Channel
+		unsigned int getTextureNumberOfChannel(int textureID);
 
 		//Render FrameBuffer Init
 		void renderFrameBufferInit(int frameBufferID, int shaderID);
@@ -206,10 +228,11 @@ namespace SK
 		//GLFW Window
 		GLFWwindow* m_window;
 
-		//Framebuffers and Shader
+		//Framebuffer, Shader, Model, Texture
 		std::vector<FrameBuffer*> m_framebuffers;
 		std::vector<Shader*> m_shaders;
 		std::vector<Model*> m_models;
+		std::vector<Texture*> m_textures;
 
 		//Projection/View Matrix
 		glm::mat4 m_projViewMatrix;

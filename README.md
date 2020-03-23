@@ -1,15 +1,18 @@
 # openSoyuz Project
 
-BETA VERSION
+Project Structure :
+	- SoyuzKernel : C++ / OpenGL Core
+	- SoyuzKernelWrapper : C++ / CLI wrapper
+	- SoyuzEngine : C# Engine
+	- TestProject : Project that use the C# engine.
 
-SoyuzKernel
-  - OpenGL / C++ core
+Beta 1.0.1
+	- Texture
+	- Mix render step improved
+	- Deprecated shaders removed
 
-SoyuzKernelWrapper
-  - C++ / CLI bridge between Kernel and Engine
+Beta 1.0.0
+	- First Commit
 
-SoyuzEngine
- - C# Engine using Kernel Wrapper
- 
- TestProject
-  - Test Project that use SoyuzEngine
+Dependencies
+	- GLEW, GLFW, GLM, STB_IMAGE

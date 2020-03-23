@@ -47,6 +47,12 @@ namespace SKW
 		return m_Instance->createModel();
 	}
 
+	//Create Texture
+	int Core::CreateTexture()
+	{
+		return m_Instance->createTexture();
+	}
+
 	//Create Mesh
 	int Core::CreateMesh(int ModelID)
 	{
@@ -177,6 +183,43 @@ namespace SKW
 	void Core::SetUniformFrameBuffer(int ShaderID, String^ Name, int FrameBufferID, int TextureID, bool UseDepth)
 	{
 		m_Instance->setUniformFrameBuffer(ShaderID, stringToCharArray(Name), FrameBufferID, UseDepth, TextureID);
+	}
+
+	//Set Uniform Texture
+	void Core::SetUniformTexture(int ShaderID, String^ Name, int TextureID, int TextureIndex)
+	{
+		m_Instance->setUniformTexture(ShaderID, stringToCharArray(Name), TextureID, TextureIndex);
+	}
+
+	//Set Texture with Data Array
+	void Core::SetTextureWithDataArray(int TextureID, int Width, int Height, int NumberOfChannel, array<float>^ Data)
+	{
+		pin_ptr<float> arrayPin = &Data[0];
+		m_Instance->setTextureWithDataArray(TextureID, Width, Height, NumberOfChannel, arrayPin);
+	}
+
+	//Set Texture With Source Path
+	void Core::SetTextureWithSourcePath(int TextureID, String^ Path, unsigned int NumberOfChannel)
+	{
+		m_Instance->setTextureWithSourcePath(TextureID, stringToCharArray(Path), NumberOfChannel);
+	}
+
+	//Get Texture Width
+	int Core::GetTextureWidth(int TextureID)
+	{
+		return m_Instance->getTextureWidth(TextureID);
+	}
+
+	//Get Texture Height
+	int Core::GetTextureHeight(int TextureID)
+	{
+		return m_Instance->getTextureHeight(TextureID);
+	}
+
+	//Get Texture Number Of Channel
+	int Core::GetTextureNumberOfChannel(int TextureID)
+	{
+		return m_Instance->getTextureNumberOfChannel(TextureID);
 	}
 
 	//Render

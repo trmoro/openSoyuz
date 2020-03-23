@@ -1,3 +1,15 @@
-﻿  ShaderScript.cpp
-D:\Visual Studio 19\Soyuz\SoyuzKernel\src\ShaderScript.cpp(321,1): warning C4129: '	': unrecognized character escape sequence
+﻿  Core.cpp
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(172,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(172,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(211,54): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(211,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(489,73): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(489,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(530,62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(530,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(645,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Core.cpp(646,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Texture.cpp
+D:\Visual Studio 19\Soyuz\SoyuzKernel\src\Texture.cpp(57,21): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   SoyuzKernel.vcxproj -> D:\Visual Studio 19\Soyuz\x64\Debug\SoyuzKernel.lib

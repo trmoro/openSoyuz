@@ -19,6 +19,12 @@ namespace Soyuz
         //Shininess
         public float Shininess { get; set; }
 
+        //Is Textured
+        public bool IsTextured { get; set; }
+
+        //Texture ID
+        public Texture Texture { get; set; }
+
         /// <summary>
         /// Material Constructor
         /// </summary>
@@ -29,6 +35,8 @@ namespace Soyuz
             Diffuse = new Vector3(0.5f, 0.5f, 0.5f);
             Specular = new Vector3(0.1f, 0.1f, 0.1f);
             Shininess = 64.0f;
+            IsTextured = false;
+            Texture = null;
         }
     }
 }

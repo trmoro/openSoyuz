@@ -29,6 +29,9 @@ namespace SKW
 		//Create Model
 		int CreateModel();
 
+		//Create Texture
+		int CreateTexture();
+
 		//Create Mesh
 		int CreateMesh(int ModelID);
 
@@ -93,6 +96,24 @@ namespace SKW
 		//Set Uniform FrameBuffer with Depth ?
 		void SetUniformFrameBuffer(int ShaderID, String^ Name, int FrameBufferID, int TextureID, bool UseDepth);
 
+		//Set Uniform Texture
+		void SetUniformTexture(int ShaderID, String^ Name, int TextureID, int TextureIndex);
+
+		//Set Texture with Data Array
+		void SetTextureWithDataArray(int TextureID, int Width, int Height, int NumberOfChannel, array<float>^ Data);
+
+		//Set Texture with Source Path
+		void SetTextureWithSourcePath(int TextureID, String^ Path, unsigned int NumberOfChannel);
+
+		//Get Texture Width
+		int GetTextureWidth(int TextureID);
+
+		//Get Texture Height
+		int GetTextureHeight(int TextureID);
+
+		//Get Texture Number Of Channel
+		int GetTextureNumberOfChannel(int TextureID);
+
 		//Render Init
 		void RenderInit(int FrameBufferID, int ShaderID);
 
@@ -134,13 +155,10 @@ namespace SKW
 		bool Update();
 
 		//Static Variable
-		const int Prefab_Shader_White		= PREFAB_SHADER_WHITE;
 		const int Prefab_Shader_Color		= PREFAB_SHADER_COLOR;
 		const int Prefab_Shader_Normal		= PREFAB_SHADER_NORMAL;
 		const int Prefab_Shader_Mix			= PREFAB_SHADER_MIX;
 		const int Prefab_Shader_Conv		= PREFAB_SHADER_CONV;
-		const int Prefab_Shader_Diffuse		= PREFAB_SHADER_DIFFUSE;
-		const int Prefab_Shader_Phong		= PREFAB_SHADER_PHONG;
 		const int Prefab_Shader_Lighting	= PREFAB_SHADER_LIGHTING;
 
 	};
