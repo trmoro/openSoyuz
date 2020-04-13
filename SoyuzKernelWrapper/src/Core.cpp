@@ -222,6 +222,29 @@ namespace SKW
 		return m_Instance->getTextureNumberOfChannel(TextureID);
 	}
 
+
+	//Get Texture Data
+	array<float>^ Core::GetTextureData(int TextureID)
+	{
+		float* dataArray = m_Instance->getTextureData(TextureID);
+		
+		unsigned int w = m_Instance->getTextureWidth(TextureID);
+		unsigned int h = m_Instance->getTextureHeight(TextureID);
+		unsigned int c = m_Instance->getTextureNumberOfChannel(TextureID);
+		unsigned int size = w * h * c;
+		array<float>^ copy = gcnew array<float>(size);
+
+		Marshal::Copy(IntPtr(dataArray), copy, 0, size);
+
+		return copy;
+	}
+
+	//Save Texture to PNG
+	bool Core::SaveTexturePNG(int TextureID, String^ FilePath)
+	{
+		return m_Instance->saveTexturePNG(TextureID, stringToCharArray(FilePath) );
+	}
+
 	//Render
 	void Core::RenderInit(int FrameBufferID, int ShaderID)
 	{

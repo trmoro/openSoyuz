@@ -82,19 +82,7 @@ namespace Soyuz
             }
             //Remove Ray if it was in Scene
             else if(Scene.Models.Contains(Ray))
-                Scene.Models.Remove(Ray);
-
-            //
-            if (Engine.Core.IsMouseClicked(0))
-            {
-                debugRS.Models.Clear();
-                Dictionary<Model,float> dictonary = AABB();
-                if (dictonary.Count > 0)
-                {
-                    debugRS.Models.Add(dictonary.ElementAt(0).Key);
-                    Console.WriteLine(dictonary.ElementAt(0).Key.Name);
-                }
-            }
+                Scene.Models.Remove(Ray);    
         }
 
         //Get Interval Commons Part

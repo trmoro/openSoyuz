@@ -114,6 +114,12 @@ namespace SKW
 		//Get Texture Number Of Channel
 		int GetTextureNumberOfChannel(int TextureID);
 
+		//Get Texture Data
+		array<float>^ GetTextureData(int TextureID);
+
+		//Save Texture to PNG
+		bool SaveTexturePNG(int TextureID, String^ FilePath);
+
 		//Render Init
 		void RenderInit(int FrameBufferID, int ShaderID);
 

@@ -41,7 +41,7 @@ namespace Soyuz
         public List<Camera> Duplicates;
 
         /// <summary>
-        /// Camera Constructor
+        /// Camera Constructor with default
         /// </summary>
         public Camera() : base()
         {
@@ -51,6 +51,80 @@ namespace Soyuz
 
             //Set Prefab Shader
             Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Lighting);
+
+            Radius = 80.0f;
+            Near = 0.005f;
+            Far = 100.0f;
+
+            //Duplicates
+            Duplicates = new List<Camera>();
+        }
+
+        /// <summary>
+        /// Camera Constructor with Prefab
+        /// </summary>
+        /// <param name="PrefabID"></param>
+        public Camera(int PrefabID)
+        {
+            Position = new Vector3(0);
+            Target = new Vector3(0, 0, 1);
+            Type = CameraType.Perspective;
+
+            //Set Prefab Shader
+            Engine.Core.SetPrefabShader(ShaderID, PrefabID);
+
+            Radius = 80.0f;
+            Near = 0.005f;
+            Far = 100.0f;
+
+            //Duplicates
+            Duplicates = new List<Camera>();
+        }
+
+        /// <summary>
+        /// Camera Constructor with Vertex and Fragment Shader Path
+        /// </summary>
+        /// <param name="VertexPath"></param>
+        /// <param name="FragmentPath"></param>
+        public Camera(string VertexPath, string FragmentPath)
+        {
+            Position = new Vector3(0);
+            Target = new Vector3(0, 0, 1);
+            Type = CameraType.Perspective;
+
+            //Set if files exist
+            if (File.Exists(VertexPath) && File.Exists(FragmentPath))
+                Engine.Core.SetShader(ShaderID, File.ReadAllText(VertexPath), File.ReadAllText(FragmentPath));
+            //Use default
+            else
+                Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Lighting);
+
+            Radius = 80.0f;
+            Near = 0.005f;
+            Far = 100.0f;
+
+            //Duplicates
+            Duplicates = new List<Camera>();
+        }
+
+        /// <summary>
+        /// Camera Constructor with Full Shader
+        /// </summary>
+        /// <param name="VertexPath"></param>
+        /// <param name="GeometryPath"></param>
+        /// <param name="FragmentPath"></param>
+        public Camera(string VertexPath, string GeometryPath, string FragmentPath)
+        {
+            Position = new Vector3(0);
+            Target = new Vector3(0, 0, 1);
+            Type = CameraType.Perspective;
+
+            //Set if files exist
+            if (File.Exists(VertexPath) && File.Exists(GeometryPath) && File.Exists(FragmentPath))
+                Engine.Core.SetShader(ShaderID, File.ReadAllText(VertexPath), File.ReadAllText(GeometryPath), File.ReadAllText(FragmentPath));
+            //Use default
+            else
+                Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Lighting);
 
             Radius = 80.0f;
             Near = 0.005f;
@@ -98,14 +172,6 @@ namespace Soyuz
                 d.Render();
 
             }
-        }
-
-        //Create a Duplicate
-        public Camera CreateDuplicate()
-        {
-            Camera d = new Camera();
-            Duplicates.Add(d);
-            return d;
         }
 
         /// <summary>

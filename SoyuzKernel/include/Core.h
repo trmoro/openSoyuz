@@ -157,6 +157,12 @@ namespace SK
 		//Get Texture Number Of Channel
 		unsigned int getTextureNumberOfChannel(int textureID);
 
+		//Get Texture Data
+		float* getTextureData(int textureID);
+
+		//Save Texture to PNG
+		bool saveTexturePNG(int textureID, std::string filePath);
+
 		//Render FrameBuffer Init
 		void renderFrameBufferInit(int frameBufferID, int shaderID);
 

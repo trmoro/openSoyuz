@@ -86,6 +86,8 @@ const char* ShaderScript::Mix_Fragment = "#version 330 core													\n\
 			if(b.a > 0)																						\n\
 				color.a = a.a;																				\n\
 		}																									\n\
+		else if(m_op == 6)																					\n\
+			color = (b * b.a) + (a * (1 - b.a));															\n\																									\n\
 		if (color.a <= 0)																					\n\
 			discard;																						\n\
 	}																										";

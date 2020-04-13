@@ -13,6 +13,9 @@ namespace SK
 		//Constructor
 		Texture(Log* log);
 
+		//Destructor
+		~Texture();
+
 		//Generate from data array
 		void genFromDataArray(unsigned int width, unsigned int height, unsigned int nChannel, float* data);
 
@@ -31,6 +34,12 @@ namespace SK
 		//Get Number Of Channel
 		unsigned int getNumberOfChannel() const;
 
+		//Get Data
+		float* getData() const;
+
+		//Save PNG
+		bool savePNG(std::string filePath) const;
+
 	private:
 
 		//ID
@@ -42,6 +51,9 @@ namespace SK
 
 		//Number of Color Channels
 		unsigned int m_nChannel;
+
+		//Data
+		float* m_data;
 
 		//Log
 		Log* m_log;

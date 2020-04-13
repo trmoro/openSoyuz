@@ -289,19 +289,6 @@ namespace Soyuz
             return new Vector3( (float) (Math.Cos(u) * Math.Cos(v)), (float) Math.Sin(v), (float) (Math.Sin(u) * Math.Cos(v)) );
         }
 
-        //Generate Sphere UV
-        Vector2 GenerateSphereUV(float m, float p, uint quadPod)
-        {
-            switch (quadPod)
-            {
-                case 0: return new Vector2();
-                case 1: return new Vector2();
-                case 2: return new Vector2();
-                case 3: return new Vector2();
-                default: return new Vector2();
-            }
-        }
-
         //Sphere
         public void Sphere(int nMeridian, int nParallel)
         {
@@ -326,7 +313,80 @@ namespace Soyuz
 
                     Positions.Add(GenerateSphereVertex(radius, ((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)) );
                     Normals.Add(GenerateSphereNormal(((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)) );
-                    UVs.Add(GenerateSphereUV(m, p, 0) );
+                    UVs.Add(new Vector2( (float)m / (float) nMeridian, (float)p / (float)nParallel ) );
+
+                    //Self
+                    tris[vertexDone * 6] = vertexDone;
+
+                    //Right
+                    if (p < nParallel - 1)
+                        tris[1 + (vertexDone * 6)] = (int)1 + vertexDone;
+                    else
+                        tris[1 + (vertexDone * 6)] = (int)m * nParallel;
+
+                    //Up / Down
+                    if (m < nMeridian - 1)
+                        tris[2 + (vertexDone * 6)] = (int)nParallel + vertexDone;
+                    else
+                        tris[2 + (vertexDone * 6)] = (int)p;
+
+                    //Up / Down
+                    if (m < nMeridian - 1)
+                        tris[3 + (vertexDone * 6)] = (int)nParallel + vertexDone;
+                    else
+                        tris[3 + (vertexDone * 6)] = (int)p;
+
+                    //Right
+                    if (p < nParallel - 1)
+                        tris[4 + (vertexDone * 6)] = (int)1 + vertexDone;
+                    else
+                        tris[4 + (vertexDone * 6)] = (int)m * nParallel;
+
+                    //Up Right
+                    if (m < nMeridian - 1 && p < nParallel - 1)
+                        tris[5 + (vertexDone * 6)] = (int)nParallel + vertexDone + 1;
+                    else if (m < nMeridian - 1)
+                        tris[5 + (vertexDone * 6)] = (int)(nParallel * (m + 1));
+                    else if (p < nParallel - 1)
+                        tris[5 + (vertexDone * 6)] = (int)p + 1;
+                    else
+                        tris[5 + (vertexDone * 6)] = (int)0;
+
+
+                    //Vertex is done
+                    vertexDone += 1;
+                }
+            }
+
+            //Position
+            Indices.AddRange(tris);
+        }
+
+        //Sphere
+        public void SphereData(int nMeridian, int nParallel,float[,] data)
+        {
+            //Number of vertices and triangles
+            int nVertex = nMeridian * nParallel * 4;
+            int nFace = nMeridian * nParallel * 2;
+
+            //Data
+            int[] tris = new int[nFace * 3];
+
+            //Vertices dones
+            int vertexDone = 0;
+
+            //Foreach Meridian
+            for (uint m = 0; m < nMeridian; m++)
+            {
+                //Foreach Parallel
+                for (uint p = 0; p < nParallel; p++)
+                {
+                    float radius = 1 + (data[m,p] * 0.05f );
+
+                    Positions.Add(GenerateSphereVertex(radius, ((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)));
+                    Normals.Add(GenerateSphereNormal(((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)));
+                    UVs.Add(new Vector2( (float)p / (float)nParallel, (float)m / (float)nMeridian) );
+
 
                     //Self
                     tris[vertexDone * 6] = vertexDone;

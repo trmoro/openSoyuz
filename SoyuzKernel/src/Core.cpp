@@ -471,6 +471,18 @@ namespace SK
 		return m_textures[textureID]->getNumberOfChannel();
 	}
 
+	//Get Texture Data
+	float* Core::getTextureData(int textureID)
+	{
+		return m_textures[textureID]->getData();
+	}
+
+	//Save Texture to PNG
+	bool Core::saveTexturePNG(int textureID, std::string filePath)
+	{
+		return m_textures[textureID]->savePNG(filePath);
+	}
+
 	//Render FrameBuffer Init
 	void Core::renderFrameBufferInit(int frameBufferID, int shaderID)
 	{

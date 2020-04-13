@@ -14,7 +14,45 @@ namespace TestProject
 
             //Create Texture
             Texture t = new Texture();
-            t.SetWithPath("mandelbrot.jpg");
+            t.SetWithPath("pm.png",1);
+            float[,] tData = new float[t.Width, t.Height];
+            float[] tmpD = t.GetDataArray();
+            for (int i = 0; i < t.Width; i++)
+            {
+                for (int j = 0; j < t.Height; j++)
+                    tData[i, j] = tmpD[j + (i * t.Height)];
+            }
+
+            //5x5 conv
+            float[,] convData = (float[,]) tData.Clone();
+            for(int i = 1; i < t.Width - 1; i++)
+            {
+                for(int j = 1; j < t.Height - 1; j++)
+                {
+                    convData[i, j] = 0;
+                    for(int u = -1; u < 2; u++)
+                    {
+                        for (int v = -1; v < 2; v++)
+                            convData[i, j] += convData[i + u, j + v];
+                    }
+                    convData[i,j] /= 12.0f;
+                }
+            }
+            
+            float[] convDataFlat = new float[t.Width * t.Height];
+            for(int i = 0; i < t.Width; i++)
+            {
+                for (int j = 0; j < t.Height; j++)
+                    convDataFlat[j + (i * t.Height)] = convData[i, j];
+            }
+
+
+            Texture t2 = new Texture();
+            t2.Width = t.Width;
+            t2.Height = t.Height;
+            t2.NumberOfChannel = 1;
+            t2.SetWithDataArray(convDataFlat);
+            t2.SavePNG("convpm.png");
 
             //Create Scene
             Scene s = new Scene();
@@ -24,34 +62,32 @@ namespace TestProject
             s.AddActor(a);
 
             //Create Model
-            Model m = new Model();
-            m.Name = "Cubo";
-            m.Position = new Vector3(0);
-            m.Scale = new Vector3(1);
+            Model planet = new Model();
+            planet.Name = "Planet";
+            planet.Position = new Vector3(0);
+            planet.Scale = new Vector3(1);
 
             //Set Material
-            m.Material = new Material() {
-                Color = new Vector4(1f, 0.8f, 1f, 0.95f),
+            planet.Material = new Material() {
+                Color = new Vector4(1f, 1, 1f, 1f),
                 Diffuse = new Vector3(0.5f, 0.5f, 0.61f),
                 Specular = new Vector3(0.5f, 0.5f, 0.5f),
-                Shininess = 16.0f,
-                IsTextured = true,
-                Texture = t
+                Shininess = 16.0f
             };
 
             //Create Mesh
             Mesh msh = new Mesh();
-            //msh.Sphere(128,128);
-            msh.Cube();
+            msh.SphereData(t.Width,t.Height, convData);
+            //msh.Cube();
 
             //Add To Model
-            m.Meshes.Add(msh);
+            planet.Meshes.Add(msh);
 
             //Compile Model
-            m.Compile();
+            planet.Compile();
 
             //Add Model
-            s.Models.Add(m);
+            s.Models.Add(planet);
 
             //Plane
             Model plane = new Model();
@@ -67,12 +103,12 @@ namespace TestProject
             s.Models.Add(plane);
 
             //Link model to actor
-            a.mod = m;
+            a.mod = planet;
             
             //Lights
             s.Lights.Add(new DirectionalLight()
             {
-                Color = new Vector3(0.12f, 0.1f, 0.25f),
+                Color = new Vector3(0.76f, 0.7f, 0.75f),
                 Direction = new Vector3(-1,-1,1)
             });
 
@@ -98,15 +134,22 @@ namespace TestProject
             c.Target = new Vector3(0);
             s.Cameras.Add(c);
             a.cam = c;
+            c.NoRenderModels.Add(planet);
 
             //Create a Duplicate
-            Camera d = c.CreateDuplicate();
+            Camera d = new Camera();
+            c.Duplicates.Add(d);
             d.IfEmptyRenderAll = false;
 
+            //Create another Duplicate
+            Camera pc = new Camera("Shaders/Planet.vs", "Shaders/Planet.fs");
+            c.Duplicates.Add(pc);
+            pc.IfEmptyRenderAll = false;
+            pc.Models.Add(planet);
+
             //Raycaster
-            Raycaster rc = new Raycaster(c, s);
-            s.AddActor(rc);
-            rc.debugRS = d;
+            RaycastOutline raycastOutline = new RaycastOutline() { Raycaster = new Raycaster(c, s), RenderStep = d } ;
+            s.AddActor(raycastOutline);
             
             //Add Scene to Engine
             e.Scene = s;
@@ -126,8 +169,12 @@ namespace TestProject
             MixRender mr2 = new MixRender(blur_edge, c, MixRender.MixOperation.Add);
             r.RenderSteps.Add(mr2);
 
+            //Replace
+            MixRender mr3 = new MixRender(mr2, pc, MixRender.MixOperation.B_on_A);
+            r.RenderSteps.Add(mr3);
+
             //Set Frame to show
-            r.Show(mr2);
+            r.Show(mr3);
 
             //Set Renderer
             e.Renderer = r;

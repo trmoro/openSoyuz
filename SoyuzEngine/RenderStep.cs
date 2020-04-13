@@ -18,8 +18,14 @@ namespace Soyuz
         //List of Model to Render
         public List<Model> Models { get; set; }
 
+        //List of Model to NOT Render
+        public List<Model> NoRenderModels { get; set; }
+
         //Bool to set the behaviour of the render step when the Model list is empty
         public bool IfEmptyRenderAll { get; set; }
+
+        //Float Uniform
+        //public Dictionary<string,float> UniformFloat { get; set; }
             
         /// <summary>
         /// Render Step Constructor
@@ -32,9 +38,13 @@ namespace Soyuz
             //Create Shader
             ShaderID = Engine.Core.CreateShader();
 
-            //List of Model to Render
+            //List of Model to Render and not
             Models = new List<Model>();
+            NoRenderModels = new List<Model>();
             IfEmptyRenderAll = true;
+
+            //Set Uniform
+            // UniformFloat
         }
 
         /// <summary>
@@ -45,7 +55,7 @@ namespace Soyuz
             //Render
             Engine.Core.RenderInit(FrameBufferID, ShaderID);
 
-            //If Emptry
+            //If Empty
             if (IfEmptyRenderAll)
                 RenderModels(Engine.Instance.Scene.Models);
             //If not empty
@@ -60,65 +70,71 @@ namespace Soyuz
             //Foreach Model
             foreach (Model m in models)
             {
-                //Material
-                Material mat = m.Material;
-
-                //Set Material Uniform
-                Engine.Core.SetUniformVec4(ShaderID, "m_color", mat.Color.X, mat.Color.Y, mat.Color.Z, mat.Color.W);
-                Engine.Core.SetUniformVec3(ShaderID, "m_diffuse", mat.Diffuse.X, mat.Diffuse.Y, mat.Diffuse.Z);
-                Engine.Core.SetUniformVec3(ShaderID, "m_specular", mat.Specular.X, mat.Specular.Y, mat.Specular.Z);
-                Engine.Core.SetUniformF(ShaderID, "m_shininess", mat.Shininess);
-
-                //Set Material Texture Uniform
-                if (mat.IsTextured)
+                //Check if we have to render model
+                if (!NoRenderModels.Contains(m))
                 {
-                    Engine.Core.SetUniformI(ShaderID, "m_isTextured", 1);
-                    Engine.Core.SetUniformTexture(ShaderID, "m_texture", mat.Texture.ID, 0);
+                    //Material
+                    Material mat = m.Material;
+
+                    //Set Material Uniform
+                    Engine.Core.SetUniformVec4(ShaderID, "m_color", mat.Color.X, mat.Color.Y, mat.Color.Z, mat.Color.W);
+                    Engine.Core.SetUniformVec3(ShaderID, "m_diffuse", mat.Diffuse.X, mat.Diffuse.Y, mat.Diffuse.Z);
+                    Engine.Core.SetUniformVec3(ShaderID, "m_specular", mat.Specular.X, mat.Specular.Y, mat.Specular.Z);
+                    Engine.Core.SetUniformF(ShaderID, "m_shininess", mat.Shininess);
+
+                    //Set Material Texture Uniform
+                    if (mat.IsTextured)
+                    {
+                        Engine.Core.SetUniformI(ShaderID, "m_isTextured", 1);
+                        Engine.Core.SetUniformTexture(ShaderID, "m_texture", mat.Texture.ID, 0);
+                    }
+                    else
+                        Engine.Core.SetUniformI(ShaderID, "m_isTextured", 0);
+
+                    //Light List
+                    List<Light> ls;
+
+                    //Directional Light
+                    ls = Engine.Instance.Scene.Lights.FindAll(x => x.Type == Light.LightType.Directional);
+                    Engine.Core.SetUniformI(ShaderID, "m_nDirLight", ls.Count);
+                    for (int i = 0; i < ls.Count; i++)
+                    {
+                        DirectionalLight dl = (DirectionalLight)ls[i];
+                        Engine.Core.SetUniformVec3(ShaderID, "m_dirLights[" + i + "].color", dl.Color.X, dl.Color.Y, dl.Color.Z);
+                        Engine.Core.SetUniformVec3(ShaderID, "m_dirLights[" + i + "].dir", dl.Direction.X, dl.Direction.Y, dl.Direction.Z);
+                    }
+
+                    //Point Light
+                    ls = Engine.Instance.Scene.Lights.FindAll(x => x.Type == Light.LightType.Point);
+                    Engine.Core.SetUniformI(ShaderID, "m_nPointLight", ls.Count);
+                    for (int i = 0; i < ls.Count; i++)
+                    {
+                        PointLight pl = (PointLight)ls[i];
+                        Engine.Core.SetUniformVec3(ShaderID, "m_pointLights[" + i + "].color", pl.Color.X, pl.Color.Y, pl.Color.Z);
+                        Engine.Core.SetUniformVec3(ShaderID, "m_pointLights[" + i + "].pos", pl.Position.X, pl.Position.Y, pl.Position.Z);
+                        Engine.Core.SetUniformF(ShaderID, "m_pointLights[" + i + "].constant", pl.Constant);
+                        Engine.Core.SetUniformF(ShaderID, "m_pointLights[" + i + "].linear", pl.Linear);
+                        Engine.Core.SetUniformF(ShaderID, "m_pointLights[" + i + "].quadratic", pl.Quadratic);
+                    }
+
+                    //Spot Light
+                    ls = Engine.Instance.Scene.Lights.FindAll(x => x.Type == Light.LightType.Spot);
+                    Engine.Core.SetUniformI(ShaderID, "m_nSpotLight", ls.Count);
+                    for (int i = 0; i < ls.Count; i++)
+                    {
+                        SpotLight sl = (SpotLight)ls[i];
+                        Engine.Core.SetUniformVec3(ShaderID, "m_spotLights[" + i + "].color", sl.Color.X, sl.Color.Y, sl.Color.Z);
+                        Engine.Core.SetUniformVec3(ShaderID, "m_spotLights[" + i + "].pos", sl.Position.X, sl.Position.Y, sl.Position.Z);
+                        Engine.Core.SetUniformVec3(ShaderID, "m_spotLights[" + i + "].dir", sl.Direction.X, sl.Direction.Y, sl.Direction.Z);
+                        Engine.Core.SetUniformF(ShaderID, "m_spotLights[" + i + "].in_cutoff", sl.In_Cutoff);
+                        Engine.Core.SetUniformF(ShaderID, "m_spotLights[" + i + "].out_cutoff", sl.Out_Cutoff);
+                    }
+
+                    //Render
+                    Engine.Core.RenderModel(ShaderID, m.ModelID);
                 }
-                else
-                    Engine.Core.SetUniformI(ShaderID, "m_isTextured", 0);
 
-                //Light List
-                List<Light> ls;
-
-                //Directional Light
-                ls = Engine.Instance.Scene.Lights.FindAll(x => x.Type == Light.LightType.Directional);
-                Engine.Core.SetUniformI(ShaderID, "m_nDirLight", ls.Count);
-                for(int i = 0; i < ls.Count; i++)
-                {
-                    DirectionalLight dl = (DirectionalLight)ls[i];
-                    Engine.Core.SetUniformVec3(ShaderID, "m_dirLights[" + i + "].color", dl.Color.X, dl.Color.Y, dl.Color.Z);
-                    Engine.Core.SetUniformVec3(ShaderID, "m_dirLights[" + i + "].dir", dl.Direction.X, dl.Direction.Y, dl.Direction.Z);
-                }
-
-                //Point Light
-                ls = Engine.Instance.Scene.Lights.FindAll(x => x.Type == Light.LightType.Point);
-                Engine.Core.SetUniformI(ShaderID, "m_nPointLight", ls.Count);
-                for (int i = 0; i < ls.Count; i++)
-                {
-                    PointLight pl = (PointLight)ls[i];
-                    Engine.Core.SetUniformVec3(ShaderID, "m_pointLights[" + i + "].color", pl.Color.X, pl.Color.Y, pl.Color.Z);
-                    Engine.Core.SetUniformVec3(ShaderID, "m_pointLights[" + i + "].pos", pl.Position.X, pl.Position.Y, pl.Position.Z);
-                    Engine.Core.SetUniformF(ShaderID, "m_pointLights[" + i + "].constant", pl.Constant);
-                    Engine.Core.SetUniformF(ShaderID, "m_pointLights[" + i + "].linear", pl.Linear);
-                    Engine.Core.SetUniformF(ShaderID, "m_pointLights[" + i + "].quadratic", pl.Quadratic);
-                }
-
-                //Spot Light
-                ls = Engine.Instance.Scene.Lights.FindAll(x => x.Type == Light.LightType.Spot);
-                Engine.Core.SetUniformI(ShaderID, "m_nSpotLight", ls.Count);
-                for (int i = 0; i < ls.Count; i++)
-                {
-                    SpotLight sl = (SpotLight)ls[i];
-                    Engine.Core.SetUniformVec3(ShaderID, "m_spotLights[" + i + "].color", sl.Color.X, sl.Color.Y, sl.Color.Z);
-                    Engine.Core.SetUniformVec3(ShaderID, "m_spotLights[" + i + "].pos", sl.Position.X, sl.Position.Y, sl.Position.Z);
-                    Engine.Core.SetUniformVec3(ShaderID, "m_spotLights[" + i + "].dir", sl.Direction.X, sl.Direction.Y, sl.Direction.Z);
-                    Engine.Core.SetUniformF(ShaderID, "m_spotLights[" + i + "].in_cutoff", sl.In_Cutoff);
-                    Engine.Core.SetUniformF(ShaderID, "m_spotLights[" + i + "].out_cutoff", sl.Out_Cutoff);
-                }
-
-                //Render
-                Engine.Core.RenderModel(ShaderID, m.ModelID);
+                //
             }
         }
 
@@ -138,7 +154,7 @@ namespace Soyuz
         public RenderStep Second { get; set; }
 
         //Mix Operation
-        public enum MixOperation { Add = 0, Min = 1, Mul = 2, Div = 3, Mask = 4, MaskRGBA = 5}
+        public enum MixOperation { Add = 0, Min = 1, Mul = 2, Div = 3, Mask = 4, MaskRGBA = 5, B_on_A = 6}
 
         //Operation
         public MixOperation Operation;
@@ -148,11 +164,11 @@ namespace Soyuz
         /// </summary>
         /// <param name="rs1">First Render Step</param>
         /// <param name="rs2">Second Render Step</param>
-        public MixRender(RenderStep rs1, RenderStep rs2, MixOperation op) : base()
+        public MixRender(RenderStep rsA, RenderStep rsB, MixOperation op) : base()
         {
             //Set RenderSteps
-            First = rs1;
-            Second = rs2;
+            First = rsA;
+            Second = rsB;
             Operation = op;
 
             //Set Prefab Shader

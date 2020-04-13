@@ -52,6 +52,23 @@ namespace Soyuz
             Width = Engine.Core.GetTextureWidth(ID);
         }
 
+        /// <summary>
+        /// Get Data Array by getting values from Kernel
+        /// </summary>
+        public float[] GetDataArray()
+        {
+            return Engine.Core.GetTextureData(ID);
+        }
+
+        /// <summary>
+        /// Save To PNG
+        /// </summary>
+        /// <param name="FilePath"></param>
+        public void SavePNG(string FilePath)
+        {
+            Engine.Core.SaveTexturePNG(ID, FilePath);
+        }
+
         //
     }
 }

@@ -3,6 +3,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb/stb_image_write.h"
+
 namespace SK
 {
 	//Constructor
@@ -10,10 +13,18 @@ namespace SK
 	{
 		m_log = log;
 		m_id = 0;
-		m_w = 0;
-		m_h = 0;
+		m_w = 1;
+		m_h = 1;
 
 		m_nChannel = 4;
+
+		m_data = new float[1];
+	}
+
+	//Destructor
+	Texture::~Texture()
+	{
+		delete m_data;
 	}
 
 	//Generate Texture from data array
@@ -40,6 +51,7 @@ namespace SK
 		m_w = width;
 		m_h = height;
 		m_nChannel = nChannel;
+		m_data = data;
 	}
 
 	//Generate Texture from source path
@@ -83,6 +95,23 @@ namespace SK
 	unsigned int Texture::getNumberOfChannel() const
 	{
 		return m_nChannel;
+	}
+
+	//Get Data
+	float* Texture::getData() const
+	{
+		return m_data;
+	}
+
+	//Save to PNG
+	bool Texture::savePNG(std::string filePath) const
+	{
+		stbi_flip_vertically_on_write(1);
+
+		unsigned char* ucData = new unsigned char[m_w * m_h * m_nChannel];
+		for (unsigned int i = 0; i < m_w * m_h * m_nChannel; i++)
+			ucData[i] = (unsigned char)(m_data[i] * 255.0f);
+		return stbi_write_png(filePath.c_str(), m_w, m_h, m_nChannel, ucData, m_nChannel * m_w);
 	}
 
 	//

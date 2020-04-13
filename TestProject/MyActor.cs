@@ -20,16 +20,15 @@ namespace TestProject
 
         public override void Update()
         {
-            mod.Rotation += new Vector3(0.01f,0.01f,0);
 
             if (Engine.Core.IsKeyPressed((sbyte) 'd') )
-                cam.Move(new Vector3(0.05f, 0, 0) );
+                mod.Rotation += new Vector3(0.02f, 0.0f, 0);
             if (Engine.Core.IsKeyPressed((sbyte)'q'))
-                cam.Move(new Vector3(-0.05f, 0, 0));
+                mod.Rotation += new Vector3(-0.02f, 0.0f, 0);
             if (Engine.Core.IsKeyPressed((sbyte)'z'))
-                cam.Move(new Vector3(0, 0, 0.05f));
+                mod.Rotation += new Vector3(0, 0.0f, 0.02f);
             if (Engine.Core.IsKeyPressed((sbyte)'s'))
-                cam.Move(new Vector3(0, 0, -0.05f));
+                mod.Rotation += new Vector3(0, 0.0f, -0.02f);
 
         }
     }
