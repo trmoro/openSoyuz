@@ -24,6 +24,7 @@ LINK : warning LNK4286: symbol '__glewFramebufferTexture' defined in 'SoyuzKerne
 LINK : warning LNK4286: symbol '__glewBindFramebuffer' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(FrameBuffer.obj)'
 LINK : warning LNK4286: symbol '__glewCheckFramebufferStatus' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(FrameBuffer.obj)'
 LINK : warning LNK4286: symbol '__glewGenFramebuffers' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(FrameBuffer.obj)'
+LINK : warning LNK4286: symbol '__glewGenerateMipmap' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(Texture.obj)'
 LINK : warning LNK4286: symbol '__glewBindBuffer' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(Mesh.obj)'
 LINK : warning LNK4286: symbol '__glewBufferData' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(Mesh.obj)'
 LINK : warning LNK4286: symbol '__glewDeleteBuffers' defined in 'SoyuzKernel.lib(glew.obj)' is imported by 'SoyuzKernel.lib(Mesh.obj)'

@@ -40,7 +40,22 @@ namespace SK
 		//Save PNG
 		bool savePNG(std::string filePath) const;
 
+		//Update
+		void update();
+
+		//Convolution 3x3
+		void conv(unsigned int size, float* matrix, float coef);
+
+		//Get Pixel
+		float getPixel(float x, float y, unsigned int channel) const;
+
+		//Set Pixel
+		void setPixel(float x, float y, unsigned int channel, float value);
+
 	private:
+
+		//Get Data Array Position
+		unsigned int getArrayPosition(float x, float y, unsigned int channel) const;
 
 		//ID
 		GLuint m_id;

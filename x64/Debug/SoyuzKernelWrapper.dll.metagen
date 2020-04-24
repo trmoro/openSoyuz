@@ -61,6 +61,10 @@ Class SKW.Core: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     GetTextureNumberOfChannel(Int32): PrivateScope, Public, HideBySig
     GetTextureData(Int32): PrivateScope, Public, HideBySig
     SaveTexturePNG(Int32, String): PrivateScope, Public, HideBySig
+    TextureConv(Int32, UInt32, Single[], Single): PrivateScope, Public, HideBySig
+    SetTexturePixel(Int32, Single, Single, UInt32, Single): PrivateScope, Public, HideBySig
+    GetTexturePixel(Int32, Single, Single, UInt32): PrivateScope, Public, HideBySig
+    UpdateTexture(Int32): PrivateScope, Public, HideBySig
     RenderInit(Int32, Int32): PrivateScope, Public, HideBySig
     RenderModel(Int32, Int32): PrivateScope, Public, HideBySig
     RenderFrameBufferInit(Int32, Int32): PrivateScope, Public, HideBySig

@@ -163,6 +163,18 @@ namespace SK
 		//Save Texture to PNG
 		bool saveTexturePNG(int textureID, std::string filePath);
 
+		//Convolution on texture
+		void textureConv(int textureID, unsigned int size, float* matrix, float coef);
+
+		//Set Texture Pixel Value
+		void textureSetPixel(int textureID, float x, float y, unsigned int channel, float value);
+
+		//Get Texture Pixel Value
+		float textureGetPixel(int textureID, float x, float y, unsigned int channel);
+
+		//Update Texture
+		void updateTexture(int textureID);
+
 		//Render FrameBuffer Init
 		void renderFrameBufferInit(int frameBufferID, int shaderID);
 

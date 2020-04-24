@@ -84,12 +84,11 @@ namespace Soyuz
 
                     //Set Material Texture Uniform
                     if (mat.IsTextured)
-                    {
                         Engine.Core.SetUniformI(ShaderID, "m_isTextured", 1);
-                        Engine.Core.SetUniformTexture(ShaderID, "m_texture", mat.Texture.ID, 0);
-                    }
                     else
                         Engine.Core.SetUniformI(ShaderID, "m_isTextured", 0);
+                    if(mat.Texture != null)
+                        Engine.Core.SetUniformTexture(ShaderID, "m_texture", mat.Texture.ID, 0);
 
                     //Light List
                     List<Light> ls;

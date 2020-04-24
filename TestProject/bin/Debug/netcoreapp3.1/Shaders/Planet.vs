@@ -9,17 +9,17 @@ uniform mat4 ModelRotationMatrix;
 uniform mat4 RotationMatrix;
 
 out vec3 m_normal;
-out vec2 m_texCoord;
-out vec3 m_pos;
 
-//Height of the current vertex
-out float Height;
+//To Geometry
+out vec2 gs_texCoord;
+out vec3 gs_pos;
 
 void main() {
-	m_texCoord = texCoord;
+
+	gs_texCoord = texCoord;
+	gs_pos = vec3(ModelRotationMatrix * vec4(position, 1.0)).xyz;
+
 	m_normal = vec3(RotationMatrix * vec4(normal, 1.0)).xyz;
-	m_pos = vec3(ModelRotationMatrix * vec4(position, 1.0)).xyz;
-	gl_Position = ProjViewModel * vec4(position, 1.0);
-	
-	Height = distance(position,vec3(0,0,0) );
+		
+	gl_Position = vec4(position, 1.0);
 }										

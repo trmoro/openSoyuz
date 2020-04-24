@@ -120,6 +120,18 @@ namespace SKW
 		//Save Texture to PNG
 		bool SaveTexturePNG(int TextureID, String^ FilePath);
 
+		//Convolution on texture
+		void TextureConv(int textureID, unsigned int size, array<float>^ matrix, float coef);
+
+		//Set Texture Pixel Value
+		void SetTexturePixel(int textureID, float x, float y, unsigned int channel, float value);
+
+		//Get Texture Pixel Value
+		float GetTexturePixel(int textureID, float x, float y, unsigned int channel);
+
+		//Update Texture
+		void UpdateTexture(int TextureID);
+
 		//Render Init
 		void RenderInit(int FrameBufferID, int ShaderID);
 

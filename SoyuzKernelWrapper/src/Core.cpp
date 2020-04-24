@@ -245,6 +245,31 @@ namespace SKW
 		return m_Instance->saveTexturePNG(TextureID, stringToCharArray(FilePath) );
 	}
 
+	//Texture Convolution
+	void Core::TextureConv(int textureID, unsigned int size, array<float>^ matrix, float coef)
+	{
+		pin_ptr<float> ptr_matrix = &matrix[0];
+		m_Instance->textureConv(textureID, size, ptr_matrix, coef);
+	}
+
+	//Set Texture Pixel
+	void Core::SetTexturePixel(int textureID, float x, float y, unsigned int channel, float value)
+	{
+		m_Instance->textureSetPixel(textureID,x,y,channel,value);
+	}
+
+	//Get Texture Pixel
+	float Core::GetTexturePixel(int textureID, float x, float y, unsigned int channel)
+	{
+		return m_Instance->textureGetPixel(textureID,x,y,channel);
+	}
+
+	//Update Texture
+	void Core::UpdateTexture(int TextureID)
+	{
+		m_Instance->updateTexture(TextureID);
+	}
+
 	//Render
 	void Core::RenderInit(int FrameBufferID, int ShaderID)
 	{

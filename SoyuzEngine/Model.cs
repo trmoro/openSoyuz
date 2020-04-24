@@ -193,6 +193,45 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Return a list of triangles
+        /// </summary>
+        /// <returns></returns>
+        public List<Tuple<int,int,int>> TrianglesIndices()
+        {
+            List<Tuple<int, int, int>> tris = new List<Tuple<int, int, int>>();
+
+            for(int i = 0; i < Indices.Count; i+=3)
+                tris.Add(new Tuple<int,int,int>(Indices[i],Indices[(i+1) % Indices.Count],Indices[(i+2) % Indices.Count]) );
+
+            return tris;
+        }
+
+        /// <summary>
+        /// Get Nearseat Vertex Index
+        /// </summary>
+        /// <param name="position">Position</param>
+        /// <returns></returns>
+        public int GetNearestVertexIndex(Vector3 position)
+        {
+            //Return value
+            int index = -1;
+            float distance = float.MaxValue;
+
+            for(int i = 0; i < Positions.Count; i++)
+            {
+                float d = Vector3.Distance(Positions[i], position);
+                if(d < distance)
+                {
+                    distance = d;
+                    index = i;
+                }
+            }
+
+            //Return
+            return index;
+        }
+
+        /// <summary>
         /// Create a Cube Mesh
         /// </summary>
         public void Cube()

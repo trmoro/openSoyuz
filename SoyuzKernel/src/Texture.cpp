@@ -40,11 +40,16 @@ namespace SK
 		else if (nChannel == 1)
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_FLOAT, data);
 
-
+		//Parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		//Mipmap
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		//Unbind
 		glBindTexture(GL_TEXTURE_2D, 0);
 		
 		//Set variables
@@ -112,6 +117,98 @@ namespace SK
 		for (unsigned int i = 0; i < m_w * m_h * m_nChannel; i++)
 			ucData[i] = (unsigned char)(m_data[i] * 255.0f);
 		return stbi_write_png(filePath.c_str(), m_w, m_h, m_nChannel, ucData, m_nChannel * m_w);
+	}
+
+	//Update
+	void Texture::update()
+	{
+		glBindTexture(GL_TEXTURE_2D, m_id);
+
+		if (m_nChannel == 4)
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RGBA, GL_FLOAT, m_data);
+		else if (m_nChannel == 3)
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RGB, GL_FLOAT, m_data);
+		else if (m_nChannel == 1)
+			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RED, GL_FLOAT, m_data);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	//Convolution
+	void Texture::conv(unsigned int size, float* matrix, float coef)
+	{
+		//Modified data array
+		float* modData = new float[m_w * m_h * m_nChannel];
+
+		//Size divided by 2
+		int s2 = (int)(size / 2);
+
+		//Y
+		for (unsigned int y = 0; y < m_h; y++)
+		{
+			//X
+			for (unsigned int x = 0; x < m_w; x++)
+			{
+				//Color Channel
+				for (unsigned int c = 0; c < m_nChannel; c++)
+				{
+					//Not in border pixel
+					if (x > 0 && y > 0 && x < m_w - 1 && y < m_h - 1)
+					{
+						//Value
+						float val = 0;
+
+						//Convolution Sum (V = y kernel, U = x kernel)
+						for (unsigned int v = 0; v < size; v++)
+						{
+							for (unsigned int u = 0; u < size; u++)
+								val += matrix[(u * size) + v] * getPixel(x - s2 + u,y - s2 + v,c);
+						}
+
+						//Multiply by coefficient to Set
+						modData[getArrayPosition(x, y, c) ] = val * coef;
+					}
+					//In border = same value
+					else
+						modData[getArrayPosition(x, y, c)] = getPixel(x, y, c);
+				}
+
+				//
+			}
+		}
+
+		//Set
+		delete m_data;
+		m_data = modData;
+	}
+
+	//Get Pixel
+	float Texture::getPixel(float x, float y, unsigned int channel) const
+	{
+		return m_data[getArrayPosition(x, y, channel)];
+	}
+
+	//Set Pixel
+	void Texture::setPixel(float x, float y, unsigned int channel, float value)
+	{
+		m_data[getArrayPosition(x,y,channel)] = value;
+	}
+
+	//Get Data Array Position
+	unsigned int Texture::getArrayPosition(float x, float y, unsigned int channel) const
+	{
+		//If negative X / Y
+		if (x < 0)
+			x += m_w;
+		if (y < 0)
+			y += m_h;
+
+		//Modulos
+		x = (int) x % m_w;
+		y = (int) y % m_h;
+		
+		//Return
+		return (unsigned int) ((((y * m_w) + x) * m_nChannel) + channel);
 	}
 
 	//

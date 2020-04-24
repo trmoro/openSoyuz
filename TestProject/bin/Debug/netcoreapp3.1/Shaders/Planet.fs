@@ -108,24 +108,21 @@ void main() {
 		result += calcSpotLight(m_spotLights[i]);
 
 	out_color = vec4(result, m_color.a);
-
-	if (m_isTextured == 1)
-		out_color *= texture2D(m_texture, m_texCoord);
 		
 	//Modify color with height
 	
 	//Water
 	if(Height <= 1.01)
-		out_color *= vec4(0,0,1,1);
+		out_color *= vec4(0.2,0.2,1,1);
 	//Sand
 	else if(Height <= 1.015)
-		out_color *= vec4(1,1,0,1);
+		out_color *= vec4(1,1,0.2,1);
 	//Grass
 	else if(Height <= 1.03)
-		out_color *= vec4(0,1,0,1);
+		out_color *= vec4(0.2,1,0.2,1);
 	//Snow
 	else
-		out_color *= vec4(0.8,0.8,0.8,1);
+		out_color *= vec4(1,1,1,1);
 
 	if (out_color.a <= 0)
 		discard;

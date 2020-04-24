@@ -18,15 +18,13 @@ namespace Soyuz
         public bool RenderRay { get; set; }
 
         //Ray Direction
-        private Vector3 RayDirection;
+        public Vector3 RayDirection { get; set; }
 
         //Camera
         public Camera Camera { get; set; }
 
         //Length
         public float Length { get; set; }
-
-        public RenderStep debugRS;
 
         //Scene
         public Scene Scene;
@@ -111,6 +109,9 @@ namespace Soyuz
             //Collision Map
             Dictionary<Model, float> CollisionMap = new Dictionary<Model, float>();
 
+            //Ray-End
+            Vector3 rayEnd = Camera.Position + (RayDirection * Length);
+
             //For each Models
             foreach (Model m in models)
             {
@@ -119,9 +120,6 @@ namespace Soyuz
 
                 //Centered Scaled-Vertex Length
                 Vector3 scaledLength = Vector3.Multiply(m.VertexLength, m.Scale) / 2.0f;
-
-                //Ray-End
-                Vector3 rayEnd = Camera.Position + (RayDirection * Length);
 
                 //XYZ Bounding Box Interval Collision checking
                 Tuple<float, float> interX = IntervalCollision(Camera.Position.X, rayEnd.X, 
@@ -153,6 +151,146 @@ namespace Soyuz
         {
             return AABB(Scene.Models);
         }
+
+        /// <summary>
+        /// AABB on all meshes of all models (Don(t work)
+        /// </summary>
+        /// <param name="models">Models tested</param>
+        /// <returns></returns>
+        public Dictionary<Model, float> FaceAABB(List<Model> models)
+        {
+            //Collision Map
+            Dictionary<Model, float> CollisionMap = new Dictionary<Model, float>();
+
+            //Ray-End
+            Vector3 rayEnd = Camera.Position + (RayDirection * Length);
+
+            //For each Models
+            foreach (Model m in models)
+            {
+                //For each meshes
+                foreach (Mesh ms in m.Meshes)
+                {
+                    //For each triangles faces
+                    foreach (Tuple<int, int, int> tris in ms.TrianglesIndices())
+                    {
+                        //Position
+                        Vector3 t1 = ms.Positions[tris.Item1];
+                        Vector3 t2 = ms.Positions[tris.Item2];
+                        Vector3 t3 = ms.Positions[tris.Item3];
+
+                        //Create AABB
+                        float maxX = Math.Max(Math.Max(t1.X, t2.X), t3.X);
+                        float maxY = Math.Max(Math.Max(t1.Y, t2.Y), t3.Y);
+                        float maxZ = Math.Max(Math.Max(t1.Z, t2.Z), t3.Z);
+
+                        float minX = Math.Min(Math.Min(t1.X, t2.X), t3.X);
+                        float minY = Math.Min(Math.Min(t1.Y, t2.Y), t3.Y);
+                        float minZ = Math.Min(Math.Min(t1.Z, t2.Z), t3.Z);
+
+                        //XYZ Bounding Box Interval Collision checking
+                        Tuple<float, float> interX = IntervalCollision(Camera.Position.X, rayEnd.X,minX,maxX);
+                        Tuple<float, float> interY = IntervalCollision(Camera.Position.Y, rayEnd.Y,minY,maxY);
+                        Tuple<float, float> interZ = IntervalCollision(Camera.Position.Z, rayEnd.Z,minZ,maxZ);
+
+                        Tuple<float, float> interXY = IntervalCommons(interX, interY);
+                        Tuple<float, float> interXYZ = IntervalCommons(interXY, interZ);
+
+                        //Collision check
+                        if (interXYZ.Item1 <= interXYZ.Item2 && interXYZ.Item1 >= 0 && interXYZ.Item2 <= 1)
+                        {
+                            //Get smallest value
+                            if (CollisionMap.ContainsKey(m) && CollisionMap[m] > interXYZ.Item1)
+                                CollisionMap[m] = interXYZ.Item1;
+                            else if (!CollisionMap.ContainsKey(m))
+                                CollisionMap[m] = interXYZ.Item1;
+                        }
+                    }
+                }
+
+                //
+
+            }
+
+            //Order By Lowest to Greatest distance and return
+            CollisionMap.OrderBy(i => i.Value);
+            return CollisionMap;
+
+        }
+
+        /// <summary>
+        /// Face AABB on all models of the Scene
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<Model, float> FaceAABB()
+        {
+            return FaceAABB(Scene.Models);
+        }
+
+        /// <summary>
+        /// Bounding Sphere
+        /// https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+        /// </summary>
+        /// <param name="models"></param>
+        /// <returns></returns>
+        public Dictionary<Model, float> BoundingSphere(List<Model> models)
+        {
+            //Collision Map
+            Dictionary<Model, float> CollisionMap = new Dictionary<Model, float>();
+
+            //For each Models
+            foreach (Model m in models)
+            {
+                //Space Barycenter
+                Vector3 spaceBarycenter = m.Position + m.Barycenter;
+
+                //Centered Scaled-Vertex Lengt and Radius
+                Vector3 scaledLength = Vector3.Multiply(m.VertexLength, m.Scale) / 2.0f;
+                float radius = scaledLength.X;
+
+                //L
+                Vector3 L = spaceBarycenter - Camera.Position;
+
+                //tCA
+                float tca = Vector3.Dot(RayDirection, L);
+
+                //Only continue if tca > 0 (no negative and at least one intersection)
+                if(tca > 0)
+                {
+                    //d
+                    double d = Math.Sqrt(L.LengthSquared() - Math.Pow(tca,2) );
+
+                    //Check if d is smaller or equal than Sphere Radius
+                    if (d <= radius)
+                    {
+                        //tHC
+                        double thc = Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(d, 2));
+
+                        //Add t0 to Collision Map
+                        CollisionMap[m] = (float) (tca - thc);
+                    }
+
+                    //
+                }
+
+            }
+
+            //Order By Lowest to Greatest distance and return
+            CollisionMap.OrderBy(i => i.Value);
+            return CollisionMap;
+
+        }
+
+        /// <summary>
+        /// Bounding Sphere with all scene's models
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<Model, float> BoundingSphere()
+        {
+            return BoundingSphere(Scene.Models);
+        }
+
+        //End of Class
     }
 
     /// <summary>

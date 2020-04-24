@@ -483,6 +483,30 @@ namespace SK
 		return m_textures[textureID]->savePNG(filePath);
 	}
 
+	//Convolution on texture
+	void Core::textureConv(int textureID, unsigned int size, float* matrix, float coef)
+	{
+		m_textures[textureID]->conv(size, matrix, coef);
+	}
+
+	//Set Texture Pixel
+	void Core::textureSetPixel(int textureID, float x, float y, unsigned int channel, float value)
+	{
+		m_textures[textureID]->setPixel(x, y, channel, value);
+	}
+
+	//Get Texture Value
+	float Core::textureGetPixel(int textureID, float x, float y, unsigned int channel)
+	{
+		return m_textures[textureID]->getPixel(x,y,channel);
+	}
+
+	//Update Texture
+	void Core::updateTexture(int textureID)
+	{
+		m_textures[textureID]->update();
+	}
+
 	//Render FrameBuffer Init
 	void Core::renderFrameBufferInit(int frameBufferID, int shaderID)
 	{
