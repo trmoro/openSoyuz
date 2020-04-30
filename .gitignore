@@ -1,0 +1,13 @@
+﻿/.vs/Soyuz
+/SoyuzKernel/dependencies
+/Debug
+/DependenciesLicenses
+/SoyuzEngine/obj
+/SoyuzEngine/Properties/PublishProfiles
+/SoyuzKernel/Debug
+/SoyuzKernel/x64
+/SoyuzKernelWrapper/Debug
+/SoyuzKernelWrapper/x64
+/SoyuzEngine/bin
+/TestProject/obj
+/x64
