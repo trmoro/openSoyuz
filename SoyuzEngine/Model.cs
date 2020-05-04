@@ -41,6 +41,7 @@ namespace Soyuz
         public Dictionary<string, Vector2> UniformVec2 { get; set; }
         public Dictionary<string, Vector3> UniformVec3 { get; set; }
         public Dictionary<string, Vector4> UniformVec4 { get; set; }
+        public Dictionary<string, Font> UniformFont { get; set; }
 
 
         /// <summary>
@@ -71,6 +72,17 @@ namespace Soyuz
             UniformVec2     = new Dictionary<string, Vector2>();
             UniformVec3     = new Dictionary<string, Vector3>();
             UniformVec4     = new Dictionary<string, Vector4>();
+            UniformFont     = new Dictionary<string, Font>();
+        }
+
+        /// <summary>
+        /// Update Spatial Properties (Position, Scale and Rotation)
+        /// </summary>
+        public void UpdateProperties()
+        {
+            Engine.Core.SetModelPosition(ModelID, Position.X, Position.Y, Position.Z);
+            Engine.Core.SetModelRotation(ModelID, Rotation.X, Rotation.Y, Rotation.Z);
+            Engine.Core.SetModelScale(ModelID, Scale.X, Scale.Y, Scale.Z);
         }
 
         /// <summary>
@@ -256,6 +268,35 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Rectangle
+        /// </summary>
+        public void Rect()
+        {
+            Positions.Add(new Vector3(0, 0, 0));
+            Positions.Add(new Vector3(1, 0, 0));
+            Positions.Add(new Vector3(1, 1, 0));
+            Positions.Add(new Vector3(0, 1, 0));
+
+            Normals.Add(new Vector3(0,0,1));
+            Normals.Add(new Vector3(0,0,1));
+            Normals.Add(new Vector3(0,0,1));
+            Normals.Add(new Vector3(0,0,1));
+
+            UVs.Add(new Vector2(0,0));
+            UVs.Add(new Vector2(1,0));
+            UVs.Add(new Vector2(1,1));
+            UVs.Add(new Vector2(0,1));
+
+            Indices.Add(0);
+            Indices.Add(1);
+            Indices.Add(2);
+
+            Indices.Add(0);
+            Indices.Add(2);
+            Indices.Add(3);
+        }
+
+        /// <summary>
         /// Create a Cube Mesh
         /// </summary>
         public void Cube()
@@ -337,7 +378,6 @@ namespace Soyuz
             Indices.Add(5);
             Indices.Add(4);
             Indices.Add(1);
-
         }
 
         //Generate Sphere Vertex

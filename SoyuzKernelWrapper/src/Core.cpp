@@ -53,6 +53,12 @@ namespace SKW
 		return m_Instance->createTexture();
 	}
 
+	//Create Font
+	int Core::CreateFont()
+	{
+		return m_Instance->createFont();
+	}
+
 	//Create Mesh
 	int Core::CreateMesh(int ModelID)
 	{
@@ -197,6 +203,12 @@ namespace SKW
 		m_Instance->setUniformTexture(ShaderID, stringToCharArray(Name), TextureID, TextureIndex);
 	}
 
+	//Set Uniform Font
+	void Core::SetUniformFont(int ShaderID, String^ Name, int FontID, int TextureIndex)
+	{
+		m_Instance->setUniformFont(ShaderID, stringToCharArray(Name), FontID, TextureIndex);
+	}
+
 	//Set Texture with Data Array
 	void Core::SetTextureWithDataArray(int TextureID, int Width, int Height, int NumberOfChannel, array<float>^ Data)
 	{
@@ -287,6 +299,18 @@ namespace SKW
 	{
 		pin_ptr<float> args = &Arguments[0];
 		m_Instance->textureTransform(TextureID, TransformID, args);
+	}
+
+	//Load Font
+	void Core::LoadFont(int FontID, String^ Path, unsigned int Size, unsigned int Start, unsigned int End)
+	{
+		m_Instance->loadFont(FontID, stringToCharArray(Path), Size, Start, End);
+	}
+
+	//Add Text as Mesh to the given Model
+	void Core::AddTextAsMesh(int FontID, int ModelID, String^ Text, float X, float Y, float MaxWidth, float LineSpacing)
+	{
+		m_Instance->addTextAsMesh(FontID, ModelID, stringToCharArray(Text), X, Y, MaxWidth, LineSpacing);
 	}
 
 	//Render

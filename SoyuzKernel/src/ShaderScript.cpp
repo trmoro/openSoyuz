@@ -253,3 +253,59 @@ const char* ShaderScript::Lighting_Fragment = "#version 330 core											\n\
 		if (out_color.a <= 0)																				\n\
 			discard;																						\n\
 	}																										";
+
+//Font Fragment Script
+const char* ShaderScript::Gui_Fragment = "#version 330 core													\n\
+	in vec3 m_normal;																						\n\
+	in vec2 m_texCoord;																						\n\
+	uniform vec4 m_color;																					\n\
+	out vec4 out_color;																						\n\
+																											\n\
+	uniform int m_isTextured;																				\n\
+	uniform sampler2D m_texture;																			\n\
+																											\n\
+	void main() {																							\n\
+		out_color = m_color;																				\n\
+		if (m_isTextured == 1)																				\n\
+			out_color *= texture2D(m_texture, m_texCoord);													\n\
+	}																										";
+
+//GUI Fragment Script
+const char* ShaderScript::Font_Fragment = "#version 330 core												\n\
+	in vec3 m_normal;																						\n\
+	in vec2 m_texCoord;																						\n\
+	uniform vec4 m_color;																					\n\
+	out vec4 out_color;																						\n\
+																											\n\
+	uniform sampler2D m_font;																				\n\
+																											\n\
+	void main() {																							\n\
+		out_color = texture2D(m_font, m_texCoord);															\n\
+		out_color.g = out_color.r;																			\n\
+		out_color.b = out_color.r;																			\n\
+		out_color.a = out_color.r;																			\n\
+		out_color *= m_color;																				\n\
+	}																										";
+
+//Mix Fragment Script
+const char* ShaderScript::Reverse_Fragment = "#version 330 core												\n\
+	in vec3 m_normal;																						\n\
+	in vec2 m_texCoord;																						\n\
+	out vec4 out_color;																						\n\
+	uniform sampler2D m_source;																				\n\
+	uniform int m_op;																						\n\
+	void main() {																							\n\
+		vec2 uv = m_texCoord;																				\n\
+		if(m_op == 0)																						\n\
+			uv.x = 1 - uv.x;																				\n\
+		else if(m_op == 1)																					\n\
+			uv.y = 1 - uv.y;																				\n\
+		else if(m_op == 2)																					\n\
+		{																									\n\
+			uv.x = 1 - uv.x;																				\n\
+			uv.y = 1 - uv.y;																				\n\
+		}																									\n\
+		out_color = texture2D(m_source, uv);																\n\
+		if (out_color.a <= 0)																				\n\
+			discard;																						\n\
+	}																										";

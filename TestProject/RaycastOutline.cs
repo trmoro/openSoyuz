@@ -68,7 +68,7 @@ namespace TestProject
                     int index = Models[0].Meshes[0].GetNearestVertexIndex(Pointer.Position);
                     Texture tex = Models[0].Material.Texture;
 
-                    Vector2 uvpos = Models[0].Meshes[0].UVs[index] * tex.Width;
+                    Vector2 uvpos = Models[0].Meshes[0].UVs[index] * new Vector2(tex.Width,tex.Height);
 
                     if (Engine.Core.IsMouseClicked(0))
                         Area(tex, uvpos, 3, -0.02f);

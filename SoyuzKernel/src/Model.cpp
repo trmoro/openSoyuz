@@ -48,6 +48,11 @@ namespace SK
 		m_meshes[meshID]->compile();
 	}
 
+	//Merge Meshes
+	void Model::mergeMeshes()
+	{
+	}
+
 	//Load with path
 	void Model::load(const char* path)
 	{

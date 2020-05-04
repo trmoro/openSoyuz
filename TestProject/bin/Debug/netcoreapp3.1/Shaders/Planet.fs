@@ -113,18 +113,18 @@ void main() {
 	float delta = (Height - 1.0) * 10;
 	
 	//Water
-	if(Height <= 1.0075)
+	if(Height <= 1.0025)
 		out_color *= vec4(0.2,0.2 + delta,1,1);
 	//Sand
-	else if(Height <= 1.01)
+	else if(Height <= 1.005)
 		out_color *= vec4(1,1,0.2 + delta,1);
 	//Grass
-	else if(Height <= 1.02)
+	else if(Height <= 1.03)
 		out_color *= vec4(0.2 + delta,1,0.2 + delta,1);
 	//Snow
 	else
 	{
-		delta = (Height - 1.02) * 10;
+		delta = (Height - 1.03) * 10;
 		out_color *= vec4(0.8 + delta,0.8 + delta,0.8 + delta,1);
 	}
 

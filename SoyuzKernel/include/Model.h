@@ -36,6 +36,9 @@ namespace SK
 		//Compile
 		void meshCompile(int meshID);
 
+		//Merge Meshes
+		void mergeMeshes();
+
 		///Source https://learnopengl.com/Model-Loading/Model
 
 		//Load with Path

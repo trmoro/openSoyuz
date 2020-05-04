@@ -140,6 +140,9 @@ namespace Soyuz
                     //Vec4
                     foreach (string u in m.UniformVec4.Keys)
                         Engine.Core.SetUniformVec4(ShaderID, u, m.UniformVec4[u].X, m.UniformVec4[u].Y, m.UniformVec4[u].Z, m.UniformVec4[u].W);
+                    //Font
+                    foreach (string u in m.UniformFont.Keys)
+                        Engine.Core.SetUniformFont(ShaderID, u, m.UniformFont[u].ID, 0);
 
                     //Render
                     Engine.Core.RenderModel(ShaderID, m.ModelID);
@@ -263,6 +266,53 @@ namespace Soyuz
                 , ConvMatrix[1,0], ConvMatrix[1,1], ConvMatrix[1,2]
                 , ConvMatrix[2,0], ConvMatrix[2,1], ConvMatrix[2,2]);
             Engine.Core.SetUniformF(ShaderID, "m_convCoef", ConvCoef);
+
+            //Render
+            Engine.Core.RenderFrameBuffer(ShaderID);
+        }
+    }
+
+    /// <summary>
+    /// Reverse Render
+    /// </summary>
+    public class ReverseRender : RenderStep
+    {
+
+        //RenderStep to Reverse
+        public RenderStep SourceRender { get; set; }
+
+        //Reverse Operation
+        public enum ReverseOperation { X = 0, Y = 1, XY = 2 }
+
+        //Operation
+        public ReverseOperation Operation;
+
+        /// <summary>
+        /// Reverse Renderer
+        /// </summary>
+        /// <param name="Source"></param>
+        /// <param name="op"></param>
+        public ReverseRender(RenderStep Source, ReverseOperation op) : base()
+        {
+            //Set RenderSteps
+            SourceRender = Source;
+            Operation = op;
+
+            //Set Prefab Shader
+            Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Reverse);
+        }
+
+        /// <summary>
+        /// Render
+        /// </summary>
+        public override void Render()
+        {
+            //Render Init
+            Engine.Core.RenderFrameBufferInit(FrameBufferID, ShaderID);
+
+            //Set Uniform
+            Engine.Core.SetUniformFrameBuffer(ShaderID, "m_source", SourceRender.FrameBufferID, 0);
+            Engine.Core.SetUniformI(ShaderID, "m_op", (int)Operation);
 
             //Render
             Engine.Core.RenderFrameBuffer(ShaderID);

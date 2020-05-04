@@ -10,4 +10,12 @@
 /SoyuzKernelWrapper/x64
 /SoyuzEngine/bin
 /TestProject/obj
+/TestProject/bin/Debug/netcoreapp3.1/SoyuzKernelWrapper.pdb
+/TestProject/bin/Debug/netcoreapp3.1/SoyuzEngine.pdb
+/TestProject/bin/Debug/netcoreapp3.1/TestProject.pdb
+/TestProject/bin/Debug/netcoreapp3.1/TestProject.runtimeconfig.dev.json
+/TestProject/bin/Release/netcoreapp3.1/SoyuzKernelWrapper.pdb
+/TestProject/bin/Release/netcoreapp3.1/SoyuzEngine.pdb
+/TestProject/bin/Release/netcoreapp3.1/TestProject.pdb
+/TestProject/bin/Release/netcoreapp3.1/TestProject.runtimeconfig.dev.json
 /x64

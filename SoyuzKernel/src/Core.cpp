@@ -17,6 +17,7 @@ namespace SK
 		m_shaders = std::vector<Shader*>();
 		m_models = std::vector<Model*>();
 		m_textures = std::vector<Texture*>();
+		m_fonts = std::vector<Font*>();
 
 		m_projViewMatrix = glm::mat4(0);
 
@@ -24,7 +25,7 @@ namespace SK
 		std::cout << "<-- openSoyuz -->" << std::endl;
 
 		//Core Inited
-		m_log->add("Core Initialized", LOG_OK);
+		m_log->add("Core Started", LOG_OK);
 	}
 
 	//Destructor
@@ -34,7 +35,10 @@ namespace SK
 		glfwDestroyWindow(m_window);
 		glfwTerminate();
 
-		//Log
+		//Clean up FreeType
+		Font::clearFreeType();
+
+		//Delete Log
 		delete m_log;
 	}
 
@@ -53,6 +57,12 @@ namespace SK
 
 		//Init FrameBuffer Render Model
 		initFrameBufferRenderModel();
+
+		//Init FreeType
+		Font::initFreeType();
+
+		//Core Inited
+		m_log->add("Core Initialized", LOG_OK);
 	}
 
 	//Update
@@ -254,6 +264,15 @@ namespace SK
 		return i;
 	}
 
+	//Create Font
+	int Core::createFont()
+	{
+		Font* f = new Font(m_log);
+		int i = (int)m_fonts.size();
+		m_fonts.push_back(f);
+		return i;
+	}
+
 	//Create Mesh
 	int Core::createMesh(int modelID) const
 	{
@@ -375,9 +394,21 @@ namespace SK
 			m_log->add("Prefab : Convolution Shader", LOG_OK);
 			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Conv_Fragment);
 			break;
+		case PREFAB_SHADER_REVERSE:
+			m_log->add("Prefab : Reverse Shader", LOG_OK);
+			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Reverse_Fragment);
+			break;
 		case PREFAB_SHADER_LIGHTING:
 			m_log->add("Prefab : Lighting Shader", LOG_OK);
 			m_shaders[shaderID]->set(ShaderScript::Lighting_Vertex, ShaderScript::Lighting_Fragment);
+			break;
+		case PREFAB_SHADER_FONT:
+			m_log->add("Prefab : Font Shader", LOG_OK);
+			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Font_Fragment);
+			break;
+		case PREFAB_SHADER_GUI:
+			m_log->add("Prefab : GUI Element Shader", LOG_OK);
+			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Gui_Fragment);
 			break;
 		}
 	}
@@ -445,6 +476,20 @@ namespace SK
 
 		//Bind
 		glBindTexture(GL_TEXTURE_2D, m_textures[textureID]->getID());
+
+		//Set Uniform
+		m_shaders[shaderID]->setUniformi((GLchar*)name, textureIndex);
+	}
+
+	//Set Uniform Font
+	void Core::setUniformFont(int shaderID, const char* name, int fontID, int textureIndex)
+	{
+		//Active Texture
+		glActiveTexture(GL_TEXTURE0 + textureIndex);
+		glEnable(GL_TEXTURE_2D);
+
+		//Bind
+		glBindTexture(GL_TEXTURE_2D, m_fonts[fontID]->getTexture());
 
 		//Set Uniform
 		m_shaders[shaderID]->setUniformi((GLchar*)name, textureIndex);
@@ -526,6 +571,18 @@ namespace SK
 	void Core::textureTransform(int textureID, unsigned int transformID, float* args)
 	{
 		m_textures[textureID]->applyTransform(transformID,args);
+	}
+
+	//Load Font
+	void Core::loadFont(int fontID, std::string path, unsigned int size, unsigned int start, unsigned int end)
+	{
+		m_fonts[fontID]->load(path, size, start, end);
+	}
+
+	//Add Text as Mesh to the given Model
+	void Core::addTextAsMesh(int fontID, int modelID, std::string text, float x, float y, float max_width, float lineSpacing)
+	{
+		m_fonts[fontID]->addTextAsMesh(m_models[modelID], text, x, y, max_width, lineSpacing);
 	}
 
 	//Render FrameBuffer Init

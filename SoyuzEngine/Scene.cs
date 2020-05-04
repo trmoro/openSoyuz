@@ -70,12 +70,8 @@ namespace Soyuz
         private void Render()
         {
             //Update Model Space Coordinate
-            foreach(Model m in Models)
-            {
-                Engine.Core.SetModelPosition(m.ModelID, m.Position.X, m.Position.Y, m.Position.Z);
-                Engine.Core.SetModelRotation(m.ModelID, m.Rotation.X, m.Rotation.Y, m.Rotation.Z);
-                Engine.Core.SetModelScale(m.ModelID, m.Scale.X, m.Scale.Y, m.Scale.Z);
-            }
+            foreach (Model m in Models)
+                m.UpdateProperties();
 
             //Render All Cameras
             foreach (Camera c in Cameras)

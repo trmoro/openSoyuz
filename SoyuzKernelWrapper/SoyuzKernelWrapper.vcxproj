@@ -84,7 +84,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\SoyuzKernel\dependencies\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;IrrXMLd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;IrrXMLd.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,7 +97,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\SoyuzKernel\dependencies\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;IrrXMLd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;IrrXMLd.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -110,7 +110,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\SoyuzKernel\dependencies\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mt.lib;zlibstatic.lib;IrrXML.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mt.lib;zlibstatic.lib;IrrXML.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -123,7 +123,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\SoyuzKernel\dependencies\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mt.lib;zlibstatic.lib;IrrXML.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;assimp-vc142-mt.lib;zlibstatic.lib;IrrXML.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

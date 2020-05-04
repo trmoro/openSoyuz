@@ -21,6 +21,9 @@
 //Model
 #include "Model.h"
 
+//Font
+#include "Font.h"
+
 //Input
 #include "Input.h"
 
@@ -50,6 +53,9 @@
 #define PREFAB_SHADER_MIX		2
 #define PREFAB_SHADER_CONV		3
 #define PREFAB_SHADER_LIGHTING	4
+#define PREFAB_SHADER_FONT		5
+#define PREFAB_SHADER_GUI		6
+#define PREFAB_SHADER_REVERSE	7
 
 namespace SK
 {
@@ -79,6 +85,9 @@ namespace SK
 
 		//Create Texture
 		int createTexture();
+
+		//Create Font
+		int createFont();
 
 		//Create Mesh
 		int createMesh(int modelID) const;
@@ -149,6 +158,9 @@ namespace SK
 		//Set Uniform Texture
 		void setUniformTexture(int shaderID, const char* name, int textureID, int textureIndex);
 
+		//Set Uniform Font
+		void setUniformFont(int shaderID, const char* name, int fontID, int textureIndex);
+
 		//Set Texture with data array
 		void setTextureWithDataArray(int textureID, unsigned int width, unsigned int height, unsigned int nChannel, float* data);
 
@@ -187,6 +199,12 @@ namespace SK
 
 		//Texture Transform
 		void textureTransform(int textureID, unsigned int transformID, float* args);
+
+		//Load Font
+		void loadFont(int fontID, std::string path, unsigned int size, unsigned int start, unsigned int end);
+
+		//Add Text as Mesh to the given Model
+		void addTextAsMesh(int fontID, int modelID, std::string text, float x, float y, float max_width, float lineSpacing);
 
 		//Render FrameBuffer Init
 		void renderFrameBufferInit(int frameBufferID, int shaderID);
@@ -259,11 +277,12 @@ namespace SK
 		//GLFW Window
 		GLFWwindow* m_window;
 
-		//Framebuffer, Shader, Model, Texture
+		//Resources
 		std::vector<FrameBuffer*> m_framebuffers;
 		std::vector<Shader*> m_shaders;
 		std::vector<Model*> m_models;
 		std::vector<Texture*> m_textures;
+		std::vector<Font*> m_fonts;
 
 		//Projection/View Matrix
 		glm::mat4 m_projViewMatrix;

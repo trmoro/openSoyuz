@@ -41,5 +41,23 @@ namespace Soyuz
         {
             m_show = st;
         }
+
+        /// <summary>
+        /// Add a Blur FX on Edges
+        /// </summary>
+        /// <param name="Start"></param>
+        /// <param name="ListOfRenderStep"></param>
+        public static void EdgeBlurFX(RenderStep Start, List<RenderStep> ListOfRenderStep)
+        {
+            //Edge Detector
+            ConvolutionRender edge_detect = new ConvolutionRender(Start, new float[3, 3] { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1 } }, 1);
+            ListOfRenderStep.Add(edge_detect);
+
+            //Blur Edge
+            ConvolutionRender blur_edge = new ConvolutionRender(edge_detect, new float[3, 3] { { 1, 2, 1 }, { 2, 4, 2 }, { 1, 2, 1 } }, 1.0f / 16.0f);
+            ListOfRenderStep.Add(blur_edge);
+        }
+
+        //
     }
 }

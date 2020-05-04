@@ -28,4 +28,13 @@ public:
 	//Lighting Fragment Script
 	static const char* Lighting_Fragment;
 
+	//Font Fragment Script
+	static const char* Font_Fragment;
+
+	//GUI Fragment Script
+	static const char* Gui_Fragment;
+
+	//Reverse Fragment Script
+	static const char* Reverse_Fragment;
+
 };

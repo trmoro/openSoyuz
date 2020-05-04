@@ -14,7 +14,9 @@ namespace TestProject
 
             //Create Texture
             Texture t = new Texture();
-            //t.Load("pm.png", 1);
+            t.Load("Images/earth.jpg", 1);
+
+            /*
             t.Fill(400, 400, 1, 1);
             t.Perlin(15752, 20, 1, 1);
             t.Perlin(79024, 10, 1, 1);
@@ -26,9 +28,10 @@ namespace TestProject
             t.Convolution(9, conv, 1.0f / 81.0f);
             t.Convolution(9, conv, 1.0f / 81.0f);
             t.Convolution(9, conv, 1.0f / 81.0f);
+            */
 
             t.Update();
-            t.SavePNG("Images/perlin.png");
+            //t.SavePNG("Images/perlin.png");
 
             //t.SetWithPath("test.png",1);
             //t.SavePNG("test.png");
@@ -109,7 +112,17 @@ namespace TestProject
             raycastOutline.Models.Add(planet);
             s.AddActor(raycastOutline);
             s.Lights.Add(pl);
-            
+
+            //Load Font
+            Font font = new Font();
+            font.Load("Fonts/Dreamwood.ttf", 32);
+
+            //GUI
+            GUI ui = new GUI();
+            ui.Text(55, 15, new Vector4(1), "I am a text", font, 80, 1.2f);
+            ui.Box(55, 150, 150, 150, new Vector4(1, 0, 0, 0.95f));
+            s.AddActor(ui);
+
             //Add Scene to Engine
             e.Scene = s;
 
@@ -132,8 +145,16 @@ namespace TestProject
             MixRender mr3 = new MixRender(mr2, pc, MixRender.MixOperation.B_on_A);
             r.RenderSteps.Add(mr3);
 
+            //Blur GUI
+            //ConvolutionRender blurUI = new ConvolutionRender(ui.Render, new Matrix4x4(1, 2, 1, 0, 2, 4, 2, 0, 1, 2, 1, 0, 0, 0, 0, 1.0f / 16.0f));
+            //r.RenderSteps.Add(blurUI);
+
+            //Mix GUI with base
+            MixRender mr4 = new MixRender(mr3, ui.Render, MixRender.MixOperation.B_on_A);
+            r.RenderSteps.Add(mr4);
+
             //Set Frame to show
-            r.Show(mr3);
+            r.Show(mr4);
 
             //Set Renderer
             e.Renderer = r;

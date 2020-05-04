@@ -32,6 +32,9 @@ namespace SKW
 		//Create Texture
 		int CreateTexture();
 
+		//Create Font
+		int CreateFont();
+
 		//Create Mesh
 		int CreateMesh(int ModelID);
 
@@ -102,6 +105,9 @@ namespace SKW
 		//Set Uniform Texture
 		void SetUniformTexture(int ShaderID, String^ Name, int TextureID, int TextureIndex);
 
+		//Set Uniform Font
+		void SetUniformFont(int ShaderID, String^ Name, int FontID, int TextureIndex);
+
 		//Set Texture with Data Array
 		void SetTextureWithDataArray(int TextureID, int Width, int Height, int NumberOfChannel, array<float>^ Data);
 
@@ -140,6 +146,12 @@ namespace SKW
 
 		//Apply Texture Transform
 		void TextureTransform(int TextureID, int TransformID, array<float>^ Arguments);
+
+		//Load Font
+		void LoadFont(int FontID, String^ Path, unsigned int Size, unsigned int Start, unsigned int End);
+		
+		//Add Text as Mesh to the given Model
+		void AddTextAsMesh(int FontID, int ModelID, String^ Text, float X, float Y, float MaxWidth, float LineSpacing);
 
 		//Render Init
 		void RenderInit(int FrameBufferID, int ShaderID);
@@ -187,6 +199,9 @@ namespace SKW
 		const int Prefab_Shader_Mix			= PREFAB_SHADER_MIX;
 		const int Prefab_Shader_Conv		= PREFAB_SHADER_CONV;
 		const int Prefab_Shader_Lighting	= PREFAB_SHADER_LIGHTING;
+		const int Prefab_Shader_Font		= PREFAB_SHADER_FONT;
+		const int Prefab_Shader_Gui			= PREFAB_SHADER_GUI;
+		const int Prefab_Shader_Reverse		= PREFAB_SHADER_REVERSE;
 
 		const int TexTransform_Perlin = TEXTF_PERLIN;
 		const int TexTransform_Border = TEXTF_BORDER;
