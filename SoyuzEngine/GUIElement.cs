@@ -27,6 +27,12 @@ namespace Soyuz
         //Depth
         public float Depth { get; set; }
 
+        //Is Hovered
+        public bool IsHovered { get; set; }
+            
+        //Is Clicked
+        public bool IsClicked { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -38,14 +44,46 @@ namespace Soyuz
             Height = 0;
             Depth = 0;
             Color = new Vector4(1);
+            ResetMouseEvent();
         }
 
         //Update
         public virtual void Update(Vector2 Mouse)
         {
+            //Reset all Mouse Event
+            ResetMouseEvent();
+
             //Auto Update Position and Color
             Position = new Vector3(X, Y, Depth);
             Material.Color = Color;
+
+            //Check if mouse is in
+            if(Mouse.X >= X && Mouse.X <= X + Width && Mouse.Y >= Y && Mouse.Y <= Y + Height)
+            {
+                IsHovered = true;
+
+                //Left Click
+                if (Engine.Core.IsMouseClicked(0))
+                    IsClicked = true;
+            }
+            
+        }
+
+        /// <summary>
+        /// Copy Mouse Event
+        /// </summary>
+        /// <param name="g"></param>
+        public void CopyMouseEvent(GUIElement g)
+        {
+            IsHovered = g.IsHovered;
+            IsClicked = g.IsClicked;
+        }
+
+        //Reset Mouse Event
+        private void ResetMouseEvent()
+        {
+            IsHovered = false;
+            IsClicked = false;
         }
 
         //
@@ -114,6 +152,7 @@ namespace Soyuz
 
             //Auto-resize Box
             Scale = new Vector3(Width, Height, 1);
+
         }
 
         //

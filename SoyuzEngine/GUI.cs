@@ -73,7 +73,7 @@ namespace Soyuz
         {
             Box b = new Box(X, Y, Width, Height, Color);
             Elements.Add(b);
-            b.Depth = 0;
+            b.Depth = 10;
             return b;
         }
 
@@ -82,7 +82,7 @@ namespace Soyuz
         {
             Text t = new Text(X, Y, Color, Text, Font, MaxWidth, LineSpacing, xOffset, yOffset);
             Texts.Add(t);
-            t.Depth = 0;
+            t.Depth = 9;
             return t;
         }
 

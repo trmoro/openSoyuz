@@ -283,7 +283,7 @@ const char* ShaderScript::Font_Fragment = "#version 330 core												\n\
 		out_color = texture2D(m_font, m_texCoord);															\n\
 		out_color.g = out_color.r;																			\n\
 		out_color.b = out_color.r;																			\n\
-		out_color.a = out_color.r;																			\n\
+		//out_color.a = out_color.r;																			\n\
 		out_color *= m_color;																				\n\
 	}																										";
 

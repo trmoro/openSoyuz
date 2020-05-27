@@ -115,12 +115,12 @@ namespace TestProject
 
             //Load Font
             Font font = new Font();
-            font.Load("Fonts/Dreamwood.ttf", 32);
+            font.Load("Fonts/consola.ttf", 14);
 
             //GUI
             GUI ui = new GUI();
-            ui.Text(55, 15, new Vector4(1), "I am a text", font, 80, 1.2f);
-            ui.Box(55, 150, 150, 150, new Vector4(1, 0, 0, 0.95f));
+            ui.Text(55, 15, new Vector4(1), "I am a text", font, 85, 1.2f);
+            ui.Box(55, 10, 150, 150, new Vector4(1, 0, 0, 0.995f));
             s.AddActor(ui);
 
             //Add Scene to Engine
