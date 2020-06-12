@@ -35,13 +35,23 @@ namespace Soyuz
         //Reverse Render (Final)
         public ReverseRender Render { get; set; }
 
+        //AutoZ Step
+        public const float AutoZStep = -0.001f;
+
+        //Z Index Start
+        public const float ZIndexStart = 127.0f;
+
+        //Z Index
+        public float ZIndex { get; set; }
+
         /// <summary>
         /// Graphic User Interface Actor
         /// </summary>
         public GUI()
         {
-            //Init Cameras
-            Camera = new Camera() { Type = Camera.CameraType.Orthographic, Near = -127.0f, Far = 127.0f, IfEmptyRenderAll = false };
+            //Init Cameras and Z Index
+            ZIndex = ZIndexStart;
+            Camera = new Camera() { Type = Camera.CameraType.Orthographic, Near = -ZIndex, Far = ZIndex, IfEmptyRenderAll = false };
             TextRender = new Camera() { IfEmptyRenderAll = false};
             ElementRender = new Camera() { IfEmptyRenderAll = false};
 
@@ -68,23 +78,137 @@ namespace Soyuz
             Engine.Core.SetPrefabShader(ElementRender.ShaderID, Engine.Core.Prefab_Shader_Gui);
         }
 
-        //Box
+        /// <summary>
+        /// Remove
+        /// </summary>
+        /// <param name="e"></param>
+        public void Remove(GUIElement e)
+        {
+            foreach (GUIElement c in e.Children)
+                Elements.Remove(c);
+            Elements.Remove(e);
+        }
+
+        /// <summary>
+        /// Remove Text
+        /// </summary>
+        /// <param name="t"></param>
+        public void Remove(Text t)
+        {
+            foreach (Text c in t.Children)
+                Texts.Remove(c);
+            Texts.Remove(t);
+        }
+
+        /// <summary>
+        /// Show
+        /// </summary>
+        /// <param name="e"></param>
+        public void Show(GUIElement e)
+        {
+            foreach (GUIElement c in e.Children)
+                c.IsHidden = false;
+            e.IsHidden = false;
+        }
+
+        /// <summary>
+        /// Show text
+        /// </summary>
+        /// <param name="t"></param>
+        public void Show(Text t)
+        {
+            foreach (Text c in t.Children)
+                c.IsHidden = false;
+            t.IsHidden = false;
+        }
+
+        /// <summary>
+        /// Hide
+        /// </summary>
+        /// <param name="e"></param>
+        public void Hide(GUIElement e)
+        {
+            foreach (GUIElement c in e.Children)
+                c.IsHidden = true;
+            e.IsHidden = true;
+        }
+
+        /// <summary>
+        /// Hide text
+        /// </summary>
+        /// <param name="t"></param>
+        public void Hide(Text t)
+        {
+            foreach (Text c in t.Children)
+                c.IsHidden = true;
+            t.IsHidden = true;
+        }
+
+        /// <summary>
+        /// Box
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Color"></param>
+        /// <returns></returns>
         public Box Box(float X, float Y, float Width, float Height, Vector4 Color)
         {
             Box b = new Box(X, Y, Width, Height, Color);
             Elements.Add(b);
-            b.Depth = 10;
+
+            b.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
             return b;
         }
 
-        //Text
+        /// <summary>
+        /// Text
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Color"></param>
+        /// <param name="Text"></param>
+        /// <param name="Font"></param>
+        /// <param name="MaxWidth"></param>
+        /// <param name="LineSpacing"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <returns></returns>
         public Text Text(float X, float Y, Vector4 Color, string Text, Font Font, float MaxWidth = float.MaxValue, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
         {
             Text t = new Text(X, Y, Color, Text, Font, MaxWidth, LineSpacing, xOffset, yOffset);
             Texts.Add(t);
-            t.Depth = 9;
+
+            t.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
             return t;
         }
+
+        public GUIElement Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
+        {
+            //Box
+            Box b = new Box(X, Y, Width, Height, Color);
+            Elements.Add(b);
+            b.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
+            //Text
+            Text t = new Text(X, Y, new Vector4(1), Text, Font, Width, LineSpacing, xOffset, yOffset);
+            Texts.Add(t);
+            t.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
+            //Add Text to Box
+            b.Children.Add(t);
+
+            //Return Box
+            return b;
+        }
+
 
         /// <summary>
         /// Start
@@ -130,8 +254,8 @@ namespace Soyuz
         private void DoRender()
         {
             //Set Lists
-            ElementRender.Models = Elements.Cast<Model>().ToList();
-            TextRender.Models = Texts.Cast<Model>().ToList();
+            ElementRender.Models = Elements.Where(e => e.IsHidden == false).Cast<Model>().ToList();
+            TextRender.Models = Texts.Where(e => e.IsHidden == false).Cast<Model>().ToList();
 
             //Camera (Render GUI Element and Font)
             Camera.Render();

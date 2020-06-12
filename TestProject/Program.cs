@@ -121,6 +121,7 @@ namespace TestProject
             GUI ui = new GUI();
             ui.Text(55, 15, new Vector4(1), "I am a text", font, 85, 1.2f);
             ui.Box(55, 10, 150, 150, new Vector4(1, 0, 0, 0.995f));
+            ui.Button(10, 200, 150, 32, new Vector4(0, 0, 1, 0.995f), "Button", font);
             s.AddActor(ui);
 
             //Add Scene to Engine

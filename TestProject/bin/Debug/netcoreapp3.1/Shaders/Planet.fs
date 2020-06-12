@@ -119,12 +119,12 @@ void main() {
 	else if(Height <= 1.005)
 		out_color *= vec4(1,1,0.2 + delta,1);
 	//Grass
-	else if(Height <= 1.03)
+	else if(Height <= 1.02)
 		out_color *= vec4(0.2 + delta,1,0.2 + delta,1);
 	//Snow
 	else
 	{
-		delta = (Height - 1.03) * 10;
+		delta = (Height - 1.02) * 10;
 		out_color *= vec4(0.8 + delta,0.8 + delta,0.8 + delta,1);
 	}
 

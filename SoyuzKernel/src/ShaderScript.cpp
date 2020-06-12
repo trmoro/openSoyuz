@@ -287,7 +287,7 @@ const char* ShaderScript::Font_Fragment = "#version 330 core												\n\
 		out_color *= m_color;																				\n\
 	}																										";
 
-//Mix Fragment Script
+//Reverse Fragment Script
 const char* ShaderScript::Reverse_Fragment = "#version 330 core												\n\
 	in vec3 m_normal;																						\n\
 	in vec2 m_texCoord;																						\n\

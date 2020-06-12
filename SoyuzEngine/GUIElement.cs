@@ -33,6 +33,12 @@ namespace Soyuz
         //Is Clicked
         public bool IsClicked { get; set; }
 
+        //Is Hidden
+        public bool IsHidden { get; set; }
+
+        //Children
+        public List<GUIElement> Children { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -44,42 +50,43 @@ namespace Soyuz
             Height = 0;
             Depth = 0;
             Color = new Vector4(1);
+            Children = new List<GUIElement>();
+            IsHidden = false;
             ResetMouseEvent();
         }
 
         //Update
         public virtual void Update(Vector2 Mouse)
         {
-            //Reset all Mouse Event
-            ResetMouseEvent();
-
-            //Auto Update Position and Color
-            Position = new Vector3(X, Y, Depth);
-            Material.Color = Color;
-
-            //Check if mouse is in
-            if(Mouse.X >= X && Mouse.X <= X + Width && Mouse.Y >= Y && Mouse.Y <= Y + Height)
+            //Show ?
+            if (!IsHidden)
             {
-                IsHovered = true;
+                //Reset all Mouse Event
+                ResetMouseEvent();
 
-                //Left Click
-                if (Engine.Core.IsMouseClicked(0))
-                    IsClicked = true;
+                //Auto Update Position and Color
+                Position = new Vector3(X, Y, Depth);
+                Material.Color = Color;
+
+                //Check if mouse is in
+                if (Mouse.X >= X && Mouse.X <= X + Width && Mouse.Y >= Y && Mouse.Y <= Y + Height)
+                {
+                    IsHovered = true;
+
+                    //Left Click
+                    if (Engine.Core.IsMouseClicked(0))
+                        IsClicked = true;
+                }
+
+                //Update Children
+                foreach (GUIElement g in Children)
+                    g.Update(Mouse);
             }
-            
         }
 
         /// <summary>
-        /// Copy Mouse Event
+        /// Reset Mouse Event
         /// </summary>
-        /// <param name="g"></param>
-        public void CopyMouseEvent(GUIElement g)
-        {
-            IsHovered = g.IsHovered;
-            IsClicked = g.IsClicked;
-        }
-
-        //Reset Mouse Event
         private void ResetMouseEvent()
         {
             IsHovered = false;
@@ -89,7 +96,9 @@ namespace Soyuz
         //
     }
 
-    //Text
+    /// <summary>
+    /// Text Class
+    /// </summary>
     public class Text : GUIElement
     {
         //Text Constructor
@@ -118,7 +127,9 @@ namespace Soyuz
         //
     }
 
-    //Box
+    /// <summary>
+    /// Box Class
+    /// </summary>
     public class Box : GUIElement
     {
 
