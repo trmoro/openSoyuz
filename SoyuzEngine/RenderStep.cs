@@ -65,7 +65,7 @@ namespace Soyuz
             foreach (Model m in models)
             {
                 //Check if we have to render model
-                if (!NoRenderModels.Contains(m))
+                if (!NoRenderModels.Contains(m) && !m.IsHidden)
                 {
                     //Material
                     Material mat = m.Material;

@@ -33,9 +33,6 @@ namespace Soyuz
         //Is Clicked
         public bool IsClicked { get; set; }
 
-        //Is Hidden
-        public bool IsHidden { get; set; }
-
         //Children
         public List<GUIElement> Children { get; set; }
 

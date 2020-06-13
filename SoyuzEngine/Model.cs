@@ -8,6 +8,9 @@ namespace Soyuz
     //Model
     public class Model
     {
+        //Hidden
+        public bool IsHidden { get; set; }
+
         //All Meshes
         public List<Mesh> Meshes { get; set; }
 
@@ -51,6 +54,7 @@ namespace Soyuz
         {
             //Create Model
             ModelID = Engine.Core.CreateModel();
+            IsHidden = false;
 
             //Default Material
             Material = new Material();
