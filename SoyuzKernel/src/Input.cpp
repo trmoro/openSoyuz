@@ -9,7 +9,7 @@ namespace SK
 	int Input::Window_Width		= 0;
 
 	//Key
-	int Input::Key_Char = 0;
+	int Input::Key_Char		= 0;
 	int Input::Key_Id		= 0;
 	int Input::Key_Scancode = 0;
 	int Input::Key_Action	= 0;

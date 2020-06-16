@@ -373,6 +373,12 @@ namespace SKW
 		return m_Instance->isMouseClicked(button);
 	}
 
+	//Is Mouse Released
+	bool Core::IsMouseReleased(int button)
+	{
+		return m_Instance->isMouseReleased(button);
+	}
+
 	//Update Mouse To World Coordinate
 	void Core::UpdateMouseToWorld()
 	{

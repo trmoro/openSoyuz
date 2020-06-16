@@ -115,7 +115,7 @@ namespace TestProject
 
             //Load Font
             Font font = new Font();
-            font.Load("Fonts/consola.ttf", 14);
+            font.Load("Fonts/consola.ttf", 24);
 
             //GUI
             GUI ui = new GUI();

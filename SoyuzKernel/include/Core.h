@@ -231,8 +231,9 @@ namespace SK
 		//Is Key Pressed
 		bool isKeyPressed(int key);
 
-		//Is Mouse Button Clicked
+		//Is Mouse Button Clicked or Released
 		bool isMouseClicked(int button);
+		bool isMouseReleased(int button);
 
 		//Get Log
 		Log* getLog() const;

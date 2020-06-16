@@ -183,6 +183,9 @@ namespace SKW
 		//Is Mouse Clicked
 		bool IsMouseClicked(int button);
 
+		//Is Mouse Released
+		bool IsMouseReleased(int button);
+
 		//Mouse To World Coordinate
 		void UpdateMouseToWorld();
 		float GetMouseToWorldX();

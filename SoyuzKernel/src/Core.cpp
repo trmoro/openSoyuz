@@ -726,6 +726,12 @@ namespace SK
 		return (button == Input::Mouse_Button && Input::Mouse_Action == 1);
 	}
 
+	//Is Mouse Released
+	bool Core::isMouseReleased(int button)
+	{
+		return (button == Input::Mouse_Button && Input::Mouse_Action == 0);
+	}
+
 	//Get Log
 	Log* Core::getLog() const
 	{
