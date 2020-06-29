@@ -52,8 +52,8 @@ namespace Soyuz
             //Init Cameras and Z Index
             ZIndex = ZIndexStart;
             Camera = new Camera() { Type = Camera.CameraType.Orthographic, Near = -ZIndex, Far = ZIndex, IfEmptyRenderAll = false };
-            TextRender = new Camera() { IfEmptyRenderAll = false};
-            ElementRender = new Camera() { IfEmptyRenderAll = false};
+            TextRender = new Camera(false) { IfEmptyRenderAll = false};
+            ElementRender = new Camera(false) { IfEmptyRenderAll = false};
 
             //Duplicate Camera
             Camera.Duplicates.Add(ElementRender);
@@ -74,8 +74,8 @@ namespace Soyuz
             TextsFX = new List<RenderStep>();
 
             //Init Shader
-            Engine.Core.SetPrefabShader(TextRender.ShaderID, Engine.Core.Prefab_Shader_Font);
-            Engine.Core.SetPrefabShader(ElementRender.ShaderID, Engine.Core.Prefab_Shader_Gui);
+            TextRender.AddPrefabShader(Engine.Core.Prefab_Shader_Font, m => !m.IsHidden);
+            ElementRender.AddPrefabShader(Engine.Core.Prefab_Shader_Gui, m => !m.IsHidden);
         }
 
         /// <summary>

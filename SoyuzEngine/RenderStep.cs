@@ -54,15 +54,15 @@ namespace Soyuz
 
             //If Empty
             if (IfEmptyRenderAll)
-                RenderModels(Engine.Instance.Scene.Models);
+                RenderModels(Engine.Instance.Scene.Models,ShaderID);
             //If not empty
             else if (Models.Count > 0)
-                RenderModels(Models);
+                RenderModels(Models,ShaderID);
             //
         }
 
         //Render Models
-        protected void RenderModels(List<Model> models)
+        protected void RenderModels(List<Model> models, int ShaderID)
         {
             //Foreach Model
             foreach (Model m in models)
@@ -233,10 +233,10 @@ namespace Soyuz
 
                 //If Empty
                 if (IfEmptyRenderAll)
-                    RenderModels(Engine.Instance.Scene.Models.Where(ShaderMap[i]).ToList() );
+                    RenderModels(Engine.Instance.Scene.Models.Where(ShaderMap[i]).ToList(), i);
                 //If not empty
                 else if (Models.Count > 0)
-                    RenderModels(Models.Where(ShaderMap[i]).ToList() );
+                    RenderModels(Models.Where(ShaderMap[i]).ToList(), i);
             }
         }
     }
