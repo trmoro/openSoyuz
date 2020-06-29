@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Soyuz
 {
@@ -59,7 +62,7 @@ namespace Soyuz
         }
 
         //Render Models
-        private void RenderModels(List<Model> models)
+        protected void RenderModels(List<Model> models)
         {
             //Foreach Model
             foreach (Model m in models)
@@ -152,6 +155,89 @@ namespace Soyuz
             }
         }
 
+    }
+
+    /// <summary>
+    /// Multi Shader Render Step
+    /// </summary>
+    public class MultiShaderRender : RenderStep
+    {
+        //Shader Map
+        public Dictionary<int,Func<Model,bool> > ShaderMap { get; set; }
+
+        /// <summary>
+        /// Multi Shader Render
+        /// </summary>
+        public MultiShaderRender()
+        {
+            //Create FrameBuffer
+            FrameBufferID = Engine.Core.CreateFrameBuffer();
+
+            ShaderMap[0] = m => m.Barycenter.X >= 5;
+
+            //List of Model to Render and not
+            Models = new List<Model>();
+            NoRenderModels = new List<Model>();
+            IfEmptyRenderAll = true;
+        }
+
+        /// <summary>
+        /// Add Prefab Shader
+        /// </summary>
+        /// <param name="PrefabID"></param>
+        /// <param name="Condition"></param>
+        public void AddPrefabShader(int PrefabID, Func<Model, bool> Condition)
+        {
+            int ShaderID = Engine.Core.CreateShader();
+            Engine.Core.SetPrefabShader(ShaderID, PrefabID);
+            ShaderMap[ShaderID] = Condition;
+        }
+
+        /// <summary>
+        /// Add Shader
+        /// </summary>
+        /// <param name="VertexPath"></param>
+        /// <param name="FragmentPath"></param>
+        /// <param name="Condition"></param>
+        public void AddShader(string VertexPath, string FragmentPath, Func<Model,bool> Condition)
+        {
+            int ShaderID = Engine.Core.CreateShader();
+            Engine.Core.SetShader(ShaderID, File.ReadAllText(VertexPath), File.ReadAllText(FragmentPath));
+            ShaderMap[ShaderID] = Condition;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VertexPath"></param>
+        /// <param name="GeometryPath"></param>
+        /// <param name="FragmentPath"></param>
+        /// <param name="Condition"></param>
+        public void AddShader(string VertexPath, string GeometryPath, string FragmentPath, Func<Model,bool> Condition)
+        {
+            int ShaderID = Engine.Core.CreateShader();
+            Engine.Core.SetShader(ShaderID, File.ReadAllText(VertexPath), File.ReadAllText(GeometryPath), File.ReadAllText(FragmentPath));
+            ShaderMap[ShaderID] = Condition;
+        }
+
+        /// <summary>
+        /// Render the Scene
+        /// </summary>
+        public override void Render()
+        {
+            //Render
+            foreach (int i in ShaderMap.Keys)
+            {
+                Engine.Core.RenderInit(FrameBufferID, i);
+
+                //If Empty
+                if (IfEmptyRenderAll)
+                    RenderModels(Engine.Instance.Scene.Models.Where(ShaderMap[i]).ToList() );
+                //If not empty
+                else if (Models.Count > 0)
+                    RenderModels(Models.Where(ShaderMap[i]).ToList() );
+            }
+        }
     }
 
 

@@ -46,6 +46,10 @@ namespace Soyuz
         public Dictionary<string, Vector4> UniformVec4 { get; set; }
         public Dictionary<string, Font> UniformFont { get; set; }
 
+        //Multi Shader Variable
+        public string MultiShader_StrVal { get; set; }
+        public bool MultiShader_Pass { get; set; }
+
 
         /// <summary>
         /// Model Constructor
@@ -69,6 +73,10 @@ namespace Soyuz
 
             //Name
             Name = "noname";
+
+            //Multishader Variable
+            MultiShader_StrVal = "";
+            MultiShader_Pass = true;
 
             //Uniform Dictionaries
             UniformInt      = new Dictionary<string, int>();
