@@ -173,7 +173,8 @@ namespace Soyuz
             //Create FrameBuffer
             FrameBufferID = Engine.Core.CreateFrameBuffer();
 
-            ShaderMap[0] = m => m.Barycenter.X >= 5;
+            //ShaderMap
+            ShaderMap = new Dictionary<int, Func<Model, bool>>();
 
             //List of Model to Render and not
             Models = new List<Model>();

@@ -93,7 +93,8 @@ namespace TestProject
             d.IfEmptyRenderAll = false;
 
             //Create another Duplicate
-            Camera pc = new Camera("Shaders/Planet.vs", "Shaders/Planet.gs", "Shaders/Planet.fs");
+            Camera pc = new Camera();
+            pc.AddShader("Shaders/Planet.vs", "Shaders/Planet.gs", "Shaders/Planet.fs", m => m.MultiShader_Pass);
             c.Duplicates.Add(pc);
             pc.IfEmptyRenderAll = false;
             pc.Models.Add(planet);
