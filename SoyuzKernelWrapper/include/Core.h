@@ -192,6 +192,9 @@ namespace SKW
 		float GetMouseToWorldY();
 		float GetMouseToWorldZ();
 
+		//Set Window Title
+		void SetWindowTitle(String^ Title);
+
 		//Update
 		//If true : it's time to end core
 		bool Update();

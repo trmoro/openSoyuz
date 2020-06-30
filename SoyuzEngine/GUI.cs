@@ -11,20 +11,20 @@ namespace Soyuz
         //Main Render Camera
         public Camera Camera { get; set; }
 
-        //Font Camera Duplicate
+        //Text Camera Duplicate
         public Camera TextRender { get; set; }
-
-        //Text Model List
-        public List<Text> Texts { get; set; }
-
-        //GUIElement Render Step Effect
-        public List<RenderStep> ElementsFX { get; set; }
 
         //Text Render Step Effects
         public List<RenderStep> TextsFX { get; set; }
 
+        //Text Model List
+        public List<Text> Texts { get; set; }
+
         //GUI Element Camera Duplicate
         public Camera ElementRender { get; set; }
+
+        //GUIElement Render Step Effect
+        public List<RenderStep> ElementsFX { get; set; }
 
         //GUIElement List
         public List<GUIElement> Elements { get; set; } 
@@ -165,6 +165,31 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Box
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Color"></param>
+        /// <returns></returns>
+        public Box Image(float X, float Y, float Width, float Height, string Path, int NumberOfChannel = 3)
+        {
+            Box b = new Box(X, Y, Width, Height, new Vector4(1) );
+            Texture t = new Texture();
+            t.Load(Path, NumberOfChannel);
+            t.Update();
+            b.Material.IsTextured = true;
+            b.Material.Texture = t;
+            Elements.Add(b);
+
+            b.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
+            return b;
+        }
+
+        /// <summary>
         /// Text
         /// </summary>
         /// <param name="X"></param>
@@ -188,6 +213,20 @@ namespace Soyuz
             return t;
         }
 
+        /// <summary>
+        /// Button
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Color"></param>
+        /// <param name="Text"></param>
+        /// <param name="Font"></param>
+        /// <param name="LineSpacing"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <returns></returns>
         public GUIElement Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
         {
             //Box
@@ -257,7 +296,7 @@ namespace Soyuz
             ElementRender.Models = Elements.Where(e => e.IsHidden == false).Cast<Model>().ToList();
             TextRender.Models = Texts.Where(e => e.IsHidden == false).Cast<Model>().ToList();
 
-            //Camera (Render GUI Element and Font)
+            //Camera (Render GUI Element and Text)
             Camera.Render();
 
             //GUI Element RenderStep Effect

@@ -255,6 +255,9 @@ namespace SK
 		float getMouseToWorldY() const;
 		float getMouseToWorldZ() const;
 
+		//Set Window Title
+		void setWindowTitle(const char* title);
+
 	private:
 
 		//GLFW init

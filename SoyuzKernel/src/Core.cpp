@@ -22,7 +22,9 @@ namespace SK
 		m_projViewMatrix = glm::mat4(0);
 
 		//openSoyuz
-		std::cout << "<-- openSoyuz -->" << std::endl;
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
+		std::cout << ">>>>>>>>   openSoyuz   >>>>>>>>" << std::endl;
+		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl << std::endl;
 
 		//Core Inited
 		m_log->add("Core Started", LOG_OK);
@@ -796,6 +798,12 @@ namespace SK
 	float Core::getMouseToWorldZ() const
 	{
 		return m_mouseToWorld.z;
+	}
+
+	//Set Window Title
+	void Core::setWindowTitle(const char* title)
+	{
+		glfwSetWindowTitle(m_window, title);
 	}
 
 	//

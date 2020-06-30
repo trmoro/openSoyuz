@@ -403,6 +403,12 @@ namespace SKW
 		return m_Instance->getMouseToWorldZ();
 	}
 
+	//Set Window Title
+	void Core::SetWindowTitle(String^ Title)
+	{
+		m_Instance->setWindowTitle(stringToCharArray(Title));
+	}
+
 	//Update
 	//If true : it's time to end core
 	bool Core::Update()

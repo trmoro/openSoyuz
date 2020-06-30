@@ -11,6 +11,7 @@ namespace TestProject
 
             //Create Engine
             Engine e = new Engine();
+            Engine.Core.SetWindowTitle("TestProject");
 
             //Create Texture
             Texture t = new Texture();
