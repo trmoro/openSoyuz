@@ -215,8 +215,11 @@ namespace SK
 		//Show FrameBuffer
 		void showFrameBuffer(int frameBufferID);
 
-		//Render Init
-		void renderInit(int frameBufferID, int shaderID);
+		//Use Framebuffer
+		void useFrameBuffer(int frameBufferID);
+
+		//Use Shader
+		void useShader(int shaderID);
 
 		//Render Model
 		void renderModel(int shaderID, int modelID);

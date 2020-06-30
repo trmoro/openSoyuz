@@ -663,12 +663,11 @@ namespace SK
 		glUseProgram(0);
 	}
 
-	//Render
-	void Core::renderInit(int frameBufferID, int shaderID)
+	//Use Framebuffer
+	void Core::useFrameBuffer(int frameBufferID)
 	{
 		//Get Objects
 		FrameBuffer* f = m_framebuffers[frameBufferID];
-		Shader* s = m_shaders[shaderID];
 
 		//Width and Height
 		int width = Input::Window_Width;
@@ -681,6 +680,12 @@ namespace SK
 		glBindFramebuffer(GL_FRAMEBUFFER, f->getID());
 		glViewport(0, 0, width, height);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	//Use Shader
+	void Core::useShader(int shaderID)
+	{
+		Shader* s = m_shaders[shaderID];
 		glUseProgram(s->getID());
 	}
 

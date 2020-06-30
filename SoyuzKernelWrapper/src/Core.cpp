@@ -313,10 +313,16 @@ namespace SKW
 		m_Instance->addTextAsMesh(FontID, ModelID, stringToCharArray(Text), X, Y, MaxWidth, LineSpacing);
 	}
 
-	//Render
-	void Core::RenderInit(int FrameBufferID, int ShaderID)
+	//Use Framebuffer
+	void Core::UseFramebuffer(int FrameBufferID)
 	{
-		m_Instance->renderInit(FrameBufferID, ShaderID);
+		m_Instance->useFrameBuffer(FrameBufferID);
+	}
+
+	//Use Shader
+	void Core::UseShader(int ShaderID)
+	{
+		m_Instance->useShader(ShaderID);
 	}
 
 	//Render Model

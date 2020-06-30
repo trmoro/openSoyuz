@@ -50,7 +50,8 @@ namespace Soyuz
         public virtual void Render()
         {
             //Render
-            Engine.Core.RenderInit(FrameBufferID, ShaderID);
+            Engine.Core.UseFramebuffer(FrameBufferID);
+            Engine.Core.UseShader(ShaderID);
 
             //If Empty
             if (IfEmptyRenderAll)
@@ -226,10 +227,14 @@ namespace Soyuz
         /// </summary>
         public override void Render()
         {
+            //Set Framebuffer to use
+            Engine.Core.UseFramebuffer(FrameBufferID);
+
             //Render
             foreach (int i in ShaderMap.Keys)
             {
-                Engine.Core.RenderInit(FrameBufferID, i);
+                //Set Shader to use
+                Engine.Core.UseShader(i);
 
                 //If Empty
                 if (IfEmptyRenderAll)

@@ -153,8 +153,11 @@ namespace SKW
 		//Add Text as Mesh to the given Model
 		void AddTextAsMesh(int FontID, int ModelID, String^ Text, float X, float Y, float MaxWidth, float LineSpacing);
 
-		//Render Init
-		void RenderInit(int FrameBufferID, int ShaderID);
+		//Use Framebuffer
+		void UseFramebuffer(int FrameBufferID);
+
+		//Use Shader
+		void UseShader(int ShaderID);
 
 		//Render Model
 		void RenderModel(int ShaderID, int ModelID);
