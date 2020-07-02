@@ -74,8 +74,13 @@ namespace Soyuz
             TextsFX = new List<RenderStep>();
 
             //Init Shader
-            TextRender.AddPrefabShader(Engine.Core.Prefab_Shader_Font, m => !m.IsHidden);
-            ElementRender.AddPrefabShader(Engine.Core.Prefab_Shader_Gui, m => !m.IsHidden);
+            Shader fontShader = new Shader();
+            fontShader.LoadPrefab(Engine.Core.Prefab_Shader_Font);
+            TextRender.AddShader(fontShader, m => !m.IsHidden);
+
+            Shader elemShader = new Shader();
+            elemShader.LoadPrefab(Engine.Core.Prefab_Shader_Gui);
+            ElementRender.AddShader(elemShader, m => !m.IsHidden);
         }
 
         /// <summary>

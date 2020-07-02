@@ -12,8 +12,8 @@ namespace Soyuz
     /// </summary>
     public class RenderStep
     {
-        //Shader ID
-        public int ShaderID = -1;
+        //Shader
+        public Shader Shader;
 
         //FrameBuffer ID
         public int FrameBufferID = -1;
@@ -36,7 +36,7 @@ namespace Soyuz
             FrameBufferID = Engine.Core.CreateFrameBuffer();
 
             //Create Shader
-            ShaderID = Engine.Core.CreateShader();
+            Shader = new Shader();
 
             //List of Model to Render and not
             Models = new List<Model>();
@@ -51,14 +51,14 @@ namespace Soyuz
         {
             //Render
             Engine.Core.UseFramebuffer(FrameBufferID);
-            Engine.Core.UseShader(ShaderID);
+            Engine.Core.UseShader(Shader.ID);
 
             //If Empty
             if (IfEmptyRenderAll)
-                RenderModels(Engine.Instance.Scene.Models,ShaderID);
+                RenderModels(Engine.Instance.Scene.Models, Shader.ID);
             //If not empty
             else if (Models.Count > 0)
-                RenderModels(Models,ShaderID);
+                RenderModels(Models, Shader.ID);
             //
         }
 
@@ -164,7 +164,7 @@ namespace Soyuz
     public class MultiShaderRender : RenderStep
     {
         //Shader Map
-        public Dictionary<int,Func<Model,bool> > ShaderMap { get; set; }
+        public Dictionary<Shader, Func<Model,bool> > ShaderMap { get; set; }
 
         /// <summary>
         /// Multi Shader Render
@@ -175,7 +175,7 @@ namespace Soyuz
             FrameBufferID = Engine.Core.CreateFrameBuffer();
 
             //ShaderMap
-            ShaderMap = new Dictionary<int, Func<Model, bool>>();
+            ShaderMap = new Dictionary<Shader, Func<Model, bool>>();
 
             //List of Model to Render and not
             Models = new List<Model>();
@@ -184,42 +184,13 @@ namespace Soyuz
         }
 
         /// <summary>
-        /// Add Prefab Shader
+        /// Add Shader with condition
         /// </summary>
-        /// <param name="PrefabID"></param>
+        /// <param name="Shader"></param>
         /// <param name="Condition"></param>
-        public void AddPrefabShader(int PrefabID, Func<Model, bool> Condition)
+        public void AddShader(Shader Shader, Func<Model,bool> Condition)
         {
-            int ShaderID = Engine.Core.CreateShader();
-            Engine.Core.SetPrefabShader(ShaderID, PrefabID);
-            ShaderMap[ShaderID] = Condition;
-        }
-
-        /// <summary>
-        /// Add Shader
-        /// </summary>
-        /// <param name="VertexPath"></param>
-        /// <param name="FragmentPath"></param>
-        /// <param name="Condition"></param>
-        public void AddShader(string VertexPath, string FragmentPath, Func<Model,bool> Condition)
-        {
-            int ShaderID = Engine.Core.CreateShader();
-            Engine.Core.SetShader(ShaderID, File.ReadAllText(VertexPath), File.ReadAllText(FragmentPath));
-            ShaderMap[ShaderID] = Condition;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="VertexPath"></param>
-        /// <param name="GeometryPath"></param>
-        /// <param name="FragmentPath"></param>
-        /// <param name="Condition"></param>
-        public void AddShader(string VertexPath, string GeometryPath, string FragmentPath, Func<Model,bool> Condition)
-        {
-            int ShaderID = Engine.Core.CreateShader();
-            Engine.Core.SetShader(ShaderID, File.ReadAllText(VertexPath), File.ReadAllText(GeometryPath), File.ReadAllText(FragmentPath));
-            ShaderMap[ShaderID] = Condition;
+            ShaderMap[Shader] = Condition;
         }
 
         /// <summary>
@@ -231,17 +202,17 @@ namespace Soyuz
             Engine.Core.UseFramebuffer(FrameBufferID);
 
             //Render
-            foreach (int i in ShaderMap.Keys)
+            foreach (Shader s in ShaderMap.Keys)
             {
                 //Set Shader to use
-                Engine.Core.UseShader(i);
+                Engine.Core.UseShader(s.ID);
 
                 //If Empty
                 if (IfEmptyRenderAll)
-                    RenderModels(Engine.Instance.Scene.Models.Where(ShaderMap[i]).ToList(), i);
+                    RenderModels(Engine.Instance.Scene.Models.Where(ShaderMap[s]).ToList(), s.ID);
                 //If not empty
                 else if (Models.Count > 0)
-                    RenderModels(Models.Where(ShaderMap[i]).ToList(), i);
+                    RenderModels(Models.Where(ShaderMap[s]).ToList(), s.ID);
             }
         }
     }
@@ -278,7 +249,7 @@ namespace Soyuz
             Operation = op;
 
             //Set Prefab Shader
-            Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Mix);
+            Engine.Core.SetPrefabShader(Shader.ID, Engine.Core.Prefab_Shader_Mix);
         }
 
         /// <summary>
@@ -287,15 +258,15 @@ namespace Soyuz
         public override void Render()
         {
             //Render Init
-            Engine.Core.RenderFrameBufferInit(FrameBufferID, ShaderID);
+            Engine.Core.RenderFrameBufferInit(FrameBufferID, Shader.ID);
 
             //Set Uniform
-            Engine.Core.SetUniformFrameBuffer(ShaderID, "m_t1", First.FrameBufferID, 0);
-            Engine.Core.SetUniformFrameBuffer(ShaderID, "m_t2", Second.FrameBufferID, 1);
-            Engine.Core.SetUniformI(ShaderID, "m_op", (int) Operation);
+            Engine.Core.SetUniformFrameBuffer(Shader.ID, "m_t1", First.FrameBufferID, 0);
+            Engine.Core.SetUniformFrameBuffer(Shader.ID, "m_t2", Second.FrameBufferID, 1);
+            Engine.Core.SetUniformI(Shader.ID, "m_op", (int) Operation);
 
             //Render
-            Engine.Core.RenderFrameBuffer(ShaderID);
+            Engine.Core.RenderFrameBuffer(Shader.ID);
         }
     }
 
@@ -321,7 +292,7 @@ namespace Soyuz
         public ConvolutionRender(RenderStep source, Matrix4x4 mat) : base()
         {
             //Set Prefab Shader
-            Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Conv);
+            Engine.Core.SetPrefabShader(Shader.ID, Engine.Core.Prefab_Shader_Conv);
 
             SourceRender = source;
             ConvMatrix = new float[3,3]{ { mat.M11, mat.M12, mat.M13},{ mat.M21, mat.M22, mat.M23 },{ mat.M31, mat.M32, mat.M33 } };
@@ -337,7 +308,7 @@ namespace Soyuz
         public ConvolutionRender(RenderStep source, float[,] mat3x3, float coef)
         {
             //Set Prefab Shader
-            Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Conv);
+            Engine.Core.SetPrefabShader(Shader.ID, Engine.Core.Prefab_Shader_Conv);
 
             SourceRender = source;
             ConvMatrix = mat3x3;
@@ -350,17 +321,17 @@ namespace Soyuz
         public override void Render()
         {
             //Render Init
-            Engine.Core.RenderFrameBufferInit(FrameBufferID, ShaderID);
+            Engine.Core.RenderFrameBufferInit(FrameBufferID, Shader.ID);
 
             //Set Uniform
-            Engine.Core.SetUniformFrameBuffer(ShaderID, "m_texture", SourceRender.FrameBufferID, 0);
-            Engine.Core.SetUniformMat3(ShaderID, "m_convMat", ConvMatrix[0,0], ConvMatrix[0,1], ConvMatrix[0,2]
+            Engine.Core.SetUniformFrameBuffer(Shader.ID, "m_texture", SourceRender.FrameBufferID, 0);
+            Engine.Core.SetUniformMat3(Shader.ID, "m_convMat", ConvMatrix[0,0], ConvMatrix[0,1], ConvMatrix[0,2]
                 , ConvMatrix[1,0], ConvMatrix[1,1], ConvMatrix[1,2]
                 , ConvMatrix[2,0], ConvMatrix[2,1], ConvMatrix[2,2]);
-            Engine.Core.SetUniformF(ShaderID, "m_convCoef", ConvCoef);
+            Engine.Core.SetUniformF(Shader.ID, "m_convCoef", ConvCoef);
 
             //Render
-            Engine.Core.RenderFrameBuffer(ShaderID);
+            Engine.Core.RenderFrameBuffer(Shader.ID);
         }
     }
 
@@ -391,7 +362,7 @@ namespace Soyuz
             Operation = op;
 
             //Set Prefab Shader
-            Engine.Core.SetPrefabShader(ShaderID, Engine.Core.Prefab_Shader_Reverse);
+            Engine.Core.SetPrefabShader(Shader.ID, Engine.Core.Prefab_Shader_Reverse);
         }
 
         /// <summary>
@@ -400,14 +371,14 @@ namespace Soyuz
         public override void Render()
         {
             //Render Init
-            Engine.Core.RenderFrameBufferInit(FrameBufferID, ShaderID);
+            Engine.Core.RenderFrameBufferInit(FrameBufferID, Shader.ID);
 
             //Set Uniform
-            Engine.Core.SetUniformFrameBuffer(ShaderID, "m_source", SourceRender.FrameBufferID, 0);
-            Engine.Core.SetUniformI(ShaderID, "m_op", (int)Operation);
+            Engine.Core.SetUniformFrameBuffer(Shader.ID, "m_source", SourceRender.FrameBufferID, 0);
+            Engine.Core.SetUniformI(Shader.ID, "m_op", (int)Operation);
 
             //Render
-            Engine.Core.RenderFrameBuffer(ShaderID);
+            Engine.Core.RenderFrameBuffer(Shader.ID);
         }
     }
 

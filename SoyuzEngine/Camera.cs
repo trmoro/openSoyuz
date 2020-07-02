@@ -56,7 +56,11 @@ namespace Soyuz
 
             //Set Prefab Shader
             if (AddDefaultShader)
-                AddPrefabShader(Engine.Core.Prefab_Shader_Lighting, m => m.MultiShader_Pass);
+            {
+                Shader prefab = new Shader();
+                prefab.LoadPrefab(Engine.Core.Prefab_Shader_Lighting);
+                AddShader(prefab, m => m.MultiShader_Pass);
+            }
 
             Radius = 80.0f;
             Near = 0.005f;
@@ -78,7 +82,8 @@ namespace Soyuz
                 Engine.Core.SetOrthographicBoxCamera(Position.X, Position.Y, Position.Z, Target.X, Target.Y, Target.Z, OB_minX, OB_maxX, OB_minY, OB_maxY, OB_minZ, OB_maxZ);
 
             //Set Camera Position
-            Engine.Core.SetUniformVec3(ShaderID, "m_camPos", Position.X, Position.Y, Position.Z);
+            foreach(Shader s in ShaderMap.Keys)
+                Engine.Core.SetUniformVec3(s.ID, "m_camPos", Position.X, Position.Y, Position.Z);
 
             //Base Rendering Method
             base.Render();
