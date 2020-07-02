@@ -19,6 +19,9 @@ namespace SK
 	//Destructor
 	FrameBuffer::~FrameBuffer()
 	{
+		glDeleteTextures(1, &m_textureID);
+		glDeleteTextures(1, &m_depthID);
+		glDeleteFramebuffers(1, &m_framebufferID);
 	}
 
 	//Update

@@ -107,6 +107,12 @@ namespace SKW
 		m_Instance->setModelScale(ModelID, x, y, z);
 	}
 
+	//Set Mesh Draw Mode
+	void Core::SetMeshDrawMode(int ModelID, int MeshID, int DrawMode)
+	{
+		m_Instance->setMeshDrawMode(ModelID, MeshID, DrawMode);
+	}
+
 	//Load Model
 	void Core::LoadModel(int ModelID, String^ Path)
 	{
@@ -413,6 +419,42 @@ namespace SKW
 	void Core::SetWindowTitle(String^ Title)
 	{
 		m_Instance->setWindowTitle(stringToCharArray(Title));
+	}
+
+	//Delete FrameBuffer
+	void Core::DeleteFrameBuffer(int FramebufferID)
+	{
+		m_Instance->deleteFrameBuffer(FramebufferID);
+	}
+
+	//Delete Shader
+	void Core::DeleteShader(int ShaderID)
+	{
+		m_Instance->deleteShader(ShaderID);
+	}
+
+	//Delete Model
+	void Core::DeleteModel(int ModelID)
+	{
+		m_Instance->deleteModel(ModelID);
+	}
+
+	//Delete Mesh
+	void Core::DeleteMesh(int ModelID, int MeshID)
+	{
+		m_Instance->deleteMesh(ModelID, MeshID);
+	}
+
+	//Delete Texture
+	void Core::DeleteTexture(int TextureID)
+	{
+		m_Instance->deleteTexture(TextureID);
+	}
+
+	//Delete Font
+	void Core::DeleteFont(int FontID)
+	{
+		m_Instance->deleteFont(FontID);
 	}
 
 	//Update

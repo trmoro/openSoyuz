@@ -11,6 +11,9 @@ namespace SK
 		//Constructor
 		Mesh();
 
+		//Destructor
+		~Mesh();
+
 		//Prepare Memory
 		void prepareMemory(unsigned int nVertex, unsigned int nIndex);
 
@@ -25,6 +28,9 @@ namespace SK
 
 		//Render
 		void render();
+
+		//Set Draw Mode
+		void setDrawMode(unsigned int drawmode);
 
 	private:
 
@@ -41,6 +47,10 @@ namespace SK
 		//Number of Element Added
 		int m_nVertex;
 		int m_nIndex;
+
+		//Drawing Mode
+		unsigned int m_drawmode;
+
 	};
 
 }

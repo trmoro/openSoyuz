@@ -21,6 +21,9 @@ namespace SK
 		//Constructor
 		Model(Log* log);
 
+		//Destructor
+		~Model();
+
 		//Create Mesh
 		int createMesh();
 
@@ -61,7 +64,13 @@ namespace SK
 		//Compute Matrices
 		glm::mat4 getModelRotationMatrix() const;
 		glm::mat4 getRotationMatrix() const;
+
+		//Get Mesh
+		Mesh* getMesh(int meshID) const;
 	
+		//Delete Mesh
+		void deleteMesh(int meshID);
+
 	private:
 
 		//Meshes
@@ -74,6 +83,5 @@ namespace SK
 
 		//Log
 		Log* m_log;
-
 	};
 }

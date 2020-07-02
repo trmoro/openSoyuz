@@ -32,6 +32,14 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Finalizer
+        /// </summary>
+        ~Texture()
+        {
+            Delete();
+        }
+
+        /// <summary>
         /// Set With Data Array, all Texture variables must be set before
         /// </summary>
         /// <param name="Data">Float Data Array</param>
@@ -200,6 +208,14 @@ namespace Soyuz
         public void Border(uint Size = 1, float Value = 0.0f)
         {
             Transform(Engine.Core.TexTransform_Border, new float[2] { Size, Value });
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        public void Delete()
+        {
+            Engine.Core.DeleteTexture(ID);
         }
 
         //

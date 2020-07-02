@@ -24,7 +24,10 @@ namespace SK
 		m_logsID.push_back(id);
 
 		//Display to Console
-		std::cout << id << " : " << msg << std::endl;
+		if(id == LOG_OK)
+			std::cout << "OK    : " << msg << std::endl;
+		else
+			std::cout << "ERROR : " << msg << std::endl;
 	}
 
 	//Add Mat4x4

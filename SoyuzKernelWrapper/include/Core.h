@@ -59,6 +59,9 @@ namespace SKW
 		//Set Model Scale
 		void SetModelScale(int ModelID, float x, float y, float z);
 
+		//Set Mesh Draw Mode
+		void SetMeshDrawMode(int ModelID, int MeshID, int DrawMode);
+
 		//Load Model
 		void LoadModel(int ModelID, String^ Path);
 
@@ -198,6 +201,24 @@ namespace SKW
 		//Set Window Title
 		void SetWindowTitle(String^ Title);
 
+		//Delete Framebuffer
+		void DeleteFrameBuffer(int FramebufferID);
+
+		//Delete Shader
+		void DeleteShader(int ShaderID);
+
+		//Delete Model
+		void DeleteModel(int ModelID);
+
+		//Delete Mesh
+		void DeleteMesh(int ModelID, int MeshID);
+
+		//Delete Texture
+		void DeleteTexture(int TextureID);
+
+		//Delete Font
+		void DeleteFont(int FontID);
+
 		//Update
 		//If true : it's time to end core
 		bool Update();
@@ -214,6 +235,11 @@ namespace SKW
 
 		const int TexTransform_Perlin = TEXTF_PERLIN;
 		const int TexTransform_Border = TEXTF_BORDER;
+
+		const int Model_DrawMode_Triangles	= MODEL_DRAW_TRIANGLES;
+		const int Model_DrawMode_Quads		= MODEL_DRAW_QUADS;
+		const int Model_DrawMode_Lines		= MODEL_DRAW_LINES;
+		const int Model_DrawMode_LineStrip	= MODEL_DRAW_LINE_STRIP;
 
 	};
 }

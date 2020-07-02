@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using System.Numerics;
+using Soyuz.Meshes;
 
 namespace Soyuz
 {
@@ -146,8 +147,7 @@ namespace Soyuz
             this.Height = Height;
             this.Color = Color;
 
-            Mesh rect = new Mesh();
-            rect.Rect();
+            Mesh rect = Quad.Rect();
             Meshes.Add(rect);
             Compile();
         }

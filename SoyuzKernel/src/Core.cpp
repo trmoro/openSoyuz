@@ -329,6 +329,12 @@ namespace SK
 		m_models[modelID]->load(path);
 	}
 
+	//Set Mesh Draw Mode
+	void Core::setMeshDrawMode(int modelID, int meshID, unsigned int drawmode)
+	{
+		m_models[modelID]->getMesh(meshID)->setDrawMode(drawmode);
+	}
+
 	//Set Perspective Camera
 	void Core::setPerspectiveCamera(float x, float y, float z, float targetX, float targetY, float targetZ, float radius, float near, float far)
 	{
@@ -809,6 +815,47 @@ namespace SK
 	void Core::setWindowTitle(const char* title)
 	{
 		glfwSetWindowTitle(m_window, title);
+	}
+
+	//Delete Framebuffer
+	void Core::deleteFrameBuffer(int framebufferID)
+	{
+		delete m_framebuffers[framebufferID];
+		m_framebuffers[framebufferID] = nullptr;
+	}
+
+	//Delete Shader
+	void Core::deleteShader(int shaderID)
+	{
+		delete m_shaders[shaderID];
+		m_shaders[shaderID] = nullptr;
+	}
+
+	//Delete Model
+	void Core::deleteModel(int modelID)
+	{
+		delete m_models[modelID];
+		m_models[modelID] = nullptr;
+	}
+
+	//Delete Mesh
+	void Core::deleteMesh(int modelID, int meshID)
+	{
+		m_models[modelID]->deleteMesh(meshID);
+	}
+
+	//Delete Texture
+	void Core::deleteTexture(int textureID)
+	{
+		delete m_textures[textureID];
+		m_textures[textureID] = nullptr;
+	}
+
+	//Delete Font
+	void Core::deleteFont(int fontID)
+	{
+		delete m_fonts[fontID];
+		m_fonts[fontID] = nullptr;
 	}
 
 	//

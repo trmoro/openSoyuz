@@ -18,6 +18,14 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Finalizer
+        /// </summary>
+        ~Font()
+        {
+            Delete();
+        }
+
+        /// <summary>
         /// Load Font
         /// </summary>
         /// <param name="Path"></param>
@@ -27,6 +35,14 @@ namespace Soyuz
         public void Load(String Path, uint Size, uint Start = 0, uint End = 255)
         {
             Engine.Core.LoadFont(ID, Path, Size, Start, End);
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        public void Delete()
+        {
+            Engine.Core.DeleteFont(ID);
         }
 
         //

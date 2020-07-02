@@ -57,6 +57,12 @@
 #define PREFAB_SHADER_GUI		6
 #define PREFAB_SHADER_REVERSE	7
 
+//Model Drawing Mode
+#define MODEL_DRAW_TRIANGLES	0
+#define MODEL_DRAW_QUADS		1
+#define MODEL_DRAW_LINES		2
+#define MODEL_DRAW_LINE_STRIP	3
+
 namespace SK
 {
 
@@ -115,6 +121,9 @@ namespace SK
 
 		//Load Model
 		void loadModel(int modelID, const char* path);
+
+		//Set Mesh Draw Mode
+		void setMeshDrawMode(int modelID, int meshID, unsigned int drawmode);
 
 		//Set Perspective Camera
 		void setPerspectiveCamera(float x, float y, float z, float targetX, float targetY, float targetZ, float radius, float near, float far);
@@ -260,6 +269,24 @@ namespace SK
 
 		//Set Window Title
 		void setWindowTitle(const char* title);
+
+		//Delete Framebuffer
+		void deleteFrameBuffer(int framebufferID);
+
+		//Delete Shader
+		void deleteShader(int shaderID);
+
+		//Delete Model
+		void deleteModel(int modelID);
+
+		//Delete Mesh
+		void deleteMesh(int modelID, int meshID);
+
+		//Delete Texture
+		void deleteTexture(int textureID);
+
+		//Delete Font
+		void deleteFont(int fontID);
 
 	private:
 

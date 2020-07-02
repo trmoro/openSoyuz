@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Soyuz;
+using Soyuz.Meshes;
 
 namespace TestProject
 {
@@ -57,8 +58,7 @@ namespace TestProject
             };
 
             //Create Mesh
-            Mesh msh = new Mesh();
-            msh.Sphere(t.Width,t.Height );
+            Mesh msh = Sphere.TriangleFaces(t.Width / 2,t.Height / 2);
 
             //Add 
             planet.Meshes.Add(msh);
@@ -102,8 +102,7 @@ namespace TestProject
 
             //Pointer Model
             Model pointer = new Model() { Name = "pointerModel", Scale = new Vector3(0.1f) };
-            Mesh pointerMesh = new Mesh();
-            pointerMesh.Sphere(16, 16);
+            Mesh pointerMesh = Sphere.TriangleFaces(16, 16);
             pointer.Meshes.Add(pointerMesh);
             pointer.Compile();
             s.Models.Add(pointer);

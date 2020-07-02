@@ -5,7 +5,9 @@ using System.Text;
 
 namespace Soyuz
 {
-    //Model
+    /// <summary>
+    /// Model Class
+    /// </summary>
     public class Model
     {
         //Hidden
@@ -85,6 +87,14 @@ namespace Soyuz
             UniformVec3     = new Dictionary<string, Vector3>();
             UniformVec4     = new Dictionary<string, Vector4>();
             UniformFont     = new Dictionary<string, Font>();
+        }
+
+        /// <summary>
+        /// Finalizer
+        /// </summary>
+        ~Model()
+        {
+            Delete();
         }
 
         /// <summary>
@@ -197,360 +207,44 @@ namespace Soyuz
             Engine.Core.LoadModel(ModelID, Path);
         }
 
+        /// <summary>
+        /// Set Mesh Draw Mode
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="DrawMode"></param>
+        public void SetDrawMode(Mesh m,int DrawMode)
+        {
+            Engine.Core.SetMeshDrawMode(ModelID, m.MeshID, DrawMode);
+        }
+
+        /// <summary>
+        /// Set Model's meshes draw mode
+        /// </summary>
+        /// <param name="DrawMode"></param>
+        public void SetDrawMode(int DrawMode)
+        {
+            foreach (Mesh m in Meshes)
+                SetDrawMode(m, DrawMode);
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        public void Delete()
+        {
+            Engine.Core.DeleteModel(ModelID);
+        }
+
+        /// <summary>
+        /// Delete Mesh
+        /// </summary>
+        /// <param name="mesh"></param>
+        public void DeleteMesh(Mesh mesh)
+        {
+            Engine.Core.DeleteMesh(ModelID, mesh.MeshID);
+        }
+
         //End of Model Class
-
-    }
-
-    //Mesh
-    public class Mesh
-    {
-        //Mesh ID
-        public int MeshID { get; set; }
-
-        //Positions, Normals and UVs
-        public List<Vector3> Positions { get; set; }
-        public List<Vector3> Normals { get; set; }
-        public List<Vector2> UVs { get; set; }
-
-        //Indices
-        public List<int> Indices { get; set; }
-
-        /// <summary>
-        /// Mesh Constructor
-        /// </summary>
-        public Mesh()
-        {
-            MeshID = -1;
-
-            Positions = new List<Vector3>();
-            Normals = new List<Vector3>();
-            UVs = new List<Vector2>();
-
-            Indices = new List<int>();
-        }
-
-        /// <summary>
-        /// Clear Mesh
-        /// </summary>
-        public void Clear()
-        {
-            Positions.Clear();
-            Normals.Clear();
-            UVs.Clear();
-            Indices.Clear();
-        }
-
-        /// <summary>
-        /// Return a list of triangles
-        /// </summary>
-        /// <returns></returns>
-        public List<Tuple<int,int,int>> TrianglesIndices()
-        {
-            List<Tuple<int, int, int>> tris = new List<Tuple<int, int, int>>();
-
-            for(int i = 0; i < Indices.Count; i+=3)
-                tris.Add(new Tuple<int,int,int>(Indices[i],Indices[(i+1) % Indices.Count],Indices[(i+2) % Indices.Count]) );
-
-            return tris;
-        }
-
-        /// <summary>
-        /// Get Nearseat Vertex Index
-        /// </summary>
-        /// <param name="position">Position</param>
-        /// <returns></returns>
-        public int GetNearestVertexIndex(Vector3 position)
-        {
-            //Return value
-            int index = -1;
-            float distance = float.MaxValue;
-
-            for(int i = 0; i < Positions.Count; i++)
-            {
-                float d = Vector3.Distance(Positions[i], position);
-                if(d < distance)
-                {
-                    distance = d;
-                    index = i;
-                }
-            }
-
-            //Return
-            return index;
-        }
-
-        /// <summary>
-        /// Rectangle
-        /// </summary>
-        public void Rect()
-        {
-            Positions.Add(new Vector3(0, 0, 0));
-            Positions.Add(new Vector3(1, 0, 0));
-            Positions.Add(new Vector3(1, 1, 0));
-            Positions.Add(new Vector3(0, 1, 0));
-
-            Normals.Add(new Vector3(0,0,1));
-            Normals.Add(new Vector3(0,0,1));
-            Normals.Add(new Vector3(0,0,1));
-            Normals.Add(new Vector3(0,0,1));
-
-            UVs.Add(new Vector2(0,0));
-            UVs.Add(new Vector2(1,0));
-            UVs.Add(new Vector2(1,1));
-            UVs.Add(new Vector2(0,1));
-
-            Indices.Add(0);
-            Indices.Add(1);
-            Indices.Add(2);
-
-            Indices.Add(0);
-            Indices.Add(2);
-            Indices.Add(3);
-        }
-
-        /// <summary>
-        /// Create a Cube Mesh
-        /// </summary>
-        public void Cube()
-        {
-            Positions.Add(new Vector3(-0.5f, -0.5f, -0.5f));
-            Positions.Add(new Vector3(0.5f, -0.5f, -0.5f));
-            Positions.Add(new Vector3(0.5f, -0.5f, 0.5f));
-            Positions.Add(new Vector3(-0.5f, -0.5f, 0.5f));
-
-            Positions.Add(new Vector3(-0.5f, 0.5f, -0.5f));
-            Positions.Add(new Vector3(0.5f, 0.5f, -0.5f));
-            Positions.Add(new Vector3(0.5f, 0.5f, 0.5f));
-            Positions.Add(new Vector3(-0.5f, 0.5f, 0.5f));
-
-            Normals.Add(new Vector3(-0.5f, -0.5f, -0.5f));
-            Normals.Add(new Vector3(0.5f, -0.5f, -0.5f));
-            Normals.Add(new Vector3(0.5f, -0.5f, 0.5f));
-            Normals.Add(new Vector3(-0.5f, -0.5f, 0.5f));
-
-            Normals.Add(new Vector3(-0.5f, 0.5f, -0.5f));
-            Normals.Add(new Vector3(0.5f, 0.5f, -0.5f));
-            Normals.Add(new Vector3(0.5f, 0.5f, 0.5f));
-            Normals.Add(new Vector3(-0.5f, 0.5f, 0.5f));
-
-            UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(1, 0));
-            UVs.Add(new Vector2(1, 1));
-            UVs.Add(new Vector2(0, 1));
-
-            UVs.Add(new Vector2(0, 0));
-            UVs.Add(new Vector2(1, 0));
-            UVs.Add(new Vector2(1, 1));
-            UVs.Add(new Vector2(0, 1));
-
-            //Down 2 triangles
-            Indices.Add(0);
-            Indices.Add(1);
-            Indices.Add(2);
-            Indices.Add(0);
-            Indices.Add(2);
-            Indices.Add(3);
-
-            //Up 2 triangles
-            Indices.Add(4);
-            Indices.Add(5);
-            Indices.Add(6);
-            Indices.Add(4);
-            Indices.Add(6);
-            Indices.Add(7);
-
-            //Front 2 Triangles
-            Indices.Add(0);
-            Indices.Add(4);
-            Indices.Add(3);
-            Indices.Add(7);
-            Indices.Add(4);
-            Indices.Add(3);
-
-            //Back 2 Triangles
-            Indices.Add(1);
-            Indices.Add(5);
-            Indices.Add(2);
-            Indices.Add(6);
-            Indices.Add(5);
-            Indices.Add(2);
-
-            //"Left" 2 Triangles
-            Indices.Add(2);
-            Indices.Add(6);
-            Indices.Add(3);
-            Indices.Add(7);
-            Indices.Add(6);
-            Indices.Add(3);
-
-            //"Right" 2 Triangles
-            Indices.Add(0);
-            Indices.Add(4);
-            Indices.Add(1);
-            Indices.Add(5);
-            Indices.Add(4);
-            Indices.Add(1);
-        }
-
-        //Generate Sphere Vertex
-        Vector3 GenerateSphereVertex(float radius, double u, double v)
-        {
-            return new Vector3( (float) (Math.Cos(u) * Math.Cos(v) * radius), (float) (Math.Sin(v) * radius), (float) (Math.Sin(u) * Math.Cos(v) * radius) );
-        }
-
-        //Generate Sphere Normal
-        Vector3 GenerateSphereNormal(double u, double v)
-        {
-            return new Vector3( (float) (Math.Cos(u) * Math.Cos(v)), (float) Math.Sin(v), (float) (Math.Sin(u) * Math.Cos(v)) );
-        }
-
-        //Sphere
-        public void Sphere(int nMeridian, int nParallel)
-        {
-            //Number of vertices and triangles
-            int nVertex = nMeridian * nParallel * 4;
-            int nFace = nMeridian * nParallel * 2;
-
-            //Data
-            int[] tris = new int[nFace * 3];
-
-            //Vertices dones
-            int vertexDone = 0;
-
-            //Foreach Meridian
-            for (uint m = 0; m < nMeridian; m++)
-            {
-                //Foreach Parallel
-                for (uint p = 0; p < nParallel; p++)
-                {
-                    //float radius = ((heightMap.GetPixel((int)m, (int)p).grayscale) * (globalRadius / 10)) + (globalRadius);
-                    float radius = 1;
-
-                    Positions.Add(GenerateSphereVertex(radius, ((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)) );
-                    Normals.Add(GenerateSphereNormal(((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)) );
-                    UVs.Add(new Vector2( (float)m / (float) nMeridian, (float)p / (float)nParallel ) );
-
-                    //Self
-                    tris[vertexDone * 6] = vertexDone;
-
-                    //Right
-                    if (p < nParallel - 1)
-                        tris[1 + (vertexDone * 6)] = (int)1 + vertexDone;
-                    else
-                        tris[1 + (vertexDone * 6)] = (int)m * nParallel;
-
-                    //Up / Down
-                    if (m < nMeridian - 1)
-                        tris[2 + (vertexDone * 6)] = (int)nParallel + vertexDone;
-                    else
-                        tris[2 + (vertexDone * 6)] = (int)p;
-
-                    //Up / Down
-                    if (m < nMeridian - 1)
-                        tris[3 + (vertexDone * 6)] = (int)nParallel + vertexDone;
-                    else
-                        tris[3 + (vertexDone * 6)] = (int)p;
-
-                    //Right
-                    if (p < nParallel - 1)
-                        tris[4 + (vertexDone * 6)] = (int)1 + vertexDone;
-                    else
-                        tris[4 + (vertexDone * 6)] = (int)m * nParallel;
-
-                    //Up Right
-                    if (m < nMeridian - 1 && p < nParallel - 1)
-                        tris[5 + (vertexDone * 6)] = (int)nParallel + vertexDone + 1;
-                    else if (m < nMeridian - 1)
-                        tris[5 + (vertexDone * 6)] = (int)(nParallel * (m + 1));
-                    else if (p < nParallel - 1)
-                        tris[5 + (vertexDone * 6)] = (int)p + 1;
-                    else
-                        tris[5 + (vertexDone * 6)] = (int)0;
-
-
-                    //Vertex is done
-                    vertexDone += 1;
-                }
-            }
-
-            //Position
-            Indices.AddRange(tris);
-        }
-
-        //Sphere
-        public void SphereData(int nMeridian, int nParallel,float[,] data)
-        {
-            //Number of vertices and triangles
-            int nVertex = nMeridian * nParallel * 4;
-            int nFace = nMeridian * nParallel * 2;
-
-            //Data
-            int[] tris = new int[nFace * 3];
-
-            //Vertices dones
-            int vertexDone = 0;
-
-            //Foreach Meridian
-            for (uint m = 0; m < nMeridian; m++)
-            {
-                //Foreach Parallel
-                for (uint p = 0; p < nParallel; p++)
-                {
-                    float radius = 1 + (data[m,p] * 0.05f );
-
-                    Positions.Add(GenerateSphereVertex(radius, ((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)));
-                    Normals.Add(GenerateSphereNormal(((float)m / (float)nMeridian) * 2 * Math.PI, ((float)p / (float)nParallel) * Math.PI - (Math.PI / 2)));
-                    UVs.Add(new Vector2( (float)p / (float)nParallel, (float)m / (float)nMeridian) );
-
-
-                    //Self
-                    tris[vertexDone * 6] = vertexDone;
-
-                    //Right
-                    if (p < nParallel - 1)
-                        tris[1 + (vertexDone * 6)] = (int)1 + vertexDone;
-                    else
-                        tris[1 + (vertexDone * 6)] = (int)m * nParallel;
-
-                    //Up / Down
-                    if (m < nMeridian - 1)
-                        tris[2 + (vertexDone * 6)] = (int)nParallel + vertexDone;
-                    else
-                        tris[2 + (vertexDone * 6)] = (int)p;
-
-                    //Up / Down
-                    if (m < nMeridian - 1)
-                        tris[3 + (vertexDone * 6)] = (int)nParallel + vertexDone;
-                    else
-                        tris[3 + (vertexDone * 6)] = (int)p;
-
-                    //Right
-                    if (p < nParallel - 1)
-                        tris[4 + (vertexDone * 6)] = (int)1 + vertexDone;
-                    else
-                        tris[4 + (vertexDone * 6)] = (int)m * nParallel;
-
-                    //Up Right
-                    if (m < nMeridian - 1 && p < nParallel - 1)
-                        tris[5 + (vertexDone * 6)] = (int)nParallel + vertexDone + 1;
-                    else if (m < nMeridian - 1)
-                        tris[5 + (vertexDone * 6)] = (int)(nParallel * (m + 1));
-                    else if (p < nParallel - 1)
-                        tris[5 + (vertexDone * 6)] = (int)p + 1;
-                    else
-                        tris[5 + (vertexDone * 6)] = (int)0;
-
-
-                    //Vertex is done
-                    vertexDone += 1;
-                }
-            }
-
-            //Position
-            Indices.AddRange(tris);
-        }
-
-        //
 
     }
 }

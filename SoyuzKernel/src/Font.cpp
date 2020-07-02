@@ -10,11 +10,22 @@ namespace SK
 	{
 		//Log
 		m_log = log;
+
+		//Value
+		m_width = 0;
+		m_height = 0;
+		m_tallest = 0;
+		m_texture = 0;
 	}
 
 	//Delete
 	Font::~Font()
 	{
+		glDeleteTextures(1, &m_texture);
+		std::map<unsigned int, glyph*>::iterator it;
+		for (it = m_glyphs.begin(); it != m_glyphs.end(); it++)
+			delete it->second;
+		m_glyphs.clear();
 	}
 
 	//Load

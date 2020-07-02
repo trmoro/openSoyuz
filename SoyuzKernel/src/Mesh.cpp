@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include "Core.h"
+
 #include <iostream>
 
 namespace SK
@@ -18,6 +20,18 @@ namespace SK
 		m_vao = 0;
 		m_vbo = 0;
 		m_ebo = 0;
+
+		m_drawmode = MODEL_DRAW_TRIANGLES;
+	}
+
+	//Delete Mesh
+	Mesh::~Mesh()
+	{
+		glDeleteVertexArrays(1, &m_vao);
+		glDeleteBuffers(1, &m_vbo);
+		glDeleteBuffers(1, &m_ebo);
+		delete m_vertices;
+		delete m_indices;
 	}
 
 	//Prepare Memory
@@ -114,14 +128,34 @@ namespace SK
 	{
 		if (m_isCompiled)
 		{
+			GLenum drawmode = GL_TRIANGLES;
+			switch (m_drawmode)
+			{
+			case MODEL_DRAW_QUADS:
+				drawmode = GL_QUADS;
+				break;
+			case MODEL_DRAW_LINES:
+				drawmode = GL_LINES;
+				break;
+			case MODEL_DRAW_LINE_STRIP:
+				drawmode = GL_LINE_STRIP;
+				break;
+			}
+
 			//Bind VAO
 			glBindVertexArray(m_vao);
 			if(m_nIndex != 2)
-				glDrawElements(GL_TRIANGLES, m_nIndex, GL_UNSIGNED_INT, nullptr);
+				glDrawElements(drawmode, m_nIndex, GL_UNSIGNED_INT, nullptr);
 			else
 				glDrawElements(GL_LINES, m_nIndex, GL_UNSIGNED_INT, nullptr);
 			glBindVertexArray(0);
 		}
+	}
+
+	//Set Drawmode
+	void Mesh::setDrawMode(unsigned int drawmode)
+	{
+		m_drawmode = drawmode;
 	}
 
 	

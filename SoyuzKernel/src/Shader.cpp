@@ -9,6 +9,12 @@ namespace SK
 		m_id = 0;
 	}
 
+	//Destructor
+	Shader::~Shader()
+	{
+		glDeleteShader(m_id);
+	}
+
 	//Set with Geometry
 	void Shader::set(const GLchar* srcVertex, bool geometry, const GLchar* srcGeometry, const GLchar* srcFragment)
 	{

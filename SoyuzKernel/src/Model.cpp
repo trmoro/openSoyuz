@@ -12,7 +12,13 @@ namespace SK
 		m_position = glm::vec3(0, 0, 0);
 		m_rotation = glm::vec3(0, 0, 0);
 		m_scale = glm::vec3(1, 1, 1);
+	}
 
+	//Delete Model
+	Model::~Model()
+	{
+		for (Mesh* m : m_meshes)
+			delete m;
 	}
 
 	//Create Mesh
@@ -118,7 +124,10 @@ namespace SK
 	void Model::render()
 	{
 		for (Mesh* m : m_meshes)
-			m->render();
+		{
+			if(m != nullptr)
+				m->render();
+		}
 	}
 
 	//Set Position
@@ -159,6 +168,19 @@ namespace SK
 		rotationMatrix = glm::rotate(rotationMatrix, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		return rotationMatrix;
+	}
+
+	//Get Mesh
+	Mesh* Model::getMesh(int meshID) const
+	{
+		return m_meshes[meshID];
+	}
+
+	//Delete Mesh
+	void Model::deleteMesh(int meshID)
+	{
+		delete m_meshes[meshID];
+		m_meshes[meshID] = nullptr;
 	}
 
 	//

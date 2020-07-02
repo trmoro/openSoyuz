@@ -30,6 +30,9 @@ namespace SK
 		//Constructor
 		Shader(Log* log);
 
+		//Destructor
+		~Shader();
+
 		//Set Shader with Geometry
 		void set(const GLchar* srcVertex, bool geometry, const GLchar* srcGeometry, const GLchar* srcFragment);
 

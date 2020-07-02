@@ -26,6 +26,7 @@ namespace SK
 	//Destructor
 	Texture::~Texture()
 	{
+		glDeleteTextures(1, &m_id);
 		delete m_data;
 	}
 
