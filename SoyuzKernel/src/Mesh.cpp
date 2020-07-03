@@ -68,7 +68,7 @@ namespace SK
 	//Add Index
 	void Mesh::addIndex(int i)
 	{
-		m_indices[m_nIndex] = i;
+		m_indices[m_nIndex] = (unsigned int) i;
 
 		m_nIndex++;
 	}

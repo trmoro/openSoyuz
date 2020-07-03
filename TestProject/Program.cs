@@ -49,7 +49,7 @@ namespace TestProject
 
             //Set Material
             planet.Material = new Material() {
-                Color = new Vector4(1f, 1, 1f, 1f),
+                Color = new Vector4(1f, 1, 1f, 0.99f),
                 Diffuse = new Vector3(0.5f, 0.5f, 0.61f),
                 Specular = new Vector3(0.5f, 0.5f, 0.5f),
                 Shininess = 16.0f,
@@ -58,19 +58,13 @@ namespace TestProject
             };
 
             //Create Mesh
-            Mesh msh = Sphere.TriangleFaces(t.Width / 2,t.Height / 2);
+            Mesh msh = Sphere.TriangleFaces(t.Width,t.Height);
 
             //Add 
             planet.Meshes.Add(msh);
             planet.Compile();
             s.Models.Add(planet);
-
-            //Load Model
-            Model medHouse = new Model();
-            medHouse.Scale = new Vector3(0.0025f);
-            medHouse.Position = new Vector3(0, 10.5f, 0);
-            medHouse.Load("Models/medieval_house.fbx");
-            s.Models.Add(medHouse);
+            planet.SetDrawMode(Engine.Core.Model_DrawMode_Triangles);
 
             //Light
             s.Lights.Add(new DirectionalLight()
@@ -101,13 +95,6 @@ namespace TestProject
             c.Duplicates.Add(pc);
             pc.IfEmptyRenderAll = false;
             pc.Models.Add(planet);
-
-            //Pointer Model
-            Model pointer = new Model() { Name = "pointerModel", Scale = new Vector3(0.1f) };
-            Mesh pointerMesh = Sphere.TriangleFaces(16, 16);
-            pointer.Meshes.Add(pointerMesh);
-            pointer.Compile();
-            s.Models.Add(pointer);
 
             //Raycaster
             PointLight pl = new PointLight() {Constant = 2.0f, Linear = 1f, Quadratic = 3.6f };
