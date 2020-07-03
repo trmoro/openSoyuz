@@ -62,7 +62,7 @@ namespace SK
 				m_tallest = face->glyph->bitmap.rows;
 			m_height += face->glyph->bitmap.rows;
 
-			glyph* g = new glyph{ 0, (float)face->glyph->bitmap.width, (float)face->glyph->bitmap.rows, face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap_left, face->glyph->advance.x / 64, face->glyph->bitmap_top };
+			glyph* g = new glyph{ 0, (int) face->glyph->bitmap.width, (int) face->glyph->bitmap.rows, face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap_left, face->glyph->advance.x / 64, face->glyph->bitmap_top };
 			m_glyphs[i] = g;
 
 			//std::cout << "Index " << g.id << " : ";
@@ -91,9 +91,7 @@ namespace SK
 				}
 			}
 			//Update Glyph Data
-			g->uvY = (float)z / (float)m_height;
-			g->uvH /= (float)m_height;
-			g->uvW /= (float)m_width;
+			g->uvY = z;
 			g->yOffset = m_tallest - g->yOffset;
 
 			z += g->height;

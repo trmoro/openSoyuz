@@ -280,8 +280,13 @@ const char* ShaderScript::Font_Fragment = "#version 330 core												\n\
 	uniform sampler2D m_font;																				\n\
 																											\n\
 	void main() {																							\n\
-		out_color = texture2D(m_font, m_texCoord);															\n\
-		out_color *= m_color;																				\n\
+		out_color = texelFetch(m_font, ivec2(m_texCoord.xy),0);												\n\
+		out_color.g = out_color.r;																			\n\
+		out_color.b = out_color.r;																			\n\
+		out_color.a = 1;																					\n\
+		out_color *= m_color;																				 \n\
+		if(out_color.r == 0)																				\n\
+			discard;																						\n\
 	}																										";
 
 //Reverse Fragment Script

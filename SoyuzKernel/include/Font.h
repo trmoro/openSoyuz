@@ -18,9 +18,9 @@ namespace SK
 {
 	struct glyph
 	{
-		float uvY;
-		float uvW;
-		float uvH;
+		int uvY;
+		int uvW;
+		int uvH;
 		unsigned int width;
 		unsigned int height;
 		int xBearing;
