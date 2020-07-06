@@ -34,6 +34,9 @@ namespace Soyuz
         //Is Clicked
         public bool IsClicked { get; set; }
 
+        //Is Triggered
+        public bool IsTriggered { get; set; }
+
         //Children
         public List<GUIElement> Children { get; set; }
 
@@ -50,7 +53,10 @@ namespace Soyuz
             Color = new Vector4(1);
             Children = new List<GUIElement>();
             IsHidden = false;
-            ResetMouseEvent();
+
+            IsTriggered = false;
+            IsClicked = false;
+            IsHovered = false;
         }
 
         //Update
@@ -59,9 +65,6 @@ namespace Soyuz
             //Show ?
             if (!IsHidden)
             {
-                //Reset all Mouse Event
-                ResetMouseEvent();
-
                 //Auto Update Position and Color
                 Position = new Vector3(X, Y, Depth);
                 Material.Color = Color;
@@ -71,24 +74,35 @@ namespace Soyuz
                 {
                     IsHovered = true;
 
-                    //Left Click
-                    if (Engine.Core.IsMouseClicked(0))
+                    //Left Click to Triiger
+                    if (Engine.Core.IsMouseClicked(0) && !IsTriggered)
+                        IsTriggered = true;
+
+                    //Left click released in the box
+                    if (Engine.Core.IsMouseReleased(0) && IsTriggered)
+                    {
                         IsClicked = true;
+                        IsTriggered = false;
+                    }
+                    else
+                        IsClicked = false;
                 }
+                //Outside the box
+                else
+                {
+                    //Not hovered
+                    IsHovered = false;
+
+                    //Left click outside the box
+                    if (Engine.Core.IsMouseReleased(0) && IsTriggered)
+                        IsTriggered = false;
+                }
+
 
                 //Update Children
                 foreach (GUIElement g in Children)
                     g.Update(Mouse);
             }
-        }
-
-        /// <summary>
-        /// Reset Mouse Event
-        /// </summary>
-        private void ResetMouseEvent()
-        {
-            IsHovered = false;
-            IsClicked = false;
         }
 
         //
