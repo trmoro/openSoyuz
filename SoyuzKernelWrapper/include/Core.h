@@ -36,19 +36,22 @@ namespace SKW
 		int CreateFont();
 
 		//Create Mesh
-		int CreateMesh(int ModelID);
+		int CreateMesh();
+
+		//Add Mesh to Model
+		void AddMeshToModel(int ModelID, int MeshID);
 
 		//Prepare Memory of Mesh
-		void MeshPrepareMemory(int ModelID, int MeshID, unsigned int nVertex, unsigned int nIndex);
+		void MeshPrepareMemory(int MeshID, unsigned int nVertex, unsigned int nIndex);
 
 		//Add Vertex to a Mesh
-		void MeshAddVertex(int ModelID, int MeshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY);
+		void MeshAddVertex(int MeshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY);
 
 		//Add Index to a Mesh
-		void MeshAddIndex(int ModelID, int MeshID, int i);
+		void MeshAddIndex(int MeshID, int i);
 
 		//Compile a Mesh
-		void MeshCompile(int ModelID, int MeshID);
+		void MeshCompile(int MeshID);
 
 		//Set Model Position
 		void SetModelPosition(int ModelID, float x, float y, float z);
@@ -60,7 +63,7 @@ namespace SKW
 		void SetModelScale(int ModelID, float x, float y, float z);
 
 		//Set Mesh Draw Mode
-		void SetMeshDrawMode(int ModelID, int MeshID, int DrawMode);
+		void SetMeshDrawMode(int MeshID, int DrawMode);
 
 		//Load Model
 		void LoadModel(int ModelID, String^ Path);
@@ -211,7 +214,7 @@ namespace SKW
 		void DeleteModel(int ModelID);
 
 		//Delete Mesh
-		void DeleteMesh(int ModelID, int MeshID);
+		void DeleteMesh(int MeshID);
 
 		//Delete Texture
 		void DeleteTexture(int TextureID);

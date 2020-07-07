@@ -57,12 +57,10 @@ namespace TestProject
                 Texture = t
             };
 
-            //Create Mesh
-            Mesh msh = Sphere.TriangleFaces(t.Width,t.Height);
-
             //Add 
-            planet.Meshes.Add(msh);
-            planet.Compile();
+            planet.Meshes.Add(Sphere.TriangleFaces(t.Width, t.Height).Compile() );
+            planet.Update();
+
             s.Models.Add(planet);
             planet.SetDrawMode(Engine.Core.Model_DrawMode_Triangles);
 

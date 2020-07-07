@@ -124,7 +124,6 @@ namespace Soyuz
             //Set Text
             Engine.Core.AddTextAsMesh(Font.ID, ModelID, Text, xOffset, yOffset, MaxWidth, LineSpacing);
             UniformFont.Add("m_font", Font);
-            Compile();
         }
 
         //Update
@@ -161,9 +160,8 @@ namespace Soyuz
             this.Height = Height;
             this.Color = Color;
 
-            Mesh rect = Quad.Rect();
-            Meshes.Add(rect);
-            Compile();
+            Meshes.Add(Quad.Rect().Compile() );
+            Update();
         }
 
         //Update

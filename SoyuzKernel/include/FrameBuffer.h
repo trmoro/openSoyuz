@@ -19,6 +19,9 @@ namespace SK
 		//Update
 		void update(int width, int height);
 
+		//Clear
+		void clear();
+
 		//Get ID
 		GLuint getID() const;
 

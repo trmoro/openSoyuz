@@ -21,6 +21,9 @@
 //Model
 #include "Model.h"
 
+//Mesh
+#include "Mesh.h"
+
 //Font
 #include "Font.h"
 
@@ -96,19 +99,25 @@ namespace SK
 		int createFont();
 
 		//Create Mesh
-		int createMesh(int modelID) const;
+		int createMesh();
+
+		//Add Mesh
+		int addMesh(Mesh* mesh);
+
+		//Add Mesh to Model
+		void addMeshToModel(int modelID, int meshID);
 
 		//Prepare Memory
-		void meshPrepareMemory(int modelID, int meshID, unsigned int nVertex, unsigned int nIndex);
+		void meshPrepareMemory(int meshID, unsigned int nVertex, unsigned int nIndex);
 
 		//Add Vertex
-		void meshAddVertex(int modelID, int meshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY);
+		void meshAddVertex(int meshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY);
 
 		//Add Index
-		void meshAddIndex(int modelID, int meshID, int i);
+		void meshAddIndex(int meshID, int i);
 
 		//Compile
-		void meshCompile(int modelID, int meshID);
+		void meshCompile(int meshID);
 
 		//Set Model Position
 		void setModelPosition(int modelID, float x, float y, float z);
@@ -123,7 +132,7 @@ namespace SK
 		void loadModel(int modelID, const char* path);
 
 		//Set Mesh Draw Mode
-		void setMeshDrawMode(int modelID, int meshID, unsigned int drawmode);
+		void setMeshDrawMode(int meshID, unsigned int drawmode);
 
 		//Set Perspective Camera
 		void setPerspectiveCamera(float x, float y, float z, float targetX, float targetY, float targetZ, float radius, float near, float far);
@@ -280,7 +289,7 @@ namespace SK
 		void deleteModel(int modelID);
 
 		//Delete Mesh
-		void deleteMesh(int modelID, int meshID);
+		void deleteMesh(int meshID);
 
 		//Delete Texture
 		void deleteTexture(int textureID);
@@ -312,11 +321,12 @@ namespace SK
 		GLFWwindow* m_window;
 
 		//Resources
-		std::vector<FrameBuffer*> m_framebuffers;
-		std::vector<Shader*> m_shaders;
-		std::vector<Model*> m_models;
-		std::vector<Texture*> m_textures;
-		std::vector<Font*> m_fonts;
+		std::vector<FrameBuffer*>	m_framebuffers;
+		std::vector<Shader*>		m_shaders;
+		std::vector<Model*>			m_models;
+		std::vector<Mesh*>			m_meshes;
+		std::vector<Texture*>		m_textures;
+		std::vector<Font*>			m_fonts;
 
 		//Projection/View Matrix
 		glm::mat4 m_projViewMatrix;

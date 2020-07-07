@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
@@ -108,9 +109,9 @@ namespace Soyuz
         }
 
         /// <summary>
-        /// Compile Model and its Meshes
+        /// Update Meshes List in Core, Barycenter and Vertex-Length
         /// </summary>
-        public void Compile()
+        public void Update()
         {
             //Barycenter Variables
             Vector3 bary = new Vector3(0);
@@ -127,23 +128,13 @@ namespace Soyuz
             //For all Meshes
             foreach(Mesh m in Meshes)
             {
-                //Init
-                if (m.MeshID == -1)
-                    m.MeshID = Engine.Core.CreateMesh(ModelID);
+                //Add Meshes to Model in Kernel
+                Engine.Core.AddMeshToModel(ModelID, m.MeshID);
 
-                //Prepare Mesh Memory
-                Engine.Core.MeshPrepareMemory(ModelID, m.MeshID, (uint) m.Positions.Count, (uint) m.Indices.Count );
-
-                //Add Vertices
                 for (int i = 0; i < m.Positions.Count; i++)
                 {
-                    //Add Vertex
-                    Vector3 pos = m.Positions[i];
-                    Vector3 nor = m.Normals[i];
-                    Vector2 uv = m.UVs[i];
-                    Engine.Core.MeshAddVertex(ModelID, m.MeshID,pos.X,pos.Y,pos.Z,nor.X,nor.Y,nor.Z,uv.X,uv.Y);
-
                     //Modify Barycenter variables
+                    Vector3 pos = m.Positions[i];
                     bary += pos;
                     nVertex++;
 
@@ -182,13 +173,6 @@ namespace Soyuz
 
                     //
                 }
-
-                //Add Indices
-                for (int i = 0; i < m.Indices.Count; i++)
-                    Engine.Core.MeshAddIndex(ModelID, m.MeshID, m.Indices[i]);
-
-                //Compile Mesh
-                Engine.Core.MeshCompile(ModelID, m.MeshID);
             }
 
             //Compute Barycenter
@@ -208,23 +192,13 @@ namespace Soyuz
         }
 
         /// <summary>
-        /// Set Mesh Draw Mode
-        /// </summary>
-        /// <param name="m"></param>
-        /// <param name="DrawMode"></param>
-        public void SetDrawMode(Mesh m,int DrawMode)
-        {
-            Engine.Core.SetMeshDrawMode(ModelID, m.MeshID, DrawMode);
-        }
-
-        /// <summary>
         /// Set Model's meshes draw mode
         /// </summary>
         /// <param name="DrawMode"></param>
         public void SetDrawMode(int DrawMode)
         {
             foreach (Mesh m in Meshes)
-                SetDrawMode(m, DrawMode);
+                m.SetDrawMode(DrawMode);
         }
 
         /// <summary>
@@ -235,16 +209,8 @@ namespace Soyuz
             Engine.Core.DeleteModel(ModelID);
         }
 
-        /// <summary>
-        /// Delete Mesh
-        /// </summary>
-        /// <param name="mesh"></param>
-        public void DeleteMesh(Mesh mesh)
-        {
-            Engine.Core.DeleteMesh(ModelID, mesh.MeshID);
-        }
-
         //End of Model Class
 
     }
+
 }

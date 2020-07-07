@@ -26,7 +26,7 @@ namespace Soyuz
         /// </summary>
         public Mesh()
         {
-            MeshID = -1;
+            MeshID = Engine.Core.CreateMesh();
 
             Positions = new List<Vector3>();
             Normals = new List<Vector3>();
@@ -83,6 +83,52 @@ namespace Soyuz
 
             //Return
             return index;
+        }
+
+        /// <summary>
+        /// Set Draw Mode
+        /// </summary>
+        /// <param name="DrawMode"></param>
+        public void SetDrawMode(int DrawMode)
+        {
+            Engine.Core.SetMeshDrawMode(MeshID, DrawMode);
+        }
+
+        /// <summary>
+        /// Delete Mesh
+        /// </summary>
+        public void Delete()
+        {
+            Engine.Core.DeleteMesh(MeshID);
+        }
+
+        /// <summary>
+        /// Compile Mesh
+        /// </summary>
+        /// <returns>itselft</returns>
+        public Mesh Compile()
+        {
+            //Prepare Mesh Memory
+            Engine.Core.MeshPrepareMemory(MeshID, (uint) Positions.Count, (uint) Indices.Count);
+
+            //Add Vertices
+            for (int i = 0; i < Positions.Count; i++)
+            {
+                //Add Vertex
+                Vector3 pos = Positions[i];
+                Vector3 nor = Normals[i];
+                Vector2 uv = UVs[i];
+                Engine.Core.MeshAddVertex(MeshID, pos.X, pos.Y, pos.Z, nor.X, nor.Y, nor.Z, uv.X, uv.Y);
+            }
+
+            //Add Indices
+            for (int i = 0; i < Indices.Count; i++)
+                Engine.Core.MeshAddIndex(MeshID, Indices[i]);
+
+            //Compile Mesh
+            Engine.Core.MeshCompile(MeshID);
+
+            return this;
         }
 
         //

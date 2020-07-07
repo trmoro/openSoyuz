@@ -59,34 +59,40 @@ namespace SKW
 		return m_Instance->createFont();
 	}
 
-	//Create Mesh
-	int Core::CreateMesh(int ModelID)
+	//Add Mesh To Model
+	void Core::AddMeshToModel(int ModelID, int MeshID)
 	{
-		return m_Instance->createMesh(ModelID);
+		m_Instance->addMeshToModel(ModelID, MeshID);
+	}
+
+	//Create Mesh
+	int Core::CreateMesh()
+	{
+		return m_Instance->createMesh();
 	}
 
 	//Prepare Memory of Mesh
-	void Core::MeshPrepareMemory(int ModelID, int MeshID, unsigned int nVertex, unsigned int nIndex)
+	void Core::MeshPrepareMemory(int MeshID, unsigned int nVertex, unsigned int nIndex)
 	{
-		m_Instance->meshPrepareMemory(ModelID, MeshID, nVertex, nIndex);
+		m_Instance->meshPrepareMemory(MeshID, nVertex, nIndex);
 	}
 
 	//Add Vertex to a Mesh
-	void Core::MeshAddVertex(int ModelID, int MeshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY)
+	void Core::MeshAddVertex(int MeshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY)
 	{
-		m_Instance->meshAddVertex(ModelID,MeshID,x,y,z,nX,nY,nZ,uvX,uvY);
+		m_Instance->meshAddVertex(MeshID,x,y,z,nX,nY,nZ,uvX,uvY);
 	}
 
 	//Add Index to a Mesh
-	void Core::MeshAddIndex(int ModelID, int MeshID, int i)
+	void Core::MeshAddIndex(int MeshID, int i)
 	{
-		m_Instance->meshAddIndex(ModelID,MeshID,i);
+		m_Instance->meshAddIndex(MeshID,i);
 	}
 
 	//Compile a Mesh
-	void Core::MeshCompile(int ModelID, int MeshID)
+	void Core::MeshCompile(int MeshID)
 	{
-		m_Instance->meshCompile(ModelID,MeshID);
+		m_Instance->meshCompile(MeshID);
 	}
 
 	//Set Model Position
@@ -108,9 +114,9 @@ namespace SKW
 	}
 
 	//Set Mesh Draw Mode
-	void Core::SetMeshDrawMode(int ModelID, int MeshID, int DrawMode)
+	void Core::SetMeshDrawMode(int MeshID, int DrawMode)
 	{
-		m_Instance->setMeshDrawMode(ModelID, MeshID, DrawMode);
+		m_Instance->setMeshDrawMode(MeshID, DrawMode);
 	}
 
 	//Load Model
@@ -440,9 +446,9 @@ namespace SKW
 	}
 
 	//Delete Mesh
-	void Core::DeleteMesh(int ModelID, int MeshID)
+	void Core::DeleteMesh(int MeshID)
 	{
-		m_Instance->deleteMesh(ModelID, MeshID);
+		m_Instance->deleteMesh(MeshID);
 	}
 
 	//Delete Texture

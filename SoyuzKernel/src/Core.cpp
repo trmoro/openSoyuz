@@ -16,6 +16,7 @@ namespace SK
 		m_framebuffers = std::vector<FrameBuffer*>();
 		m_shaders = std::vector<Shader*>();
 		m_models = std::vector<Model*>();
+		m_meshes = std::vector<Mesh*>();
 		m_textures = std::vector<Texture*>();
 		m_fonts = std::vector<Font*>();
 
@@ -159,27 +160,28 @@ namespace SK
 		int modelID = createModel();
 
 		//Create Mesh
-		int meshID = createMesh(modelID);
+		Mesh* msh = new Mesh();
+		m_models[modelID]->addHiddenMesh(msh);
 
 		//Prepare Memory
-		meshPrepareMemory(modelID, meshID, 4, 6);
+		msh->prepareMemory(4, 6);
 
 		//Add Vertices
-		meshAddVertex(modelID, meshID, 0, 0, 0, 0, 0, 0, 1, 1);
-		meshAddVertex(modelID, meshID, 1, 0, 0, 0, 0, 0, 0, 1);
-		meshAddVertex(modelID, meshID, 1, 1, 0, 0, 0, 0, 0, 0);
-		meshAddVertex(modelID, meshID, 0, 1, 0, 0, 0, 0, 1, 0);
+		msh->addVertex(0, 0, 0, 0, 0, 0, 1, 1);
+		msh->addVertex(1, 0, 0, 0, 0, 0, 0, 1);
+		msh->addVertex(1, 1, 0, 0, 0, 0, 0, 0);
+		msh->addVertex(0, 1, 0, 0, 0, 0, 1, 0);
 
 		//Add Indices : Two Triangles
-		meshAddIndex(modelID, meshID, 0);
-		meshAddIndex(modelID, meshID, 1);
-		meshAddIndex(modelID, meshID, 2);
-		meshAddIndex(modelID, meshID, 0);
-		meshAddIndex(modelID, meshID, 2);
-		meshAddIndex(modelID, meshID, 3);
+		msh->addIndex(0);
+		msh->addIndex(1);
+		msh->addIndex(2);
+		msh->addIndex(0);
+		msh->addIndex(2);
+		msh->addIndex(3);
 
 		//Compile
-		meshCompile(modelID, meshID);
+		msh->compile();
 
 		//Set Position and Rotation
 		setModelPosition(modelID, 0, 0, 0);
@@ -198,27 +200,29 @@ namespace SK
 		int modelID = createModel();
 
 		//Create Mesh
-		int meshID = createMesh(modelID);
+		Mesh* msh = new Mesh();
+		addMesh(msh);
+		m_models[modelID]->addHiddenMesh(msh);
 
 		//Prepare Memory
-		meshPrepareMemory(modelID, meshID, 4, 6);
+		msh->prepareMemory(4, 6);
 
 		//Add Vertices
-		meshAddVertex(modelID, meshID, 0, 0, 0, 0, 0, 0, 0, 1);
-		meshAddVertex(modelID, meshID, 1, 0, 0, 0, 0, 0, 1, 1);
-		meshAddVertex(modelID, meshID, 1, 1, 0, 0, 0, 0, 1, 0);
-		meshAddVertex(modelID, meshID, 0, 1, 0, 0, 0, 0, 0, 0);
+		msh->addVertex(0, 0, 0, 0, 0, 0, 0, 1);
+		msh->addVertex(1, 0, 0, 0, 0, 0, 1, 1);
+		msh->addVertex(1, 1, 0, 0, 0, 0, 1, 0);
+		msh->addVertex(0, 1, 0, 0, 0, 0, 0, 0);
 
 		//Add Indices : Two Triangles
-		meshAddIndex(modelID, meshID, 0);
-		meshAddIndex(modelID, meshID, 1);
-		meshAddIndex(modelID, meshID, 2);
-		meshAddIndex(modelID, meshID, 0);
-		meshAddIndex(modelID, meshID, 2);
-		meshAddIndex(modelID, meshID, 3);
+		msh->addIndex(0);
+		msh->addIndex(1);
+		msh->addIndex(2);
+		msh->addIndex(0);
+		msh->addIndex(2);
+		msh->addIndex(3);
 
 		//Compile
-		meshCompile(modelID, meshID);
+		msh->compile();
 
 		//Set Position and Rotation
 		setModelPosition(modelID, 0, 0, 0);
@@ -276,33 +280,48 @@ namespace SK
 	}
 
 	//Create Mesh
-	int Core::createMesh(int modelID) const
+	int Core::createMesh()
 	{
-		return m_models[modelID]->createMesh();
+		Mesh* m = new Mesh();
+		return addMesh(m);
+	}
+
+	//Add Mesh
+	int Core::addMesh(Mesh* mesh)
+	{
+		int i = (int)m_meshes.size();
+		m_meshes.push_back(mesh);
+		return i;
+	}
+
+	//Add Mesh To Model
+	void Core::addMeshToModel(int modelID, int meshID)
+	{
+		m_models[modelID]->addMesh(meshID,m_meshes[meshID]);
 	}
 
 	//Mesh Prepare Memory
-	void Core::meshPrepareMemory(int modelID, int meshID, unsigned int nVertex, unsigned int nIndex)
+	void Core::meshPrepareMemory(int meshID, unsigned int nVertex, unsigned int nIndex)
 	{
-		m_models[modelID]->meshPrepareMemory(meshID, nVertex, nIndex);
+		m_meshes[meshID]->prepareMemory(nVertex, nIndex);
 	}
 
 	//Mesh Add Vertex
-	void Core::meshAddVertex(int modelID, int meshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY)
+	void Core::meshAddVertex(int meshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY)
 	{
-		m_models[modelID]->meshAddVertex(meshID, x, y, z, nX, nY, nZ, uvX, uvY);
+		m_meshes[meshID]->addVertex(x, y, z, nX, nY, nZ, uvX, uvY);
 	}
 
 	//Mesh Add Index
-	void Core::meshAddIndex(int modelID, int meshID, int i)
+	void Core::meshAddIndex(int meshID, int i)
 	{
-		m_models[modelID]->meshAddIndex(meshID, i);
+		m_meshes[meshID]->addIndex(i);
 	}
 
 	//Mesh Compile
-	void Core::meshCompile(int modelID, int meshID)
+	void Core::meshCompile(int meshID)
 	{
-		m_models[modelID]->meshCompile(meshID);
+		m_meshes[meshID]->compile();
 	}
 
 	//Set Model Position
@@ -330,9 +349,9 @@ namespace SK
 	}
 
 	//Set Mesh Draw Mode
-	void Core::setMeshDrawMode(int modelID, int meshID, unsigned int drawmode)
+	void Core::setMeshDrawMode(int meshID, unsigned int drawmode)
 	{
-		m_models[modelID]->getMesh(meshID)->setDrawMode(drawmode);
+		m_meshes[meshID]->setDrawMode(drawmode);
 	}
 
 	//Set Perspective Camera
@@ -839,9 +858,12 @@ namespace SK
 	}
 
 	//Delete Mesh
-	void Core::deleteMesh(int modelID, int meshID)
+	void Core::deleteMesh(int meshID)
 	{
-		m_models[modelID]->deleteMesh(meshID);
+		for (Model* mod : m_models)
+			mod->deleteMesh(m_meshes[meshID]);
+		delete m_meshes[meshID];
+		m_meshes[meshID] = nullptr;
 	}
 
 	//Delete Texture

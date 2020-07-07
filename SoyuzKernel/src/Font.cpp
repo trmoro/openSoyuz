@@ -124,13 +124,14 @@ namespace SK
 	void Font::addTextAsMesh(Model* model, std::string text, float x, float y, float max_width, float lineSpacing)
 	{
 		//Create Mesh
-		int mesh = model->createMesh();
+		Mesh* msh = new Mesh();
+		model->addHiddenMesh(msh);
 
 		//Text Size
 		unsigned int textSize = text.size();
 
 		//Prepare Memory
-		model->meshPrepareMemory(mesh, 4 * textSize, 6 * textSize);
+		msh->prepareMemory(4 * textSize, 6 * textSize);
 
 		//Deltas
 		float dX = 0;
@@ -150,26 +151,26 @@ namespace SK
 			}
 
 			//Add Vertices
-			model->meshAddVertex(mesh, x + dX + g->xBearing, y + dY + g->yOffset, 0, 0, 0, 1, 0.0f, g->uvY);
-			model->meshAddVertex(mesh, x + dX + g->width + g->xBearing, y + dY + g->yOffset, 0, 0, 0, 1, g->uvW, g->uvY);
-			model->meshAddVertex(mesh, x + dX + g->width + g->xBearing, y + dY + g->height + g->yOffset, 0, 0, 0, 1, g->uvW, g->uvY + g->uvH);
-			model->meshAddVertex(mesh, x + dX + g->xBearing, y + dY + g->height + g->yOffset, 0, 0, 0, 1, 0.0f, g->uvY + g->uvH);
+			msh->addVertex(x + dX + g->xBearing, y + dY + g->yOffset, 0, 0, 0, 1, 0.0f, g->uvY);
+			msh->addVertex(x + dX + g->width + g->xBearing, y + dY + g->yOffset, 0, 0, 0, 1, g->uvW, g->uvY);
+			msh->addVertex(x + dX + g->width + g->xBearing, y + dY + g->height + g->yOffset, 0, 0, 0, 1, g->uvW, g->uvY + g->uvH);
+			msh->addVertex(x + dX + g->xBearing, y + dY + g->height + g->yOffset, 0, 0, 0, 1, 0.0f, g->uvY + g->uvH);
 
 			//Add Indices
-			model->meshAddIndex(mesh, 0 + (4 * i) );
-			model->meshAddIndex(mesh, 1 + (4 * i) );
-			model->meshAddIndex(mesh, 2 + (4 * i) );
+			msh->addIndex(0 + (4 * i) );
+			msh->addIndex(1 + (4 * i) );
+			msh->addIndex(2 + (4 * i) );
 
-			model->meshAddIndex(mesh, 0 + (4 * i) );
-			model->meshAddIndex(mesh, 2 + (4 * i) );
-			model->meshAddIndex(mesh, 3 + (4 * i) );
+			msh->addIndex(0 + (4 * i) );
+			msh->addIndex(2 + (4 * i) );
+			msh->addIndex(3 + (4 * i) );
 
 			//New Letter
 			dX += g->xAdvance;
 		}
 
 		//Compile
-		model->meshCompile(mesh);
+		msh->compile();
 	}
 
 	//Get Texture

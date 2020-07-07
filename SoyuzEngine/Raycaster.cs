@@ -340,7 +340,6 @@ namespace Soyuz
         /// <param name="length"></param>
         public void Update(Vector3 RayDirection, float length)
         {
-
             //Change the position of the line end-vertex
             line.Positions[1] = RayDirection;
 
@@ -348,7 +347,8 @@ namespace Soyuz
             line.Positions[0] = new Vector3(RayDirection.X, RayDirection.Y + length, RayDirection.Z);
 
             //Re-Compile
-            Compile();
+            line.Compile();
+            Update();
         }
 
     }

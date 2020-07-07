@@ -1,5 +1,7 @@
 #include "Model.h"
 
+#include "Core.h"
+
 namespace SK
 {
 	//Constructor
@@ -7,7 +9,7 @@ namespace SK
 	{
 		m_log = log;
 
-		m_meshes = std::vector<Mesh*>();
+		m_meshes = std::map<int,Mesh*>();
 
 		m_position = glm::vec3(0, 0, 0);
 		m_rotation = glm::vec3(0, 0, 0);
@@ -17,46 +19,19 @@ namespace SK
 	//Delete Model
 	Model::~Model()
 	{
-		for (Mesh* m : m_meshes)
-			delete m;
+		
 	}
 
-	//Create Mesh
-	int Model::createMesh()
+	//Add Mesh
+	void Model::addMesh(int meshID, Mesh* mesh)
 	{
-		Mesh* ms = new Mesh();
-		int i = (int)m_meshes.size();
-		m_meshes.push_back(ms);
-		return i;
+		m_meshes[meshID] = mesh;
 	}
 
-	//Prepare Memory
-	void Model::meshPrepareMemory(int meshID, unsigned int nVertex, unsigned int nIndex)
+	//Add Hidden Mesh
+	void Model::addHiddenMesh(Mesh* mesh)
 	{
-		m_meshes[meshID]->prepareMemory(nVertex, nIndex);
-	}
-
-	//Add Vertex
-	void Model::meshAddVertex(int meshID, float x, float y, float z, float nX, float nY, float nZ, float uvX, float uvY)
-	{
-		m_meshes[meshID]->addVertex(x, y, z, nX, nY, nZ, uvX, uvY);
-	}
-
-	//Add Index
-	void Model::meshAddIndex(int meshID, int i)
-	{
-		m_meshes[meshID]->addIndex(i);
-	}
-
-	//Compile Mesh
-	void Model::meshCompile(int meshID)
-	{
-		m_meshes[meshID]->compile();
-	}
-
-	//Merge Meshes
-	void Model::mergeMeshes()
-	{
+		m_meshes[m_meshes.size() * -1] = mesh;
 	}
 
 	//Load with path
@@ -89,11 +64,12 @@ namespace SK
 	//Process Assimp Mesh
 	void Model::processMesh(aiMesh* mesh)
 	{
-		//Create Mesh
-		int meshID = createMesh();
+		//Create Mesh, add it to model ( BUT NOT TO Core )
+		Mesh* msh = new Mesh();
+		addHiddenMesh(msh);
 
 		//Prepare Mesh Memory (triangle faces needed)
-		meshPrepareMemory(meshID, mesh->mNumVertices, mesh->mNumFaces * 3);
+		msh->prepareMemory(mesh->mNumVertices, mesh->mNumFaces * 3);
 
 		//Add Vertices
 		for (unsigned int i = 0; i < mesh->mNumVertices; i++)
@@ -105,7 +81,7 @@ namespace SK
 			if (mesh->mTextureCoords[0])
 				tex = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 
-			meshAddVertex(meshID, pos.x, pos.y, pos.z, nor.x, nor.y, nor.z, tex.x, tex.y);
+			msh->addVertex(pos.x, pos.y, pos.z, nor.x, nor.y, nor.z, tex.x, tex.y);
 		}
 
 		//Indices
@@ -113,20 +89,21 @@ namespace SK
 		{
 			aiFace face = mesh->mFaces[i];
 			for (unsigned int j = 0; j < face.mNumIndices; j++)
-				meshAddIndex(meshID,face.mIndices[j]);
+				msh->addIndex(face.mIndices[j]);
 		}
 
 		//Compile
-		meshCompile(meshID);
+		msh->compile();
 	}
 
 	//Render
 	void Model::render()
 	{
-		for (Mesh* m : m_meshes)
+		std::map<int, Mesh*>::iterator it;
+		for (it = m_meshes.begin(); it != m_meshes.end(); it++)
 		{
-			if(m != nullptr)
-				m->render();
+			if(it->second != nullptr)
+				it->second->render();
 		}
 	}
 
@@ -170,17 +147,15 @@ namespace SK
 		return rotationMatrix;
 	}
 
-	//Get Mesh
-	Mesh* Model::getMesh(int meshID) const
-	{
-		return m_meshes[meshID];
-	}
-
 	//Delete Mesh
-	void Model::deleteMesh(int meshID)
+	void Model::deleteMesh(Mesh* mesh)
 	{
-		delete m_meshes[meshID];
-		m_meshes[meshID] = nullptr;
+		for (int i = 0; i < m_meshes.size(); i++)
+		{
+			if (m_meshes[i] == mesh)
+				m_meshes[i] = nullptr;
+		}
+
 	}
 
 	//

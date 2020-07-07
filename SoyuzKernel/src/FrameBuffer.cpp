@@ -19,9 +19,7 @@ namespace SK
 	//Destructor
 	FrameBuffer::~FrameBuffer()
 	{
-		glDeleteTextures(1, &m_textureID);
-		glDeleteTextures(1, &m_depthID);
-		glDeleteFramebuffers(1, &m_framebufferID);
+		clear();
 	}
 
 	//Update
@@ -30,6 +28,9 @@ namespace SK
 		//Check if we need to create a new framebuffer
 		if (m_width != width || m_height != height)
 		{
+			//Clear
+			clear();
+
 			//Update Variable
 			m_width = width;
 			m_height = height;
@@ -88,6 +89,14 @@ namespace SK
 			else
 				m_log->add("FrameBuffer is COMPLETE", LOG_OK);
 		}
+	}
+
+	//Clear
+	void FrameBuffer::clear()
+	{
+		glDeleteTextures(1, &m_textureID);
+		glDeleteTextures(1, &m_depthID);
+		glDeleteFramebuffers(1, &m_framebufferID);
 	}
 
 	//Get id
