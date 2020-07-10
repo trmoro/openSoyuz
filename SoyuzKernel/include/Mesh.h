@@ -32,6 +32,9 @@ namespace SK
 		//Set Draw Mode
 		void setDrawMode(unsigned int drawmode);
 
+		//Transform as Skybox Mesh
+		void transformAsSkybox();
+
 	private:
 
 		//Data
@@ -50,6 +53,9 @@ namespace SK
 
 		//Drawing Mode
 		unsigned int m_drawmode;
+
+		//Is Skybox
+		bool m_isSkybox;
 
 	};
 

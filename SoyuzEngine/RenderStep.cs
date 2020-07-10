@@ -59,7 +59,26 @@ namespace Soyuz
             //If not empty
             else if (Models.Count > 0)
                 RenderModels(Models, Shader.ID);
-            //
+
+            //Render Skybox (Kernel will detected if there is or not a skybox)
+            Engine.Core.RenderSkybox(FrameBufferID);
+        }
+
+        /// <summary>
+        /// Set Skybox with a Cubemap Texture
+        /// </summary>
+        /// <param name="Cubemap"></param>
+        public void SetSkybox(Texture Cubemap)
+        {
+            Engine.Core.SetSkybox(FrameBufferID, Cubemap.ID);
+        }
+
+        /// <summary>
+        /// Disable Skybox
+        /// </summary>
+        public void DisableSkybox()
+        {
+            Engine.Core.DisableSkybox(FrameBufferID);
         }
 
         //Render Models
@@ -214,6 +233,10 @@ namespace Soyuz
                 else if (Models.Count > 0)
                     RenderModels(Models.Where(ShaderMap[s]).ToList(), s.ID);
             }
+
+            //Render Skybox (Kernel will detected if there is or not a skybox)
+            Engine.Core.RenderSkybox(FrameBufferID);
+
         }
     }
 

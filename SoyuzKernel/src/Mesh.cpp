@@ -22,6 +22,8 @@ namespace SK
 		m_ebo = 0;
 
 		m_drawmode = MODEL_DRAW_TRIANGLES;
+
+		m_isSkybox = false;
 	}
 
 	//Delete Mesh
@@ -128,27 +130,40 @@ namespace SK
 	{
 		if (m_isCompiled)
 		{
-			GLenum drawmode = GL_TRIANGLES;
-			switch (m_drawmode)
+			//Default Mesh Render
+			if (!m_isSkybox)
 			{
-			case MODEL_DRAW_QUADS:
-				drawmode = GL_QUADS;
-				break;
-			case MODEL_DRAW_LINES:
-				drawmode = GL_LINES;
-				break;
-			case MODEL_DRAW_LINE_STRIP:
-				drawmode = GL_LINE_STRIP;
-				break;
+				GLenum drawmode = GL_TRIANGLES;
+				switch (m_drawmode)
+				{
+				case MODEL_DRAW_QUADS:
+					drawmode = GL_QUADS;
+					break;
+				case MODEL_DRAW_LINES:
+					drawmode = GL_LINES;
+					break;
+				case MODEL_DRAW_LINE_STRIP:
+					drawmode = GL_LINE_STRIP;
+					break;
+				}
+
+				//Bind VAO
+				glBindVertexArray(m_vao);
+				if (m_nIndex != 2)
+					glDrawElements(drawmode, m_nIndex, GL_UNSIGNED_INT, nullptr);
+				else
+					glDrawElements(GL_LINES, m_nIndex, GL_UNSIGNED_INT, nullptr);
+				glBindVertexArray(0);
+			}
+			//Skybox Render
+			else
+			{
+				glBindVertexArray(m_vao);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+				glBindVertexArray(0);
 			}
 
-			//Bind VAO
-			glBindVertexArray(m_vao);
-			if(m_nIndex != 2)
-				glDrawElements(drawmode, m_nIndex, GL_UNSIGNED_INT, nullptr);
-			else
-				glDrawElements(GL_LINES, m_nIndex, GL_UNSIGNED_INT, nullptr);
-			glBindVertexArray(0);
+			//
 		}
 	}
 
@@ -156,6 +171,72 @@ namespace SK
 	void Mesh::setDrawMode(unsigned int drawmode)
 	{
 		m_drawmode = drawmode;
+	}
+
+	//Transform as a Skybox Mesh
+	//Source : https://learnopengl.com/code_viewer_gh.php?code=src/4.advanced_opengl/6.1.cubemaps_skybox/cubemaps_skybox.cpp
+	void Mesh::transformAsSkybox()
+	{
+		float skyboxVertices[] = {
+			// positions          
+			-1.0f,  1.0f, -1.0f,
+			-1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			-1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f
+		};
+
+		// skybox VAO
+		unsigned int skyboxVAO, skyboxVBO;
+		glGenVertexArrays(1, &skyboxVAO);
+		glGenBuffers(1, &skyboxVBO);
+		glBindVertexArray(skyboxVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+		m_vao = skyboxVAO;
+		m_vbo = skyboxVBO;
+		m_isCompiled = true;
+		m_isSkybox = true;
+
 	}
 
 	

@@ -67,6 +67,29 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Load as Cubemap
+        /// </summary>
+        /// <param name="Right"></param>
+        /// <param name="Left"></param>
+        /// <param name="Top"></param>
+        /// <param name="Bottom"></param>
+        /// <param name="Front"></param>
+        /// <param name="Back"></param>
+        public void LoadAsCubemap(String Right, String Left, String Top, String Bottom, String Front, String Back)
+        {
+            //Check if paths exist
+            if (File.Exists(Right) && File.Exists(Left) && File.Exists(Top) && File.Exists(Bottom) && File.Exists(Front) && File.Exists(Back))
+            {
+                Engine.Core.SetTextureAsCubemap(ID, Right, Left, Top, Bottom, Front, Back);
+                Height = Engine.Core.GetTextureHeight(ID);
+                Width = Engine.Core.GetTextureWidth(ID);
+                NumberOfChannel = Engine.Core.GetTextureNumberOfChannel(ID);
+            }
+            else
+                Console.WriteLine("SoyuzEngine Error : One or several files don't exist, unable to load Cubemap.");
+        }
+
+        /// <summary>
         /// Get Data Array by getting values from Kernel
         /// </summary>
         public float[] GetDataArray()

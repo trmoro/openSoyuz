@@ -18,7 +18,9 @@ namespace SK
 		m_w = 1;
 		m_h = 1;
 
-		m_nChannel = 4;
+		m_nChannel = 1;
+
+		m_isCubeMap = false;
 
 		m_data = new float[1];
 	}
@@ -81,7 +83,6 @@ namespace SK
 		stbi_image_free(image);
 	}
 
-
 	//Fill
 	void Texture::genFilled(unsigned int width, unsigned int height, unsigned int nChannel, float value)
 	{
@@ -92,6 +93,43 @@ namespace SK
 		
 		//Use Data Array
 		genFromDataArray(width, height, nChannel, dataArray);
+	}
+
+	//Generate Cubemap
+	void Texture::genCubemap(const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back)
+	{
+		m_isCubeMap = true;
+		const char* faces[] = { right,left,top,bottom,front,back };
+
+		glGenTextures(1, &m_id);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+
+		int width, height, nrChannels;
+		for (unsigned int i = 0; i < 6; i++)
+		{
+			unsigned char* data = stbi_load(faces[i], &width, &height, &nrChannels, 0);
+			if (data)
+			{
+				m_log->add("Cubemap tex success to load at path : " + std::string(faces[i]), LOG_OK);
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+				stbi_image_free(data);
+			}
+			else
+			{
+				m_log->add("Cubemap tex failed to load at path : " + std::string(faces[i]), LOG_ERROR);
+				stbi_image_free(data);
+			}
+		}
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		//Set
+		m_w = width;
+		m_h = height;
+		m_nChannel = nrChannels;
 	}
 
 
@@ -139,16 +177,19 @@ namespace SK
 	//Update
 	void Texture::update()
 	{
-		glBindTexture(GL_TEXTURE_2D, m_id);
+		if (!m_isCubeMap)
+		{
+			glBindTexture(GL_TEXTURE_2D, m_id);
 
-		if (m_nChannel == 4)
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RGBA, GL_FLOAT, m_data);
-		else if (m_nChannel == 3)
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RGB, GL_FLOAT, m_data);
-		else if (m_nChannel == 1)
-			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RED, GL_FLOAT, m_data);
+			if (m_nChannel == 4)
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RGBA, GL_FLOAT, m_data);
+			else if (m_nChannel == 3)
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RGB, GL_FLOAT, m_data);
+			else if (m_nChannel == 1)
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_w, m_h, GL_RED, GL_FLOAT, m_data);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	}
 
 	//Convolution
@@ -231,6 +272,12 @@ namespace SK
 		default:
 			break;
 		}
+	}
+
+	//Is Cubemap
+	bool Texture::isCubemap() const
+	{
+		return m_isCubeMap;
 	}
 
 	//Apply Perlin Noise

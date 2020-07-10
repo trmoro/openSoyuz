@@ -4,6 +4,8 @@
 
 #include "Log.h"
 
+#include "Texture.h"
+
 namespace SK
 {
 	class FrameBuffer
@@ -22,6 +24,12 @@ namespace SK
 		//Clear
 		void clear();
 
+		//Set Skybox
+		void setSkybox(Texture* t);
+
+		//Disable Skybox
+		void disableSkybox();
+
 		//Get ID
 		GLuint getID() const;
 
@@ -30,6 +38,12 @@ namespace SK
 
 		//Get Depth ID
 		GLuint getDepthID() const;
+
+		//Get Skybox Texture
+		Texture* getSkyboxTexture() const;
+
+		//Has Skybox
+		bool hasSkybox() const;
 
 	private:
 
@@ -44,6 +58,10 @@ namespace SK
 
 		//Log
 		Log* m_log;
+
+		//Skybox
+		bool m_hasSkybox;
+		Texture* m_skyboxTexture;
 
 	};
 }

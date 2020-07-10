@@ -27,6 +27,9 @@ namespace SK
 		//Filled Texture
 		void genFilled(unsigned int width, unsigned int height, unsigned int nChannel, float value);
 
+		//Generate Cube Map
+		void genCubemap(const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back);
+
 		//Get ID
 		GLuint getID() const;
 
@@ -60,6 +63,9 @@ namespace SK
 		//Apply Transform
 		void applyTransform(unsigned int id, float* args);
 
+		//Is Cubemap
+		bool isCubemap() const;
+
 	private:
 
 		//Get Data Array Position
@@ -77,6 +83,9 @@ namespace SK
 
 		//Data
 		float* m_data;
+
+		//Is Cube Map
+		bool m_isCubeMap;
 
 		//Log
 		Log* m_log;

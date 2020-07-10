@@ -59,6 +59,7 @@
 #define PREFAB_SHADER_FONT		5
 #define PREFAB_SHADER_GUI		6
 #define PREFAB_SHADER_REVERSE	7
+#define PREFAB_SHADER_SKYBOX	8
 
 //Model Drawing Mode
 #define MODEL_DRAW_TRIANGLES	0
@@ -188,6 +189,9 @@ namespace SK
 		//Set Texture with filling
 		void setTextureFilled(int textureID, unsigned int width, unsigned int height, unsigned int nChannel, float value);
 
+		//Set Texture as Cubemap
+		void setTextureAsCubemap(int textureID, const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back);
+
 		//Get Texture Width
 		unsigned int getTextureWidth(int textureID);
 
@@ -241,6 +245,15 @@ namespace SK
 
 		//Render Model
 		void renderModel(int shaderID, int modelID);
+
+		//Render Skybox
+		void renderSkybox(int frameBufferID);
+
+		//Set Skybox
+		void setSkybox(int frameBufferID, int cubemapTextureID);
+
+		//Disable Skybox
+		void disableSkybox(int frameBufferID);
 
 		//Set Clear Color
 		void setClearColor(float r, float g, float b, float a);
@@ -348,6 +361,10 @@ namespace SK
 
 		//Mouse To World
 		glm::vec3 m_mouseToWorld;
+
+		//Skybox Mesh
+		Mesh* m_skyboxMesh;
+		int	m_skyboxShaderID;
 
 	};
 }

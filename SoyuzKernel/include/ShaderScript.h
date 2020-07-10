@@ -7,6 +7,12 @@ public:
 	//Basic Vertex
 	static const char* Basic_Vertex;
 
+	//Skybox Vertex
+	static const char* Skybox_Vertex;
+
+	//Skybox Fragment
+	static const char* Skybox_Fragment;
+
 	//Screen Fragment Script
 	static const char* Screen_Fragment;
 

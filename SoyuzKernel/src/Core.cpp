@@ -64,6 +64,12 @@ namespace SK
 		//Init FreeType
 		Font::initFreeType();
 
+		//Skybox Mesh and Shader
+		m_skyboxMesh = new Mesh();
+		m_skyboxMesh->transformAsSkybox();
+		m_skyboxShaderID = createShader();
+		setPrefabShader(m_skyboxShaderID, PREFAB_SHADER_SKYBOX);
+
 		//Core Inited
 		m_log->add("Core Initialized", LOG_OK);
 	}
@@ -143,6 +149,10 @@ namespace SK
 		//Depth Settings
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
+
+		//Enable texture
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_TEXTURE_CUBE_MAP);
 
 		//Enable Multisampling (for anti-aliasing)
 		//glEnable(GL_MULTISAMPLE);
@@ -437,6 +447,10 @@ namespace SK
 			m_log->add("Prefab : GUI Element Shader", LOG_OK);
 			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Gui_Fragment);
 			break;
+		case PREFAB_SHADER_SKYBOX:
+			m_log->add("Prefab : Skybox Shader", LOG_OK);
+			m_shaders[shaderID]->set(ShaderScript::Skybox_Vertex, ShaderScript::Skybox_Fragment);
+			break;
 		}
 	}
 
@@ -445,7 +459,6 @@ namespace SK
 	{
 		//Active Texture
 		glActiveTexture(GL_TEXTURE0 + textureId);
-		glEnable(GL_TEXTURE_2D);
 
 		//Bind
 		if(depth)
@@ -499,10 +512,12 @@ namespace SK
 	{
 		//Active Texture
 		glActiveTexture(GL_TEXTURE0 + textureIndex);
-		glEnable(GL_TEXTURE_2D);
 
 		//Bind
-		glBindTexture(GL_TEXTURE_2D, m_textures[textureID]->getID());
+		if (m_textures[textureID]->isCubemap())
+			glBindTexture(GL_TEXTURE_CUBE_MAP, m_textures[textureID]->getID());
+		else
+			glBindTexture(GL_TEXTURE_2D, m_textures[textureID]->getID());
 
 		//Set Uniform
 		m_shaders[shaderID]->setUniformi((GLchar*)name, textureIndex);
@@ -513,7 +528,6 @@ namespace SK
 	{
 		//Active Texture
 		glActiveTexture(GL_TEXTURE0 + textureIndex);
-		glEnable(GL_TEXTURE_2D);
 
 		//Bind
 		glBindTexture(GL_TEXTURE_2D, m_fonts[fontID]->getTexture());
@@ -538,6 +552,12 @@ namespace SK
 	void Core::setTextureFilled(int textureID, unsigned int width, unsigned int height, unsigned int nChannel, float value)
 	{
 		m_textures[textureID]->genFilled(width, height, nChannel, value);
+	}
+
+	//Set Texture as Cubemap
+	void Core::setTextureAsCubemap(int textureID, const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back)
+	{
+		m_textures[textureID]->genCubemap(right, left, top, bottom, front, back);
 	}
 
 	//Get Texture Width
@@ -722,10 +742,54 @@ namespace SK
 		Model* m = m_models[modelID];
 		
 		//Render
-		s->setUniformMatrix4((GLchar*)"ProjViewModel", m_projViewMatrix * m->getModelRotationMatrix());
+		s->setUniformMatrix4((GLchar*)"ProjViewModel", getProjView() * m->getModelRotationMatrix());
 		s->setUniformMatrix4((GLchar*)"ModelRotationMatrix", m->getModelRotationMatrix());
 		s->setUniformMatrix4((GLchar*)"RotationMatrix", m->getRotationMatrix());
 		m->render();
+	}
+
+	//Render Skybox (Use it after rendering models)
+	void Core::renderSkybox(int frameBufferID)
+	{
+		//If Framebuffer has Skybox
+		if (m_framebuffers[frameBufferID]->hasSkybox())
+		{
+			// Change depth function so depth test passes when values are equal to depth buffer's content
+			glDepthFunc(GL_LEQUAL);
+
+			// Use Skybox Shader
+			useShader(m_skyboxShaderID);
+
+			//Compute View matrix without translation
+			glm::mat4 view = glm::mat4(glm::mat3(m_viewMatrix));
+
+			//Set Uniform
+			Shader* s = getShader(m_skyboxShaderID);
+			s->setUniformMatrix4( (GLchar*) "projection", m_projectionMatrix);
+			s->setUniformMatrix4( (GLchar*) "view", view);
+
+			// Skybox Texture
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, m_framebuffers[frameBufferID]->getSkyboxTexture()->getID());;
+
+			//Render Mesh
+			m_skyboxMesh->render();
+
+			// Set depth function back to default
+			glDepthFunc(GL_LESS);
+		}
+	}
+
+	//Set Skybox
+	void Core::setSkybox(int frameBufferID, int cubemapTextureID)
+	{
+		m_framebuffers[frameBufferID]->setSkybox(m_textures[cubemapTextureID]);
+	}
+
+	//Disable Skybox
+	void Core::disableSkybox(int frameBufferID)
+	{
+		m_framebuffers[frameBufferID]->disableSkybox();
 	}
 
 	//Set Clear Color

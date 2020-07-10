@@ -153,6 +153,9 @@ namespace SKW
 		//Apply Texture Transform
 		void TextureTransform(int TextureID, int TransformID, array<float>^ Arguments);
 
+		//Set Texture As Cubemap
+		void SetTextureAsCubemap(int TextureID, String^ Right, String^ Left, String^ Top, String^ Bottom, String^ Front, String^ Back);
+
 		//Load Font
 		void LoadFont(int FontID, String^ Path, unsigned int Size, unsigned int Start, unsigned int End);
 		
@@ -176,6 +179,15 @@ namespace SKW
 
 		//Show FrameBuffer
 		void ShowFrameBuffer(int FrameBufferID);
+
+		//Render Skybox
+		void RenderSkybox(int FrameBufferID);
+
+		//Set Skybox
+		void SetSkybox(int FrameBufferID, int CubemapTextureID);
+
+		//Disable Skybox
+		void DisableSkybox(int FrameBufferID);
 
 		//Set Clear Color
 		void SetClearColor(float r, float g, float b, float a);

@@ -1,5 +1,4 @@
 #include "FrameBuffer.h"
-#include "..\include\FrameBuffer.h"
 
 namespace SK
 {
@@ -14,6 +13,10 @@ namespace SK
 		m_height = 0;
 
 		m_log = log;
+
+		//Skybox
+		m_hasSkybox = false;
+		m_skyboxTexture = nullptr;
 	}
 
 	//Destructor
@@ -99,6 +102,19 @@ namespace SK
 		glDeleteFramebuffers(1, &m_framebufferID);
 	}
 
+	//Set Skybox
+	void FrameBuffer::setSkybox(Texture* t)
+	{
+		m_hasSkybox = true;
+		m_skyboxTexture = t;
+	}
+
+	//Disable Skybox
+	void FrameBuffer::disableSkybox()
+	{
+		m_hasSkybox = false;
+	}
+
 	//Get id
 	GLuint FrameBuffer::getID() const
 	{
@@ -115,5 +131,17 @@ namespace SK
 	GLuint FrameBuffer::getDepthID() const
 	{
 		return m_depthID;
+	}
+
+	//Get Skybox Texture
+	Texture* FrameBuffer::getSkyboxTexture() const
+	{
+		return m_skyboxTexture;
+	}
+	
+	//Has Skybox
+	bool FrameBuffer::hasSkybox() const
+	{
+		return m_hasSkybox;
 	}
 }

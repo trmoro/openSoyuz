@@ -313,6 +313,12 @@ namespace SKW
 		m_Instance->textureTransform(TextureID, TransformID, args);
 	}
 
+	//Set Texture as Cubemap
+	void Core::SetTextureAsCubemap(int TextureID, String^ Right, String^ Left, String^ Top, String^ Bottom, String^ Front, String^ Back)
+	{
+		m_Instance->setTextureAsCubemap(TextureID, stringToCharArray(Right), stringToCharArray(Left), stringToCharArray(Top), stringToCharArray(Bottom), stringToCharArray(Front), stringToCharArray(Back) );
+	}
+
 	//Load Font
 	void Core::LoadFont(int FontID, String^ Path, unsigned int Size, unsigned int Start, unsigned int End)
 	{
@@ -359,6 +365,24 @@ namespace SKW
 	void Core::ShowFrameBuffer(int FrameBufferID)
 	{
 		m_Instance->showFrameBuffer(FrameBufferID);
+	}
+
+	//Render Skybox
+	void Core::RenderSkybox(int FrameBufferID)
+	{
+		m_Instance->renderSkybox(FrameBufferID);
+	}
+
+	//Set Skybox
+	void Core::SetSkybox(int FrameBufferID, int CubemapTextureID)
+	{
+		m_Instance->setSkybox(FrameBufferID,CubemapTextureID);
+	}
+
+	//Disable Skybox
+	void Core::DisableSkybox(int FrameBufferID)
+	{
+		m_Instance->disableSkybox(FrameBufferID);
 	}
 
 	//Set Clear Color
