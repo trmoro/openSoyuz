@@ -278,9 +278,6 @@ namespace SK
 		//Get Model
 		Model* getModel(int modelID) const;
 
-		//Get ProjView Matrix
-		glm::mat4 getProjView() const;
-
 		//Mouse To World
 		void mouseToWorld();
 
@@ -342,7 +339,6 @@ namespace SK
 		std::vector<Font*>			m_fonts;
 
 		//Projection/View Matrix
-		glm::mat4 m_projViewMatrix;
 		glm::mat4 m_projectionMatrix;
 		glm::mat4 m_viewMatrix;
 

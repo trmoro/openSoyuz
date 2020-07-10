@@ -20,7 +20,8 @@ namespace SK
 		m_textures = std::vector<Texture*>();
 		m_fonts = std::vector<Font*>();
 
-		m_projViewMatrix = glm::mat4(0);
+		m_projectionMatrix = glm::mat4(0);
+		m_viewMatrix = glm::mat4(0);
 
 		//openSoyuz
 		std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << std::endl;
@@ -368,34 +369,31 @@ namespace SK
 	void Core::setPerspectiveCamera(float x, float y, float z, float targetX, float targetY, float targetZ, float radius, float near, float far)
 	{
 		//Projection
-		glm::mat4 projection = glm::perspective(glm::radians(radius), (float) Input::Window_Width / (float) Input::Window_Height, near, far);
+		m_projectionMatrix = glm::perspective(glm::radians(radius), (float) Input::Window_Width / (float) Input::Window_Height, near, far);
 
 		//View
-		glm::mat4 view = glm::lookAt(glm::vec3(x,y,z), glm::vec3(targetX,targetY,targetZ), glm::vec3(0, 1, 0));
+		m_viewMatrix = glm::lookAt(glm::vec3(x,y,z), glm::vec3(targetX,targetY,targetZ), glm::vec3(0, 1, 0));
 		//view = glm::rotate(view, 3.14159265359f, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		//Set
-		m_projViewMatrix = projection * view;
-		m_projectionMatrix = projection;
-		m_viewMatrix = view;
 	}
 
 	//Set Orthographic Camera
 	void Core::setOrthographicCamera(float near, float far)
 	{
-		m_projViewMatrix = glm::ortho(0.0f, (float) Input::Window_Width, (float) Input::Window_Height, 0.0f, near, far);
+		//Projection Matrix
+		m_projectionMatrix = glm::ortho(0.0f, (float) Input::Window_Width, (float) Input::Window_Height, 0.0f, near, far);
+
+		//Identiy Matrix for View
+		m_viewMatrix = glm::mat4(1);
 	}
 
 	//Set Orthographic Box Camera
 	void Core::setOrthographicBoxCamera(float x, float y, float z, float targetX, float targetY, float targetZ, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)
 	{
-		glm::mat4 projection = glm::ortho(xMin, xMax, yMin, yMax, zMin, zMax);
-		glm::mat4 view = glm::lookAt(glm::vec3(x, y, z), glm::vec3(targetX, targetY, targetZ), glm::vec3(0, 1, 0));
-
-		//Set
-		m_projViewMatrix = projection * view;
-		m_projectionMatrix = projection;
-		m_viewMatrix = view;
+		//Projection
+		m_projectionMatrix = glm::ortho(xMin, xMax, yMin, yMax, zMin, zMax);
+		
+		//View
+		m_viewMatrix = glm::lookAt(glm::vec3(x, y, z), glm::vec3(targetX, targetY, targetZ), glm::vec3(0, 1, 0));
 	}
 
 	//Set Shader
@@ -657,8 +655,10 @@ namespace SK
 	void Core::renderFrameBuffer(int shaderID)
 	{
 		//Render Model
-		m_screenShader->setUniformMatrix4((GLchar*)"ProjViewModel", getProjView() * m_frameBufferRenderModel->getModelRotationMatrix());
-		m_screenShader->setUniformMatrix4((GLchar*)"RotationMatrix", m_frameBufferRenderModel->getRotationMatrix());
+		m_screenShader->setUniformMatrix4((GLchar*)"Projection", m_projectionMatrix);
+		m_screenShader->setUniformMatrix4((GLchar*)"View", m_viewMatrix);
+		m_screenShader->setUniformMatrix4((GLchar*)"Model", m_frameBufferRenderModel->getModelRotationMatrix());
+		m_screenShader->setUniformMatrix4((GLchar*)"ModelRotation", m_frameBufferRenderModel->getRotationMatrix());
 		m_frameBufferRenderModel->render();
 
 		//Unbind
@@ -699,8 +699,10 @@ namespace SK
 
 		//Render Model
 		m_screenShader->setUniformi((GLchar*)"m_texture", 0);
-		m_screenShader->setUniformMatrix4((GLchar*)"ProjViewModel", getProjView() * m_screenModel->getModelRotationMatrix());
-		m_screenShader->setUniformMatrix4((GLchar*)"RotationMatrix", m_screenModel->getRotationMatrix());
+		m_screenShader->setUniformMatrix4((GLchar*)"Projection", m_projectionMatrix);
+		m_screenShader->setUniformMatrix4((GLchar*)"View", m_viewMatrix);
+		m_screenShader->setUniformMatrix4((GLchar*)"Model", m_screenModel->getModelRotationMatrix());
+		m_screenShader->setUniformMatrix4((GLchar*)"ModelRotation", m_screenModel->getRotationMatrix());
 		m_screenModel->render();
 
 		//Unbind
@@ -742,9 +744,14 @@ namespace SK
 		Model* m = m_models[modelID];
 		
 		//Render
-		s->setUniformMatrix4((GLchar*)"ProjViewModel", getProjView() * m->getModelRotationMatrix());
-		s->setUniformMatrix4((GLchar*)"ModelRotationMatrix", m->getModelRotationMatrix());
-		s->setUniformMatrix4((GLchar*)"RotationMatrix", m->getRotationMatrix());
+		m_screenShader->setUniformMatrix4((GLchar*)"Projection", m_projectionMatrix);
+		m_screenShader->setUniformMatrix4((GLchar*)"View", m_viewMatrix);
+		m_screenShader->setUniformMatrix4((GLchar*)"Model", m->getModelRotationMatrix());
+		m_screenShader->setUniformMatrix4((GLchar*)"ModelRotation", m->getRotationMatrix());
+
+		m_screenShader->setUniformMatrix4((GLchar*)"ViewNoTranslation", glm::mat4(glm::mat3(m_viewMatrix) ) );
+
+
 		m->render();
 	}
 
@@ -844,12 +851,6 @@ namespace SK
 	Model* Core::getModel(int modelID) const
 	{
 		return m_models[modelID];
-	}
-
-	//Get Projection View Matrix
-	glm::mat4 Core::getProjView() const
-	{
-		return m_projViewMatrix;
 	}
 
 	//Mouse To World

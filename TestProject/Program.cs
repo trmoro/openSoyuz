@@ -29,7 +29,8 @@ namespace TestProject
 
             //Set Material
             planet.Material = new Material() {
-                IsTextured = true,
+                Color = new Vector4(1),
+                IsTextured = false,
                 Texture = cubemap
             };
 
@@ -52,6 +53,7 @@ namespace TestProject
             //Add Planet Shader
             Shader planetShader = new Shader();
             planetShader.Load("Shaders/Reflective.vs", "Shaders/Reflective.fs");
+            //planetShader.LoadPrefab(Engine.Core.Prefab_Shader_Color);
             c.AddShader(planetShader, m => m.Name == "Planet");
 
             //Add Orbit Viewer

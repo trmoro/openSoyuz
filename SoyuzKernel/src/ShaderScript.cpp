@@ -5,14 +5,16 @@ const char* ShaderScript::Basic_Vertex = "#version 330 core													\n\
 	layout(location = 0) in vec3 position;																	\n\
 	layout(location = 1) in vec3 normal;																	\n\
 	layout(location = 2) in vec2 texCoord;																	\n\
-	uniform mat4 ProjViewModel;																				\n\
-	uniform mat4 RotationMatrix;																			\n\
+	uniform mat4 Projection;																				\n\
+	uniform mat4 View;																						\n\
+	uniform mat4 Model;																						\n\
+	uniform mat4 ModelRotation;																				\n\
 	out vec3 m_normal;																						\n\
 	out vec2 m_texCoord;																					\n\
 	void main() {																							\n\
 		m_texCoord = texCoord;																				\n\
-		m_normal = vec3(RotationMatrix * vec4(normal, 1.0)).xyz;											\n\
-		gl_Position = ProjViewModel * vec4(position, 1.0);													\n\
+		m_normal = vec3(ModelRotation * vec4(normal, 1.0)).xyz;												\n\
+		gl_Position = Projection * View * Model * vec4(position, 1.0);										\n\
 	}																										";
 
 //Skybox Vertex Script
@@ -147,17 +149,18 @@ const char* ShaderScript::Lighting_Vertex = "#version 330 core												\n\
 	layout(location = 0) in vec3 position;																	\n\
 	layout(location = 1) in vec3 normal;																	\n\
 	layout(location = 2) in vec2 texCoord;																	\n\
-	uniform mat4 ProjViewModel;																				\n\
-	uniform mat4 ModelRotationMatrix;																		\n\
-	uniform mat4 RotationMatrix;																			\n\
+	uniform mat4 Projection;																				\n\
+	uniform mat4 View;																						\n\
+	uniform mat4 Model;																						\n\
+	uniform mat4 ModelRotation;																				\n\
 	out vec3 m_normal;																						\n\
 	out vec2 m_texCoord;																					\n\
 	out vec3 m_pos;																							\n\
 	void main() {																							\n\
 		m_texCoord = texCoord;																				\n\
-		m_normal = vec3(RotationMatrix * vec4(normal, 1.0)).xyz;											\n\
-		m_pos = vec3(ModelRotationMatrix * vec4(position, 1.0)).xyz;										\n\
-		gl_Position = ProjViewModel * vec4(position, 1.0);													\n\
+		m_normal = vec3(ModelRotation * vec4(normal, 1.0)).xyz;												\n\
+		m_pos = vec3(Model * vec4(position, 1.0)).xyz;														\n\
+		gl_Position = Projection * View * Model * vec4(position, 1.0);										\n\
 	}																										";
 
 //Lighting Fragment Script
