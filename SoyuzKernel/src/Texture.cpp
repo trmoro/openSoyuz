@@ -98,6 +98,8 @@ namespace SK
 	//Generate Cubemap
 	void Texture::genCubemap(const char* right, const char* left, const char* top, const char* bottom, const char* front, const char* back)
 	{
+		stbi_set_flip_vertically_on_load(false);
+
 		m_isCubeMap = true;
 		const char* faces[] = { right,left,top,bottom,front,back };
 
@@ -125,6 +127,8 @@ namespace SK
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		stbi_set_flip_vertically_on_load(true);
 
 		//Set
 		m_w = width;

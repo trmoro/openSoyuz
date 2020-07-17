@@ -60,6 +60,8 @@ namespace TestProject
             //If variables set
             if(Model != null && Camera != null)
             {
+                Model.Rotation += new Vector3(0, 0.005f, 0);
+
                 // U / V Positions
                 if (Engine.Core.IsKeyPressed((sbyte)'d'))
                     U += Speed;

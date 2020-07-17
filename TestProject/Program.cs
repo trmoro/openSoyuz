@@ -22,28 +22,26 @@ namespace TestProject
             Scene s = new Scene();
 
             //Create Planet
-            Model planet = new Model();
-            planet.Name = "Planet";
-            planet.Position = new Vector3(0);
-            planet.Scale = new Vector3(10);
+            Model mod = new Model();
+            mod.Name = "TestModel";
+            mod.Position = new Vector3(0);
+            mod.Scale = new Vector3(0.03f);
 
             //Set Material
-            planet.Material = new Material() {
-                Color = new Vector4(1),
+            mod.Material = new Material() {
+                Color = new Vector4(0.2f,0.7f,1,1),
                 IsTextured = false,
-                Texture = cubemap
+                Texture = cubemap,
+                RefractRatio = 1.0f / 1.52f
             };
 
             //Add 
-            planet.Meshes.Add(Quad.Cube().Compile() );
-            planet.Update();
-            planet.SetDrawMode(Engine.Core.Model_DrawMode_Triangles);
-            s.Models.Add(planet);
-
-            //Create Skybox
-            Model skybox = new Model();
-            skybox.Name = "Skybox";
-            skybox.Scale = new Vector3(100);
+            mod.Load("Models/medieval_house.fbx");
+            //mod.Meshes.Add(Sphere.Default(512,512).Compile() );
+            //mod.Meshes.Add(Sphere.TriangleVertex(512, 512).Compile());
+            mod.Update();
+            mod.SetDrawMode(Engine.Core.Model_DrawMode_Triangles);
+            s.Models.Add(mod);
 
             //Add Camera : each camera generates an image
             Camera c = new Camera(false);
@@ -51,13 +49,13 @@ namespace TestProject
             s.Cameras.Add(c);
 
             //Add Planet Shader
-            Shader planetShader = new Shader();
-            planetShader.Load("Shaders/Reflective.vs", "Shaders/Reflective.fs");
-            //planetShader.LoadPrefab(Engine.Core.Prefab_Shader_Color);
-            c.AddShader(planetShader, m => m.Name == "Planet");
+            Shader shader = new Shader();
+            //shader.Load("Shaders/Reflective.vs", "Shaders/Refract.fs");
+            shader.LoadPrefab(Engine.Core.Prefab_Shader_Refract);
+            c.AddShader(shader, m => m.Name == "TestModel");
 
             //Add Orbit Viewer
-            OrbitViewer orbitViewer = new OrbitViewer() { Camera = c, Model = planet, Distance = 15, Speed = 0.02f };
+            OrbitViewer orbitViewer = new OrbitViewer() { Camera = c, Model = mod, Distance = 15, Speed = 0.02f };
             s.AddActor(orbitViewer);
 
             //Load Font
@@ -67,8 +65,8 @@ namespace TestProject
             //GUI
             GUI ui = new GUI();
             ui.Text(55, 15, new Vector4(1), "I am a text", font, 85, 1.2f);
-            ui.Box(55, 10, 150, 150, new Vector4(1, 0, 0, 0.995f));
-            ui.Button(10, 200, 150, 32, new Vector4(0, 0, 1, 0.995f), "Button", font);
+            ui.Box(55, 10, 150, 150, new Vector4(1, 0, 0, 0.9f));
+            ui.Button(10, 200, 150, 32, new Vector4(0, 0, 1, 0.9f), "Button", font);
             s.AddActor(ui);
 
             //Add Scene to Engine

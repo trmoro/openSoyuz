@@ -28,9 +28,6 @@ public:
 	//Convolution Fragment
 	static const char* Conv_Fragment;
 
-	//Lighting Vertex Script
-	static const char* Lighting_Vertex;
-
 	//Lighting Fragment Script
 	static const char* Lighting_Fragment;
 
@@ -42,5 +39,11 @@ public:
 
 	//Reverse Fragment Script
 	static const char* Reverse_Fragment;
+
+	//Reflect Fragment Script
+	static const char* Reflect_Fragment;
+
+	//Refract Fragment Script
+	static const char* Refract_Fragment;
 
 };

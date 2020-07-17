@@ -98,6 +98,7 @@ namespace Soyuz
                     Engine.Core.SetUniformVec3(ShaderID, "m_diffuse", mat.Diffuse.X, mat.Diffuse.Y, mat.Diffuse.Z);
                     Engine.Core.SetUniformVec3(ShaderID, "m_specular", mat.Specular.X, mat.Specular.Y, mat.Specular.Z);
                     Engine.Core.SetUniformF(ShaderID, "m_shininess", mat.Shininess);
+                    Engine.Core.SetUniformF(ShaderID, "m_refractRatio", mat.RefractRatio);
 
                     //Set Material Texture Uniform
                     if (mat.IsTextured)

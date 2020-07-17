@@ -109,7 +109,7 @@ namespace Soyuz
         }
 
         /// <summary>
-        /// Update Meshes List in Core, Barycenter and Vertex-Length
+        /// Update Meshes List in Kernel, Barycenter and Vertex-Length
         /// </summary>
         public void Update()
         {

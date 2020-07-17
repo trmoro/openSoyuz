@@ -100,7 +100,7 @@ namespace Soyuz
         public void Delete()
         {
             Engine.Core.DeleteMesh(MeshID);
-        }
+        }       
 
         /// <summary>
         /// Compile Mesh
@@ -129,6 +129,20 @@ namespace Soyuz
             Engine.Core.MeshCompile(MeshID);
 
             return this;
+        }
+
+        /// <summary>
+        /// Compute Normal with 3 Position
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static Vector3 ComputeNormal(Vector3 a, Vector3 b, Vector3 c)
+        {
+            Vector3 u = b - a;
+            Vector3 v = c - a;
+            return new Vector3((u.Y * v.Z) - (u.Z * v.Y), (u.Z * v.X) - (u.X * v.Z), (u.X * v.Y) - (u.Y * v.X));
         }
 
         //

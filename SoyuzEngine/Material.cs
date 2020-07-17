@@ -25,6 +25,9 @@ namespace Soyuz
         //Texture ID
         public Texture Texture { get; set; }
 
+        //Refract Ratio
+        public float RefractRatio { get; set; }
+
         /// <summary>
         /// Material Constructor
         /// </summary>
@@ -37,6 +40,7 @@ namespace Soyuz
             Shininess = 64.0f;
             IsTextured = false;
             Texture = null;
+            RefractRatio = 1.0f / 1.309f;
         }
     }
 }

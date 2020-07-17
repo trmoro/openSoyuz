@@ -98,7 +98,7 @@ namespace SK
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-		glfwWindowHint(GLFW_SAMPLES, MSAA);
+		//glfwWindowHint(GLFW_SAMPLES, MSAA);
 
 		//Create Window
 		Input::Window_Width = 640;
@@ -435,7 +435,7 @@ namespace SK
 			break;
 		case PREFAB_SHADER_LIGHTING:
 			m_log->add("Prefab : Lighting Shader", LOG_OK);
-			m_shaders[shaderID]->set(ShaderScript::Lighting_Vertex, ShaderScript::Lighting_Fragment);
+			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Lighting_Fragment);
 			break;
 		case PREFAB_SHADER_FONT:
 			m_log->add("Prefab : Font Shader", LOG_OK);
@@ -448,6 +448,14 @@ namespace SK
 		case PREFAB_SHADER_SKYBOX:
 			m_log->add("Prefab : Skybox Shader", LOG_OK);
 			m_shaders[shaderID]->set(ShaderScript::Skybox_Vertex, ShaderScript::Skybox_Fragment);
+			break;
+		case PREFAB_SHADER_REFLECT:
+			m_log->add("Prefab : Reflect Shader", LOG_OK);
+			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Reflect_Fragment);
+			break;
+		case PREFAB_SHADER_REFRACT:
+			m_log->add("Prefab : Refract Shader", LOG_OK);
+			m_shaders[shaderID]->set(ShaderScript::Basic_Vertex, ShaderScript::Refract_Fragment);
 			break;
 		}
 	}
@@ -744,13 +752,10 @@ namespace SK
 		Model* m = m_models[modelID];
 		
 		//Render
-		m_screenShader->setUniformMatrix4((GLchar*)"Projection", m_projectionMatrix);
-		m_screenShader->setUniformMatrix4((GLchar*)"View", m_viewMatrix);
-		m_screenShader->setUniformMatrix4((GLchar*)"Model", m->getModelRotationMatrix());
-		m_screenShader->setUniformMatrix4((GLchar*)"ModelRotation", m->getRotationMatrix());
-
-		m_screenShader->setUniformMatrix4((GLchar*)"ViewNoTranslation", glm::mat4(glm::mat3(m_viewMatrix) ) );
-
+		s->setUniformMatrix4((GLchar*)"Projection", m_projectionMatrix);
+		s->setUniformMatrix4((GLchar*)"View", m_viewMatrix);
+		s->setUniformMatrix4((GLchar*)"Model", m->getModelRotationMatrix());
+		s->setUniformMatrix4((GLchar*)"Rotation", m->getRotationMatrix());
 
 		m->render();
 	}
@@ -772,8 +777,8 @@ namespace SK
 
 			//Set Uniform
 			Shader* s = getShader(m_skyboxShaderID);
-			s->setUniformMatrix4( (GLchar*) "projection", m_projectionMatrix);
-			s->setUniformMatrix4( (GLchar*) "view", view);
+			s->setUniformMatrix4( (GLchar*) "Projection", m_projectionMatrix);
+			s->setUniformMatrix4( (GLchar*) "View", view);
 
 			// Skybox Texture
 			glActiveTexture(GL_TEXTURE0);

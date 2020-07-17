@@ -8,24 +8,26 @@ const char* ShaderScript::Basic_Vertex = "#version 330 core													\n\
 	uniform mat4 Projection;																				\n\
 	uniform mat4 View;																						\n\
 	uniform mat4 Model;																						\n\
-	uniform mat4 ModelRotation;																				\n\
+	uniform mat4 Rotation;																					\n\
+	out vec3 m_pos;																							\n\
 	out vec3 m_normal;																						\n\
 	out vec2 m_texCoord;																					\n\
 	void main() {																							\n\
 		m_texCoord = texCoord;																				\n\
-		m_normal = vec3(ModelRotation * vec4(normal, 1.0)).xyz;												\n\
+		m_normal = vec3(Rotation * vec4(normal, 1.0));														\n\
+		m_pos = vec3(Model * vec4(position, 1.0));															\n\
 		gl_Position = Projection * View * Model * vec4(position, 1.0);										\n\
 	}																										";
 
 //Skybox Vertex Script
 const char* ShaderScript::Skybox_Vertex = "#version 330 core												\n\
 	layout(location = 0) in vec3 position;																	\n\
-	uniform mat4 projection;																				\n\
-	uniform mat4 view;																						\n\
+	uniform mat4 Projection;																				\n\
+	uniform mat4 View;																						\n\
 	out vec3 m_texCoord;																					\n\
 	void main() {																							\n\
 		m_texCoord = position;																				\n\
-		vec4 pos = projection * view * vec4(position, 1.0);													\n\
+		vec4 pos = Projection * View * vec4(position, 1.0);													\n\
 		gl_Position = pos.xyww;																				\n\
 	}																										";
 
@@ -142,25 +144,6 @@ const char* ShaderScript::Conv_Fragment = "#version 330 core												\n\
 		result.g *= m_convCoef;								 												\n\
 		result.b *= m_convCoef;								 												\n\
 		color = result;																						\n\
-	}																										";
-
-//Lighting Vertex Script
-const char* ShaderScript::Lighting_Vertex = "#version 330 core												\n\
-	layout(location = 0) in vec3 position;																	\n\
-	layout(location = 1) in vec3 normal;																	\n\
-	layout(location = 2) in vec2 texCoord;																	\n\
-	uniform mat4 Projection;																				\n\
-	uniform mat4 View;																						\n\
-	uniform mat4 Model;																						\n\
-	uniform mat4 ModelRotation;																				\n\
-	out vec3 m_normal;																						\n\
-	out vec2 m_texCoord;																					\n\
-	out vec3 m_pos;																							\n\
-	void main() {																							\n\
-		m_texCoord = texCoord;																				\n\
-		m_normal = vec3(ModelRotation * vec4(normal, 1.0)).xyz;												\n\
-		m_pos = vec3(Model * vec4(position, 1.0)).xyz;														\n\
-		gl_Position = Projection * View * Model * vec4(position, 1.0);										\n\
 	}																										";
 
 //Lighting Fragment Script
@@ -334,4 +317,43 @@ const char* ShaderScript::Reverse_Fragment = "#version 330 core												\n\
 		out_color = texture2D(m_source, uv);																\n\
 		if (out_color.a <= 0)																				\n\
 			discard;																						\n\
+	}																										";
+
+//Reflect Fragment Script
+const char* ShaderScript::Reflect_Fragment = "#version 330 core												\n\
+	in vec3 m_pos;																							\n\
+	in vec3 m_normal;																						\n\
+																											\n\
+	uniform samplerCube m_texture;																			\n\
+	uniform vec3 m_camPos;																					\n\
+																											\n\
+	uniform vec4 m_color;																					\n\
+	out vec4 out_color;																						\n\
+																											\n\
+	void main() {																							\n\
+		vec3 I = normalize(m_pos - m_camPos);																\n\
+		vec3 R = reflect(I, normalize(m_normal));															\n\
+																											\n\
+		vec3 color = texture(m_texture, R).rgb;																\n\
+		out_color = vec4(color, 1.0) * m_color;																\n\
+	}																										";
+
+//Reflect Fragment Script
+const char* ShaderScript::Refract_Fragment = "#version 330 core												\n\
+	in vec3 m_pos;																							\n\
+	in vec3 m_normal;																						\n\
+																											\n\
+	uniform samplerCube m_texture;																			\n\
+	uniform vec3 m_camPos;																					\n\
+	uniform float m_refractRatio;																			\n\
+																											\n\
+	uniform vec4 m_color;																					\n\
+	out vec4 out_color;																						\n\
+																											\n\
+	void main() {																							\n\
+		vec3 I = normalize(m_pos - m_camPos);																\n\
+		vec3 R = refract(I, normalize(m_normal), m_refractRatio);											\n\
+																											\n\
+		vec3 color = texture(m_texture, R).rgb;																\n\
+		out_color = vec4(color, 1.0) * m_color;																\n\
 	}																										";
