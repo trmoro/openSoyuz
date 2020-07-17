@@ -70,16 +70,26 @@ namespace Soyuz
             Duplicates = new List<Camera>();
         }
 
-        //Render
-        public override void Render()
+        /// <summary>
+        /// Update Kernel Camera
+        /// </summary>
+        public void UpdateKernelCamera()
         {
-            //Set Camera
             if (Type == CameraType.Perspective)
                 Engine.Core.SetPerspectiveCamera(Position.X, Position.Y, Position.Z, Target.X, Target.Y, Target.Z, Radius, Near, Far);
             else if (Type == CameraType.Orthographic)
                 Engine.Core.SetOrthographicCamera(Near, Far);
             else
                 Engine.Core.SetOrthographicBoxCamera(Position.X, Position.Y, Position.Z, Target.X, Target.Y, Target.Z, OB_minX, OB_maxX, OB_minY, OB_maxY, OB_minZ, OB_maxZ);
+        }
+
+        /// <summary>
+        /// Render
+        /// </summary>
+        public override void Render()
+        {
+            //Set Camera
+            UpdateKernelCamera();
 
             //Set Camera Position
             foreach(Shader s in ShaderMap.Keys)

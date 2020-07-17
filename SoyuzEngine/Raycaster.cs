@@ -62,6 +62,7 @@ namespace Soyuz
         public override void Update()
         {
             //Update Mouse To World Position
+            Camera.UpdateKernelCamera();
             Engine.Core.UpdateMouseToWorld();
             RayDirection = new Vector3(Engine.Core.GetMouseToWorldX(), Engine.Core.GetMouseToWorldY(), Engine.Core.GetMouseToWorldZ());
 
