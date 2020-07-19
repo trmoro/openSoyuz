@@ -26,6 +26,9 @@ namespace Soyuz
 
         //Bool to set the behaviour of the render step when the Model list is empty
         public bool IfEmptyRenderAll { get; set; }
+        
+        //Skybox Storing Variable to prevents finalizer
+        private Texture Skybox { get; set; }
             
         /// <summary>
         /// Render Step Constructor
@@ -70,6 +73,7 @@ namespace Soyuz
         /// <param name="Cubemap"></param>
         public void SetSkybox(Texture Cubemap)
         {
+            Skybox = Cubemap;
             Engine.Core.SetSkybox(FrameBufferID, Cubemap.ID);
         }
 
