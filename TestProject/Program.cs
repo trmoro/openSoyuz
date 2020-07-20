@@ -39,8 +39,9 @@ namespace TestProject
             mod.Load("Models/medieval_house.fbx");
             //mod.Meshes.Add(Sphere.Default(512,512).Compile() );
             //mod.Meshes.Add(Sphere.TriangleVertex(512, 512).Compile());
+            //mod.Meshes.Add(Utils.Point().Compile());
             mod.Update();
-            mod.SetDrawMode(Engine.Core.Model_DrawMode_Triangles);
+            mod.SetDrawMode(Engine.Core.Model_DrawMode_Points);
             s.Models.Add(mod);
 
             //Add Camera : each camera generates an image
@@ -50,7 +51,7 @@ namespace TestProject
 
             //Add Planet Shader
             Shader shader = new Shader();
-            //shader.Load("Shaders/Reflective.vs", "Shaders/Refract.fs");
+            //shader.Load("Shaders/SphereGPU.vs", "Shaders/SphereGPU.gs", "Shaders/SphereGPU.fs");
             shader.LoadPrefab(Engine.Core.Prefab_Shader_Refract);
             c.AddShader(shader, m => m.Name == "TestModel");
 

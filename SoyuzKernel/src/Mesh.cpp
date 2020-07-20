@@ -145,14 +145,14 @@ namespace SK
 				case MODEL_DRAW_LINE_STRIP:
 					drawmode = GL_LINE_STRIP;
 					break;
+				case MODEL_DRAW_POINTS:
+					drawmode = GL_POINTS;
+					break;
 				}
 
 				//Bind VAO
 				glBindVertexArray(m_vao);
-				if (m_nIndex != 2)
-					glDrawElements(drawmode, m_nIndex, GL_UNSIGNED_INT, nullptr);
-				else
-					glDrawElements(GL_LINES, m_nIndex, GL_UNSIGNED_INT, nullptr);
+				glDrawElements(drawmode, m_nIndex, GL_UNSIGNED_INT, nullptr);
 				glBindVertexArray(0);
 			}
 			//Skybox Render

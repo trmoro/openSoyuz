@@ -257,6 +257,7 @@ namespace SKW
 		const int Model_DrawMode_Quads		= MODEL_DRAW_QUADS;
 		const int Model_DrawMode_Lines		= MODEL_DRAW_LINES;
 		const int Model_DrawMode_LineStrip	= MODEL_DRAW_LINE_STRIP;
+		const int Model_DrawMode_Points		= MODEL_DRAW_POINTS;
 
 	};
 }
