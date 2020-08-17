@@ -150,10 +150,11 @@ namespace SK
 	//Delete Mesh
 	void Model::deleteMesh(Mesh* mesh)
 	{
-		for (int i = 0; i < m_meshes.size(); i++)
+		std::map<int, Mesh*>::iterator it;
+		for (it = m_meshes.begin(); it != m_meshes.end(); it++)
 		{
-			if (m_meshes[i] == mesh)
-				m_meshes[i] = nullptr;
+			if (it->second != nullptr && it->second == mesh)
+				it->second = nullptr;
 		}
 
 	}

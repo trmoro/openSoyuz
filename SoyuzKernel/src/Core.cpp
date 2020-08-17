@@ -930,10 +930,13 @@ namespace SK
 	//Delete Mesh
 	void Core::deleteMesh(int meshID)
 	{
-		for (Model* mod : m_models)
-			mod->deleteMesh(m_meshes[meshID]);
-		delete m_meshes[meshID];
-		m_meshes[meshID] = nullptr;
+		//for (Model* mod : m_models)
+		//	mod->deleteMesh(m_meshes[meshID]);
+		
+		std::cout << meshID << " " << m_meshes.size() << std::endl;
+		
+		//delete m_meshes[meshID];
+		//m_meshes[meshID] = nullptr;
 	}
 
 	//Delete Texture

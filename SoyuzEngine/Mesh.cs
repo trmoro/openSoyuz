@@ -99,6 +99,10 @@ namespace Soyuz
         /// </summary>
         public void Delete()
         {
+            Positions.Clear();
+            Normals.Clear();
+            UVs.Clear();
+            Indices.Clear();
             Engine.Core.DeleteMesh(MeshID);
         }       
 

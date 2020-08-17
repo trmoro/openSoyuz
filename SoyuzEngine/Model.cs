@@ -53,6 +53,9 @@ namespace Soyuz
         public string MultiShader_StrVal { get; set; }
         public bool MultiShader_Pass { get; set; }
 
+        //Deleted
+        public bool IsDeleted { get; private set; }
+
 
         /// <summary>
         /// Model Constructor
@@ -88,6 +91,9 @@ namespace Soyuz
             UniformVec3     = new Dictionary<string, Vector3>();
             UniformVec4     = new Dictionary<string, Vector4>();
             UniformFont     = new Dictionary<string, Font>();
+
+            //Deleted
+            IsDeleted = false;
         }
 
         /// <summary>
@@ -206,6 +212,7 @@ namespace Soyuz
         /// </summary>
         public void Delete()
         {
+            IsDeleted = true;
             Engine.Core.DeleteModel(ModelID);
         }
 

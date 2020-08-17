@@ -71,7 +71,10 @@ namespace Soyuz
         {
             //Update Model Space Coordinate
             foreach (Model m in Models)
-                m.UpdateProperties();
+            {
+                if(m != null && !m.IsDeleted)
+                    m.UpdateProperties();
+            }
 
             //Render All Cameras
             foreach (Camera c in Cameras)

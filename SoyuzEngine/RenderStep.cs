@@ -21,9 +21,6 @@ namespace Soyuz
         //List of Model to Render
         public List<Model> Models { get; set; }
 
-        //List of Model to NOT Render
-        public List<Model> NoRenderModels { get; set; }
-
         //Bool to set the behaviour of the render step when the Model list is empty
         public bool IfEmptyRenderAll { get; set; }
         
@@ -43,7 +40,6 @@ namespace Soyuz
 
             //List of Model to Render and not
             Models = new List<Model>();
-            NoRenderModels = new List<Model>();
             IfEmptyRenderAll = true;
         }
 
@@ -92,7 +88,7 @@ namespace Soyuz
             foreach (Model m in models)
             {
                 //Check if we have to render model
-                if (!NoRenderModels.Contains(m) && !m.IsHidden)
+                if (m != null && !m.IsDeleted && !m.IsHidden)
                 {
                     //Material
                     Material mat = m.Material;
@@ -203,7 +199,6 @@ namespace Soyuz
 
             //List of Model to Render and not
             Models = new List<Model>();
-            NoRenderModels = new List<Model>();
             IfEmptyRenderAll = true;
         }
 
