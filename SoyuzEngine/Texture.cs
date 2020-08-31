@@ -214,13 +214,15 @@ namespace Soyuz
         /// <summary>
         /// Apply Perlin Noise Transformation
         /// </summary>
-        /// <param name="Seed"></param>
-        /// <param name="Step"></param>
-        /// <param name="Ratio"></param>
-        /// <param name="Mult"></param>
-        public void Perlin(uint Seed = 0, float Step = 1, float Ratio = 1, float Mult = 1)
+        /// <param name="Seed">Seed of the Perlin Noise</param>
+        /// <param name="X">X Start</param>
+        /// <param name="Y">Y Start</param>
+        /// <param name="Step">Step</param>
+        /// <param name="Ratio">Ratio of the transformation on the origin texture</param>
+        /// <param name="Mult">Multiplier of the transformation</param>
+        public void Perlin(uint Seed = 0, int X = 0, int Y = 0, float Step = 1, float Ratio = 1, float Mult = 1)
         {
-            Transform(Engine.Core.TexTransform_Perlin, new float[4] { Seed, Step, Ratio, Mult });
+            Transform(Engine.Core.TexTransform_Perlin, new float[6] { Seed, X, Y, Step, Ratio, Mult });
         }
 
         /// <summary>

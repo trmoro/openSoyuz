@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Soyuz.Meshes
@@ -131,5 +132,43 @@ namespace Soyuz.Meshes
             //Return Mesh
             return msh;
         }
+
+        /// <summary>
+        /// Create a Plane Mesh with quad faces
+        /// </summary>
+        /// <param name="SizeX"></param>
+        /// <param name="SizeZ"></param>
+        /// <returns></returns>
+        public static Mesh Plane(int SizeX, int SizeZ)
+        {
+            //Create
+            Mesh msh = new Mesh();
+
+            //Loop
+            for(int x = 0; x <= SizeX; x++)
+            {
+                for(int z = 0; z <= SizeZ; z++)
+                {
+                    //Add Vertex
+                    msh.Positions.Add(new Vector3(x, 0, z));
+                    msh.Normals.Add(new Vector3(0, 1, 0));
+                    msh.UVs.Add(new Vector2( (float) x / (float) SizeX, (float)z / (float)SizeZ));
+
+                    //Add Indices
+                    if(x < SizeX && z < SizeZ)
+                    {
+                        msh.Indices.Add(z + (x * SizeZ));
+                        msh.Indices.Add(z + ( (x+1) * SizeZ));
+                        msh.Indices.Add(z + 1 + ( (x+1) * SizeZ));
+                        msh.Indices.Add(z + 1 + (x * SizeZ));
+                    }
+                }
+            }
+
+            //Return
+            return msh;
+        }
+
+        //
     }
 }

@@ -24,6 +24,7 @@ namespace Soyuz.Meshes
                 msh.UVs.Add(new Vector2( (float)Math.Cos(x), (float)Math.Sin(x) ));
                 msh.Indices.Add(i);
             }
+            msh.Indices.Add(0);
 
             return msh;
         }

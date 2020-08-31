@@ -268,7 +268,7 @@ namespace SK
 		switch (id)
 		{
 		case TEXTF_PERLIN:
-			applyPerlinNoise((unsigned int) args[0], args[1], args[2], args[3] );
+			applyPerlinNoise((unsigned int) args[0], (int) args[1], (int) args[2], args[3], args[4], args[5] );
 			break;
 		case TEXTF_BORDER:
 			border((unsigned int)args[0], args[1]);
@@ -285,7 +285,7 @@ namespace SK
 	}
 
 	//Apply Perlin Noise
-	void Texture::applyPerlinNoise(unsigned int seed, float step, float ratio, float mult)
+	void Texture::applyPerlinNoise(unsigned int seed, int originX, int originY, float step, float ratio, float mult)
 	{
 		//Create Perlin Noise
 		PerlinNoise* pn = new PerlinNoise(seed);
@@ -296,8 +296,8 @@ namespace SK
 			for (unsigned int y = 0; y < m_h; y++)
 			{
 				//Compute value
-				float val = 1 * pn->noise( (double) x * step / (double) m_w,  (double) y * step / (double) m_h, 0);
-				val = mult * ( (1.0f - ratio) + (val * ratio) );
+				float val = 1 * pn->noise((double) (x+ originX) * step / (double)m_w, (double) (y+originY) * step / (double)m_h, 0);
+				val = mult * ((1.0f - ratio) + (val * ratio));
 
 				//Multiply
 				for (unsigned int c = 0; c < m_nChannel; c++)

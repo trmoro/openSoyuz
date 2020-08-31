@@ -11,6 +11,9 @@ namespace Soyuz
     /// </summary>
     public class Model
     {
+        //Parent Actor
+        public Actor ParentActor { get; set; }
+
         //Hidden
         public bool IsHidden { get; set; }
 
@@ -65,6 +68,7 @@ namespace Soyuz
             //Create Model
             ModelID = Engine.Core.CreateModel();
             IsHidden = false;
+            ParentActor = null;
 
             //Default Material
             Material = new Material();

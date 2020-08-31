@@ -93,7 +93,7 @@ namespace SK
 		///TEXTURE TRANSFORMATIONS
 
 		//Apply Perlin Noise
-		void applyPerlinNoise(unsigned int seed, float step, float ratio, float mult);
+		void applyPerlinNoise(unsigned int seed, int originX, int originY, float step, float ratio, float mult);
 
 		//Border
 		void border(unsigned int size, float value);
