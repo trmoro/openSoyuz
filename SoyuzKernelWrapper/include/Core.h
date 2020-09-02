@@ -254,7 +254,6 @@ namespace SKW
 		const int TexTransform_Border = TEXTF_BORDER;
 
 		const int Model_DrawMode_Triangles	= MODEL_DRAW_TRIANGLES;
-		const int Model_DrawMode_Quads		= MODEL_DRAW_QUADS;
 		const int Model_DrawMode_Lines		= MODEL_DRAW_LINES;
 		const int Model_DrawMode_LineStrip	= MODEL_DRAW_LINE_STRIP;
 		const int Model_DrawMode_Points		= MODEL_DRAW_POINTS;
