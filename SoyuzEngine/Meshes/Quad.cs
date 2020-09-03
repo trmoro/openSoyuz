@@ -157,13 +157,14 @@ namespace Soyuz.Meshes
                     //Add Indices
                     if(x < SizeX && z < SizeZ)
                     {
-                        msh.Indices.Add(z + (x * SizeZ));
-                        msh.Indices.Add(z + ( (x+1) * SizeZ));
-                        msh.Indices.Add(z + 1 + ( (x+1) * SizeZ));
+                        msh.Indices.Add(z + (x * (SizeZ+1) ));
+                        msh.Indices.Add(z + 1 + (x * (SizeZ + 1) ));
+                        msh.Indices.Add(z + 1 + ( (x+1) * (SizeZ + 1) ));
 
-                        msh.Indices.Add(z + (x * SizeZ));
-                        msh.Indices.Add(z + 1 + ((x + 1) * SizeZ));
-                        msh.Indices.Add(z + 1 + (x * SizeZ));
+                        msh.Indices.Add(z + (x * (SizeZ + 1) ));
+                        msh.Indices.Add(z + 1 + ((x + 1) * (SizeZ + 1) ));
+                        msh.Indices.Add(z + ((x + 1) * (SizeZ + 1) ));
+
                     }
                 }
             }
