@@ -1,7 +1,6 @@
 #pragma once
 
 using namespace System;
-using namespace System::Runtime::InteropServices;
 
 namespace SKW
 {
@@ -37,11 +36,5 @@ namespace SKW
             return m_Instance;
         }
 
-        //String to Char Array
-        static const char* stringToCharArray(String^ string)
-        {
-            const char* str = (const char*)(Marshal::StringToHGlobalAnsi(string)).ToPointer();
-            return str;
-        }
     };
 }

@@ -122,7 +122,9 @@ namespace SKW
 	//Load Model
 	void Core::LoadModel(int ModelID, String^ Path)
 	{
-		m_Instance->loadModel(ModelID, stringToCharArray(Path));
+		IntPtr str = Marshal::StringToHGlobalAnsi(Path);
+		m_Instance->loadModel(ModelID, (const char*) str.ToPointer() );
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Perspective Camera
@@ -146,13 +148,34 @@ namespace SKW
 	//Set Shader
 	void Core::SetShader(int ShaderID, String^ vertex, String^ fragment)
 	{
-		m_Instance->setShader(ShaderID,stringToCharArray(vertex), stringToCharArray(fragment) );
+		IntPtr pV = Marshal::StringToHGlobalAnsi(vertex);
+		IntPtr pF = Marshal::StringToHGlobalAnsi(fragment);
+
+		const char* sV = (const char*)pV.ToPointer();
+		const char* sF = (const char*)pF.ToPointer();
+
+		m_Instance->setShader(ShaderID,sV, sF );
+
+		Marshal::FreeHGlobal(pV);
+		Marshal::FreeHGlobal(pF);
 	}
 
 	//Set Shader with Geometry
 	void Core::SetShader(int ShaderID, String^ vertex, String^ geometry, String^ fragment)
 	{
-		m_Instance->setShader(ShaderID, stringToCharArray(vertex), stringToCharArray(geometry), stringToCharArray(fragment));
+		IntPtr pV = Marshal::StringToHGlobalAnsi(vertex);
+		IntPtr pG = Marshal::StringToHGlobalAnsi(geometry);
+		IntPtr pF = Marshal::StringToHGlobalAnsi(fragment);
+
+		const char* sV = (const char*)pV.ToPointer();
+		const char* sG = (const char*)pG.ToPointer();
+		const char* sF = (const char*)pF.ToPointer();
+
+		m_Instance->setShader(ShaderID, sV, sG, sF);
+
+		Marshal::FreeHGlobal(pV);
+		Marshal::FreeHGlobal(pG);
+		Marshal::FreeHGlobal(pF);
 	}
 
 	//Set Prefab Shader
@@ -164,61 +187,81 @@ namespace SKW
 	//Set Uniform I
 	void Core::SetUniformI(int ShaderID, String^ Name, int Value)
 	{
-		m_Instance->setUniformi(ShaderID,stringToCharArray(Name), Value);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformi(ShaderID,(const char*) str.ToPointer(), Value);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Float
 	void Core::SetUniformF(int ShaderID, String^ Name, float Value)
 	{
-		m_Instance->setUniformf(ShaderID, stringToCharArray(Name), Value);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformf(ShaderID, (const char*)str.ToPointer(), Value);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Vec2
 	void Core::SetUniformVec2(int ShaderID, String^ Name, float X, float Y)
 	{
-		m_Instance->setUniformVec2(ShaderID, stringToCharArray(Name), X, Y);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformVec2(ShaderID, (const char*)str.ToPointer(), X, Y);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Vec3
 	void Core::SetUniformVec3(int ShaderID, String^ Name, float X, float Y, float Z)
 	{
-		m_Instance->setUniformVec3(ShaderID, stringToCharArray(Name), X, Y, Z);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformVec3(ShaderID, (const char*)str.ToPointer(), X, Y, Z);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Vec4
 	void Core::SetUniformVec4(int ShaderID, String^ Name, float X, float Y, float Z, float W)
 	{
-		m_Instance->setUniformVec4(ShaderID, stringToCharArray(Name), X, Y, Z, W);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformVec4(ShaderID, (const char*)str.ToPointer(), X, Y, Z, W);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Matrix3x3
 	void Core::SetUniformMat3(int ShaderID, String^ Name, float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33)
 	{
-		m_Instance->setUniformMat3(ShaderID, stringToCharArray(Name), m11, m12, m13, m21, m22, m23, m31, m32, m33);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformMat3(ShaderID, (const char*)str.ToPointer(), m11, m12, m13, m21, m22, m23, m31, m32, m33);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform FrameBuffer
 	void Core::SetUniformFrameBuffer(int ShaderID, String^ Name, int FrameBufferID, int TextureID)
 	{
-		m_Instance->setUniformFrameBuffer(ShaderID, stringToCharArray(Name), FrameBufferID, false, TextureID);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformFrameBuffer(ShaderID, (const char*)str.ToPointer(), FrameBufferID, false, TextureID);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform FrameBuffer
 	void Core::SetUniformFrameBuffer(int ShaderID, String^ Name, int FrameBufferID, int TextureID, bool UseDepth)
 	{
-		m_Instance->setUniformFrameBuffer(ShaderID, stringToCharArray(Name), FrameBufferID, UseDepth, TextureID);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformFrameBuffer(ShaderID, (const char*)str.ToPointer(), FrameBufferID, UseDepth, TextureID);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Texture
 	void Core::SetUniformTexture(int ShaderID, String^ Name, int TextureID, int TextureIndex)
 	{
-		m_Instance->setUniformTexture(ShaderID, stringToCharArray(Name), TextureID, TextureIndex);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformTexture(ShaderID, (const char*)str.ToPointer(), TextureID, TextureIndex);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Uniform Font
 	void Core::SetUniformFont(int ShaderID, String^ Name, int FontID, int TextureIndex)
 	{
-		m_Instance->setUniformFont(ShaderID, stringToCharArray(Name), FontID, TextureIndex);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Name);
+		m_Instance->setUniformFont(ShaderID, (const char*)str.ToPointer(), FontID, TextureIndex);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Texture with Data Array
@@ -231,7 +274,9 @@ namespace SKW
 	//Set Texture With Source Path
 	void Core::SetTextureWithSourcePath(int TextureID, String^ Path, unsigned int NumberOfChannel)
 	{
-		m_Instance->setTextureWithSourcePath(TextureID, stringToCharArray(Path), NumberOfChannel);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Path);
+		m_Instance->setTextureWithSourcePath(TextureID, (const char*)str.ToPointer(), NumberOfChannel);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Set Texture filled with a value
@@ -278,7 +323,10 @@ namespace SKW
 	//Save Texture to PNG
 	bool Core::SaveTexturePNG(int TextureID, String^ FilePath)
 	{
-		return m_Instance->saveTexturePNG(TextureID, stringToCharArray(FilePath) );
+		IntPtr str = Marshal::StringToHGlobalAnsi(FilePath);
+		bool b = m_Instance->saveTexturePNG(TextureID, (const char*)str.ToPointer() );
+		Marshal::FreeHGlobal(str);
+		return b;
 	}
 
 	//Texture Convolution
@@ -316,19 +364,44 @@ namespace SKW
 	//Set Texture as Cubemap
 	void Core::SetTextureAsCubemap(int TextureID, String^ Right, String^ Left, String^ Top, String^ Bottom, String^ Front, String^ Back)
 	{
-		m_Instance->setTextureAsCubemap(TextureID, stringToCharArray(Right), stringToCharArray(Left), stringToCharArray(Top), stringToCharArray(Bottom), stringToCharArray(Front), stringToCharArray(Back) );
+		IntPtr pRight = Marshal::StringToHGlobalAnsi(Right);
+		IntPtr pLeft = Marshal::StringToHGlobalAnsi(Left);
+		IntPtr pTop = Marshal::StringToHGlobalAnsi(Top);
+		IntPtr pBottom = Marshal::StringToHGlobalAnsi(Bottom);
+		IntPtr pFront = Marshal::StringToHGlobalAnsi(Front);
+		IntPtr pBack = Marshal::StringToHGlobalAnsi(Back);
+
+		const char* sRight = (const char*)pRight.ToPointer();
+		const char* sLeft = (const char*)pLeft.ToPointer();
+		const char* sTop = (const char*)pTop.ToPointer();
+		const char* sBottom = (const char*)pBottom.ToPointer();
+		const char* sFront = (const char*)pFront.ToPointer();
+		const char* sBack = (const char*)pBack.ToPointer();
+
+		m_Instance->setTextureAsCubemap(TextureID, sRight, sLeft, sTop, sBottom, sFront, sBack);
+
+		Marshal::FreeHGlobal(pRight);
+		Marshal::FreeHGlobal(pLeft);
+		Marshal::FreeHGlobal(pTop);
+		Marshal::FreeHGlobal(pBottom);
+		Marshal::FreeHGlobal(pFront);
+		Marshal::FreeHGlobal(pBack);
 	}
 
 	//Load Font
 	void Core::LoadFont(int FontID, String^ Path, unsigned int Size, unsigned int Start, unsigned int End)
 	{
-		m_Instance->loadFont(FontID, stringToCharArray(Path), Size, Start, End);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Path);
+		m_Instance->loadFont(FontID, (const char*)str.ToPointer(), Size, Start, End);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Add Text as Mesh to the given Model
 	void Core::AddTextAsMesh(int FontID, int ModelID, String^ Text, float X, float Y, float MaxWidth, float LineSpacing)
 	{
-		m_Instance->addTextAsMesh(FontID, ModelID, stringToCharArray(Text), X, Y, MaxWidth, LineSpacing);
+		IntPtr str = Marshal::StringToHGlobalAnsi(Text);
+		m_Instance->addTextAsMesh(FontID, ModelID, (const char*)str.ToPointer(), X, Y, MaxWidth, LineSpacing);
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Use Framebuffer
@@ -448,7 +521,9 @@ namespace SKW
 	//Set Window Title
 	void Core::SetWindowTitle(String^ Title)
 	{
-		m_Instance->setWindowTitle(stringToCharArray(Title));
+		IntPtr str = Marshal::StringToHGlobalAnsi(Title);
+		m_Instance->setWindowTitle((const char*) str.ToPointer() );
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Delete FrameBuffer

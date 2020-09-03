@@ -1,5 +1,8 @@
 #pragma once
 
+using namespace System;
+using namespace System::Runtime::InteropServices;
+
 #include "../SoyuzKernel/include/Core.h"
 
 #include "SKWObject.h"
