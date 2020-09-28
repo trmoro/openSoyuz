@@ -95,6 +95,9 @@ namespace SK
 		//Apply Perlin Noise
 		void applyPerlinNoise(unsigned int seed, int originX, int originY, float step, float ratio, float mult);
 
+		//Apply Curve
+		void applyCurve(float start, float end, float alpha);
+
 		//Border
 		void border(unsigned int size, float value);
 

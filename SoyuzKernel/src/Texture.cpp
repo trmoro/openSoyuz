@@ -273,6 +273,9 @@ namespace SK
 		case TEXTF_BORDER:
 			border((unsigned int)args[0], args[1]);
 			break;
+		case TEXTF_CURVE:
+			applyCurve(args[0], args[1], args[2]);
+			break;
 		default:
 			break;
 		}
@@ -308,6 +311,42 @@ namespace SK
 
 		//Clear
 		delete pn;
+	}
+
+	//Apply
+	void Texture::applyCurve(float start, float end, float alpha)
+	{
+		//Middle value
+		float middle_val = (start + end) / 2.0f;
+
+		//Distance of the middle from the borders
+		float middle_dist = middle_val - start;
+
+		//Foreach pixel
+		for (unsigned int x = 0; x < m_w; x++)
+		{
+			for (unsigned int y = 0; y < m_h; y++)
+			{
+				for (unsigned int c = 0; c < m_nChannel; c++)
+				{
+					//Get Value
+					float val = getPixel(x, y, c);
+
+					//If value is in window
+					if (val >= start && val <= end)
+					{
+						//Distance from borders
+						float dist = middle_dist - abs(val - middle_val);
+
+						//Apply
+						setPixel(x, y, c, val * ( 1  + (alpha * dist) ) );
+					}
+
+					//
+				}
+			}
+
+		}
 	}
 
 	//Paint border

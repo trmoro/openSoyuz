@@ -253,8 +253,9 @@ namespace SKW
 		const int Prefab_Shader_Reflect		= PREFAB_SHADER_REFLECT;
 		const int Prefab_Shader_Refract		 = PREFAB_SHADER_REFRACT;
 
-		const int TexTransform_Perlin = TEXTF_PERLIN;
-		const int TexTransform_Border = TEXTF_BORDER;
+		const int TexTransform_Perlin	= TEXTF_PERLIN;
+		const int TexTransform_Border	= TEXTF_BORDER;
+		const int TexTransform_Curve	= TEXTF_CURVE;
 
 		const int Model_DrawMode_Triangles	= MODEL_DRAW_TRIANGLES;
 		const int Model_DrawMode_Lines		= MODEL_DRAW_LINES;

@@ -235,6 +235,11 @@ namespace Soyuz
             Transform(Engine.Core.TexTransform_Border, new float[2] { Size, Value });
         }
 
+        public void Curve(float Start, float End, float Alpha)
+        {
+            Transform(Engine.Core.TexTransform_Curve, new float[3] { Start, End, Alpha });
+        }
+
         /// <summary>
         /// Delete
         /// </summary>

@@ -43,8 +43,9 @@
 #include "Texture.h"
 
 //Texture Transform
-#define TEXTF_PERLIN 0
-#define TEXTF_BORDER 1
+#define TEXTF_PERLIN	0
+#define TEXTF_BORDER	1
+#define TEXTF_CURVE		2
 
 //MSAA
 #define MSAA 4
