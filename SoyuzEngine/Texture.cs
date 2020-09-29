@@ -235,10 +235,39 @@ namespace Soyuz
             Transform(Engine.Core.TexTransform_Border, new float[2] { Size, Value });
         }
 
+        /// <summary>
+        /// Apply an "Alpha" Curve, function to explain
+        /// </summary>
+        /// <param name="Start"></param>
+        /// <param name="End"></param>
+        /// <param name="Alpha"></param>
         public void Curve(float Start, float End, float Alpha)
         {
             Transform(Engine.Core.TexTransform_Curve, new float[3] { Start, End, Alpha });
         }
+
+        /// <summary>
+        /// Rescale
+        /// </summary>
+        /// <param name="MinValue"></param>
+        /// <param name="MaxValue"></param>
+        public void Rescale(float MinValue, float MaxValue)
+        {
+            Transform(Engine.Core.TexTransform_Rescale, new float[2] { MinValue, MaxValue });
+        }
+
+        /// <summary>
+        /// Zone Rescale
+        /// </summary>
+        /// <param name="Min"></param>
+        /// <param name="Max"></param>
+        /// <param name="NewMin"></param>
+        /// <param name="NewMax"></param>
+        public void ZoneRescale(float Min, float Max, float NewMin, float NewMax)
+        {
+            Transform(Engine.Core.TexTransform_ZoneRescale, new float[4] { Min, Max, NewMin, NewMax });
+        }
+
 
         /// <summary>
         /// Delete

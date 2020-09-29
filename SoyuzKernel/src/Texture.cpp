@@ -276,6 +276,12 @@ namespace SK
 		case TEXTF_CURVE:
 			applyCurve(args[0], args[1], args[2]);
 			break;
+		case TEXTF_RESCALE:
+			rescale(args[0], args[1]);
+			break;
+		case TEXTF_ZONERESCALE:
+			zoneRescale(args[0], args[1], args[2], args[3]);
+			break;
 		default:
 			break;
 		}
@@ -345,8 +351,9 @@ namespace SK
 					//
 				}
 			}
-
 		}
+
+		//
 	}
 
 	//Paint border
@@ -390,6 +397,53 @@ namespace SK
 				for (unsigned int c = 0; c < m_nChannel; c++)
 					setPixel(x, y, c, value);
 			}
+		}
+	}
+
+	//Rescale
+	void Texture::rescale(float start, float end)
+	{
+		float length = end - start;
+
+		//Foreach pixel
+		for (unsigned int x = 0; x < m_w; x++)
+		{
+			for (unsigned int y = 0; y < m_h; y++)
+			{
+				for (unsigned int c = 0; c < m_nChannel; c++)
+					setPixel(x, y, c, (getPixel(x, y, c) * length) + start);
+			}
+
+		}
+	}
+
+	//Zone Rescale
+	void Texture::zoneRescale(float start, float end, float newStart, float newEnd)
+	{
+		//Compute lengths and the multiplier between the new and the old length
+		float newLength = newEnd - newStart;
+		float oldLenght = end - start;
+		float multi = newLength / oldLenght;
+
+		//Foreach pixel
+		for (unsigned int x = 0; x < m_w; x++)
+		{
+			for (unsigned int y = 0; y < m_h; y++)
+			{
+				for (unsigned int c = 0; c < m_nChannel; c++)
+				{
+					//Pixel value
+					float val = getPixel(x, y, c);
+
+					//Difference between the pixel value and the minimum
+					float delta = val - start;
+
+					//Set Value
+					if(val >= start && val <= end)
+						setPixel(x, y, c, (delta * multi) + newStart);
+				}
+			}
+
 		}
 	}
 

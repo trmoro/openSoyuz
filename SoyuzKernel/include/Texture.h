@@ -101,5 +101,11 @@ namespace SK
 		//Border
 		void border(unsigned int size, float value);
 
+		//Rescale
+		void rescale(float start, float end);
+
+		//Zone Rescale
+		void zoneRescale(float start, float end, float newStart, float newEnd);
+
 	};
 }
