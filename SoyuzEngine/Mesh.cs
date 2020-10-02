@@ -136,6 +136,16 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Translate all mesh vertex
+        /// </summary>
+        /// <param name="vector"></param>
+        public void Translate(Vector3 vector)
+        {
+            for (int i = 0; i < Positions.Count; i++)
+                Positions[i] = Positions[i] + vector;
+        }
+
+        /// <summary>
         /// Compute Normal with 3 Position
         /// </summary>
         /// <param name="a"></param>
