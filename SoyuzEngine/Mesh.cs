@@ -139,10 +139,22 @@ namespace Soyuz
         /// Translate all mesh vertex
         /// </summary>
         /// <param name="vector"></param>
-        public void Translate(Vector3 vector)
+        public Mesh Translate(Vector3 vector)
         {
             for (int i = 0; i < Positions.Count; i++)
                 Positions[i] = Positions[i] + vector;
+            return this;
+        }
+
+        /// <summary>
+        /// Scale all mesh vertex
+        /// </summary>
+        /// <param name="vector"></param>
+        public Mesh Scale(Vector3 vector)
+        {
+            for (int i = 0; i < Positions.Count; i++)
+                Positions[i] = Positions[i] * vector;
+            return this;
         }
 
         /// <summary>
