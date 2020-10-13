@@ -52,7 +52,8 @@ namespace Soyuz
         /// Load image as texture.
         /// </summary>
         /// <param name="Path">Source Path</param>
-        public void Load(String Path, int NumberOfChannel = 3)
+        /// <returns>Itself</returns>
+        public Texture Load(String Path, int NumberOfChannel = 3)
         {
             if (File.Exists(Path))
             {
@@ -61,9 +62,13 @@ namespace Soyuz
                 this.NumberOfChannel = NumberOfChannel;
                 Height = Engine.Core.GetTextureHeight(ID);
                 Width = Engine.Core.GetTextureWidth(ID);
+
+                return this;
             }
             else
                 Console.WriteLine("SoyuzEngine Error : Texture file doesn't exists");
+
+            return null;
         }
 
         /// <summary>
@@ -75,7 +80,8 @@ namespace Soyuz
         /// <param name="Bottom"></param>
         /// <param name="Front"></param>
         /// <param name="Back"></param>
-        public void LoadAsCubemap(String Right, String Left, String Top, String Bottom, String Front, String Back)
+        /// <returns>Itself</returns>
+        public Texture LoadAsCubemap(String Right, String Left, String Top, String Bottom, String Front, String Back)
         {
             //Check if paths exist
             if (File.Exists(Right) && File.Exists(Left) && File.Exists(Top) && File.Exists(Bottom) && File.Exists(Front) && File.Exists(Back))
@@ -84,9 +90,13 @@ namespace Soyuz
                 Height = Engine.Core.GetTextureHeight(ID);
                 Width = Engine.Core.GetTextureWidth(ID);
                 NumberOfChannel = Engine.Core.GetTextureNumberOfChannel(ID);
+
+                return this;
             }
             else
                 Console.WriteLine("SoyuzEngine Error : One or several files don't exist, unable to load Cubemap.");
+
+            return null;
         }
 
         /// <summary>

@@ -110,10 +110,13 @@ namespace Soyuz
 
                     //Texture Dictionary
                     int textureIndex = 1;
-                    foreach(string key in mat.TextureDictionary.Keys)
+                    if (mat.TextureDictionary != null)
                     {
-                        Engine.Core.SetUniformTexture(ShaderID, key, mat.TextureDictionary[key].ID, textureIndex);
-                        textureIndex++;
+                        foreach (string key in mat.TextureDictionary.Keys)
+                        {
+                            Engine.Core.SetUniformTexture(ShaderID, key, mat.TextureDictionary[key].ID, textureIndex);
+                            textureIndex++;
+                        }
                     }
 
                     //Light List

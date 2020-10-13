@@ -44,6 +44,7 @@ namespace Soyuz
             IsTextured = false;
             Texture = null;
             RefractRatio = 1.0f / 1.309f;
+            TextureDictionary = new Dictionary<string, Texture>();
         }
     }
 }
