@@ -25,6 +25,9 @@ namespace Soyuz
         //Texture ID
         public Texture Texture { get; set; }
 
+        //Texture Dictionary
+        public Dictionary<string, Texture> TextureDictionary {get; set;}
+
         //Refract Ratio
         public float RefractRatio { get; set; }
 

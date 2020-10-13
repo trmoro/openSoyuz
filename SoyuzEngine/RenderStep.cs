@@ -108,6 +108,14 @@ namespace Soyuz
                     if(mat.Texture != null)
                         Engine.Core.SetUniformTexture(ShaderID, "m_texture", mat.Texture.ID, 0);
 
+                    //Texture Dictionary
+                    int textureIndex = 1;
+                    foreach(string key in mat.TextureDictionary.Keys)
+                    {
+                        Engine.Core.SetUniformTexture(ShaderID, key, mat.TextureDictionary[key].ID, textureIndex);
+                        textureIndex++;
+                    }
+
                     //Light List
                     List<Light> ls;
 
