@@ -40,6 +40,10 @@ namespace Soyuz
         //Children
         public List<GUIElement> Children { get; set; }
 
+        //Callback
+        public Action<GUIElement> OnHover;
+        public Action<GUIElement> OnClick; 
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -74,15 +78,20 @@ namespace Soyuz
                 //Check if mouse is in
                 if (Mouse.X >= X && Mouse.X <= X + Width && Mouse.Y >= Y && Mouse.Y <= Y + Height)
                 {
+                    //Hover
                     IsHovered = true;
+                    if(OnHover != null)
+                        OnHover(this);
 
-                    //Left Click to Triiger
+                    //Left Click to Trigger
                     if (Engine.Core.IsMouseClicked(0) && !IsTriggered)
                         IsTriggered = true;
 
                     //Left click released in the box
                     if (Engine.Core.IsMouseReleased(0) && IsTriggered)
                     {
+                        if(OnClick != null)
+                            OnClick(this);
                         IsClicked = true;
                         IsTriggered = false;
                     }
