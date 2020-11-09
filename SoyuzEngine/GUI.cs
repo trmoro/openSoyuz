@@ -170,7 +170,29 @@ namespace Soyuz
         }
 
         /// <summary>
-        /// Box
+        /// Texture
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Color"></param>
+        /// <returns></returns>
+        public Box Texture(Texture t, float X, float Y, float Width, float Height)
+        {
+            Box b = new Box(X, Y, Width, Height, new Vector4(1));
+            b.Material.IsTextured = true;
+            b.Material.Texture = t;
+            Elements.Add(b);
+
+            b.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
+            return b;
+        }
+
+        /// <summary>
+        /// Image
         /// </summary>
         /// <param name="X"></param>
         /// <param name="Y"></param>
@@ -180,18 +202,11 @@ namespace Soyuz
         /// <returns></returns>
         public Box Image(float X, float Y, float Width, float Height, string Path, int NumberOfChannel = 3)
         {
-            Box b = new Box(X, Y, Width, Height, new Vector4(1) );
             Texture t = new Texture();
             t.Load(Path, NumberOfChannel);
             t.Update();
-            b.Material.IsTextured = true;
-            b.Material.Texture = t;
-            Elements.Add(b);
 
-            b.Depth = ZIndex;
-            ZIndex += AutoZStep;
-
-            return b;
+            return Texture(t,X,Y,Width,Height);
         }
 
         /// <summary>
@@ -321,6 +336,24 @@ namespace Soyuz
 
             //Final Render (Reverse X)
             Render.Render();
+        }
+
+        /// <summary>
+        /// Get Display Width
+        /// </summary>
+        /// <returns></returns>
+        public static int GetDisplayWidth()
+        {
+            return Engine.Core.GetDisplayWidth();
+        }
+
+        /// <summary>
+        /// Get Display Height
+        /// </summary>
+        /// <returns></returns>
+        public static int GetDisplayHeight()
+        {
+            return Engine.Core.GetDisplayHeight();
         }
 
         //

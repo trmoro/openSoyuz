@@ -216,6 +216,10 @@ namespace SKW
 		float GetMouseToWorldY();
 		float GetMouseToWorldZ();
 
+		//Get Display Width and Height
+		int GetDisplayWidth();
+		int GetDisplayHeight();
+
 		//Set Window Title
 		void SetWindowTitle(String^ Title);
 

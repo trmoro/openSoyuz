@@ -518,6 +518,18 @@ namespace SKW
 		return m_Instance->getMouseToWorldZ();
 	}
 
+	//Get Display Width
+	int Core::GetDisplayWidth()
+	{
+		return m_Instance->getDisplayWidth();
+	}
+
+	//Get Display Height
+	int Core::GetDisplayHeight()
+	{
+		return m_Instance->getDisplayHeight();
+	}
+
 	//Set Window Title
 	void Core::SetWindowTitle(String^ Title)
 	{

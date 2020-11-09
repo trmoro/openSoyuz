@@ -292,6 +292,10 @@ namespace SK
 		float getMouseToWorldY() const;
 		float getMouseToWorldZ() const;
 
+		//Get Display Width and Height
+		int getDisplayWidth() const;
+		int getDisplayHeight() const;
+
 		//Set Window Title
 		void setWindowTitle(const char* title);
 

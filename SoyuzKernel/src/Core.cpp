@@ -900,6 +900,18 @@ namespace SK
 		return m_mouseToWorld.z;
 	}
 
+	//Get Display Width
+	int Core::getDisplayWidth() const
+	{
+		return Input::Window_Width;
+	}
+
+	//Get Display Height
+	int Core::getDisplayHeight() const
+	{
+		return Input::Window_Height;
+	}
+
 	//Set Window Title
 	void Core::setWindowTitle(const char* title)
 	{
