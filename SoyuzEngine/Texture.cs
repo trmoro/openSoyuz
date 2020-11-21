@@ -158,6 +158,11 @@ namespace Soyuz
             Engine.Core.TextureConv(ID, Size, FlattenMatrix, Coef);
         }
 
+        public void SubConvolution(uint Size, float[] FlattenMatrix, float Coef, uint StartX, uint EndX, uint StartY, uint EndY)
+        {
+            Engine.Core.TextureSubConv(ID, Size, FlattenMatrix, Coef, StartX, EndX, StartY, EndY);
+        }
+
         /// <summary>
         /// Return a Data Matrix (using only R on RGB and RGBA textures)
         /// </summary>
