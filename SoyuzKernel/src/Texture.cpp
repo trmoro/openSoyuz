@@ -199,6 +199,13 @@ namespace SK
 	//Convolution
 	void Texture::conv(unsigned int size, float* matrix, float coef)
 	{
+		//Subconv on all texture
+		subConv(size, matrix, coef, 0, m_w, 0, m_h);
+	}
+
+	//Sub Convolution
+	void Texture::subConv(unsigned int size, float* matrix, float coef, unsigned int startX, unsigned int endX, unsigned int startY, unsigned int endY)
+	{
 		//Modified data array
 		float* modData = new float[m_w * m_h * m_nChannel];
 
@@ -206,10 +213,10 @@ namespace SK
 		int s2 = (int)(size / 2);
 
 		//Y
-		for (unsigned int y = 0; y < m_h; y++)
+		for (unsigned int y = startY; y < endY; y++)
 		{
 			//X
-			for (unsigned int x = 0; x < m_w; x++)
+			for (unsigned int x = startX; x < endY; x++)
 			{
 				//Color Channel
 				for (unsigned int c = 0; c < m_nChannel; c++)
@@ -224,11 +231,11 @@ namespace SK
 						for (unsigned int v = 0; v < size; v++)
 						{
 							for (unsigned int u = 0; u < size; u++)
-								val += matrix[(u * size) + v] * getPixel(x - s2 + u,y - s2 + v,c);
+								val += matrix[(u * size) + v] * getPixel(x - s2 + u, y - s2 + v, c);
 						}
 
 						//Multiply by coefficient to Set
-						modData[getArrayPosition(x, y, c) ] = val * coef;
+						modData[getArrayPosition(x, y, c)] = val * coef;
 					}
 					//In border = same value
 					else

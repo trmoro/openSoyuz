@@ -216,6 +216,9 @@ namespace SK
 		//Convolution on texture
 		void textureConv(int textureID, unsigned int size, float* matrix, float coef);
 
+		//Sub-Convolution on texture
+		void textureSubConv(int textureID, unsigned int size, float* matrix, float coef, unsigned int startX, unsigned int endX, unsigned int startY, unsigned int endY);
+
 		//Set Texture Pixel Value
 		void textureSetPixel(int textureID, float x, float y, unsigned int channel, float value);
 

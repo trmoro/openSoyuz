@@ -144,6 +144,9 @@ namespace SKW
 		//Convolution on texture
 		void TextureConv(int textureID, unsigned int size, array<float>^ matrix, float coef);
 
+		//Sub-Convolution on texture
+		void TextureSubConv(int textureID, unsigned int size, array<float>^ matrix, float coef, unsigned int startX, unsigned int endX, unsigned int startY, unsigned int endY);
+
 		//Set Texture Pixel Value
 		void SetTexturePixel(int textureID, float x, float y, unsigned int channel, float value);
 

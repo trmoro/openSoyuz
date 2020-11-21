@@ -51,8 +51,11 @@ namespace SK
 		//Update
 		void update();
 
-		//Convolution 3x3
+		//Convolution
 		void conv(unsigned int size, float* matrix, float coef);
+
+		//Sub-Convolution
+		void subConv(unsigned int size, float* matrix, float coef, unsigned int startX, unsigned int endX, unsigned int startY, unsigned int endY);
 
 		//Get Pixel
 		float getPixel(float x, float y, unsigned int channel) const;

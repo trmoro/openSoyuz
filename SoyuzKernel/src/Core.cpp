@@ -602,6 +602,12 @@ namespace SK
 		m_textures[textureID]->conv(size, matrix, coef);
 	}
 
+	//SubConvolution on texture
+	void Core::textureSubConv(int textureID, unsigned int size, float* matrix, float coef, unsigned int startX, unsigned int endX, unsigned int startY, unsigned int endY)
+	{
+		m_textures[textureID]->subConv(size, matrix, coef,startX,endX,startY,endY);
+	}
+
 	//Set Texture Pixel
 	void Core::textureSetPixel(int textureID, float x, float y, unsigned int channel, float value)
 	{

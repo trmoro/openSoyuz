@@ -336,6 +336,13 @@ namespace SKW
 		m_Instance->textureConv(textureID, size, ptr_matrix, coef);
 	}
 
+	//Texture SubConvolution
+	void Core::TextureSubConv(int textureID, unsigned int size, array<float>^ matrix, float coef, unsigned int startX, unsigned int endX, unsigned int startY, unsigned int endY)
+	{
+		pin_ptr<float> ptr_matrix = &matrix[0];
+		m_Instance->textureSubConv(textureID, size, ptr_matrix, coef,startX,endX,startY,endY);
+	}
+
 	//Set Texture Pixel
 	void Core::SetTexturePixel(int textureID, float x, float y, unsigned int channel, float value)
 	{
