@@ -37,6 +37,9 @@ namespace Soyuz
         //Is Triggered
         public bool IsTriggered { get; set; }
 
+        //Reverse
+        public bool Reverse { get; set; }
+
         //Children
         public List<GUIElement> Children { get; set; }
 
@@ -61,6 +64,8 @@ namespace Soyuz
             IsTriggered = false;
             IsClicked = false;
             IsHovered = false;
+            Reverse = false;
+            UniformInt.Add("Reverse", 0);
         }
 
         //Update
@@ -74,6 +79,12 @@ namespace Soyuz
                 //Auto Update Position and Color
                 Position = new Vector3(X, Y, Depth);
                 Material.Color = Color;
+
+                //Reverse
+                if (Reverse == true)
+                    UniformInt["Reverse"] = 1;
+                else
+                    UniformInt["Reverse"] = 0;
 
                 //Check if mouse is in
                 if (Mouse.X >= X && Mouse.X <= X + Width && Mouse.Y >= Y && Mouse.Y <= Y + Height)

@@ -261,7 +261,7 @@ const char* ShaderScript::Lighting_Fragment = "#version 330 core											\n\
 			discard;																						\n\
 	}																										";
 
-//Font Fragment Script
+//Gui element Fragment Script
 const char* ShaderScript::Gui_Fragment = "#version 330 core													\n\
 	in vec3 m_normal;																						\n\
 	in vec2 m_texCoord;																						\n\
@@ -270,11 +270,14 @@ const char* ShaderScript::Gui_Fragment = "#version 330 core													\n\
 																											\n\
 	uniform int m_isTextured;																				\n\
 	uniform sampler2D m_texture;																			\n\
+	uniform int Reverse;																					\n\
 																											\n\
 	void main() {																							\n\
 		out_color = m_color;																				\n\
-		if (m_isTextured == 1)																				\n\
+		if (m_isTextured == 1 && Reverse == 0)																\n\
 			out_color *= texture2D(m_texture, m_texCoord);													\n\
+		else if(m_isTextured == 1)																			\n\
+			out_color *= texture2D(m_texture, vec2(m_texCoord.x,1-m_texCoord.y));							\n\
 	}																										";
 
 //GUI Fragment Script
