@@ -158,6 +158,16 @@ namespace Soyuz
             Engine.Core.TextureConv(ID, Size, FlattenMatrix, Coef);
         }
 
+        /// <summary>
+        /// SubConvolution
+        /// </summary>
+        /// <param name="Size"></param>
+        /// <param name="FlattenMatrix"></param>
+        /// <param name="Coef"></param>
+        /// <param name="StartX"></param>
+        /// <param name="EndX"></param>
+        /// <param name="StartY"></param>
+        /// <param name="EndY"></param>
         public void SubConvolution(uint Size, float[] FlattenMatrix, float Coef, uint StartX, uint EndX, uint StartY, uint EndY)
         {
             Engine.Core.TextureSubConv(ID, Size, FlattenMatrix, Coef, StartX, EndX, StartY, EndY);

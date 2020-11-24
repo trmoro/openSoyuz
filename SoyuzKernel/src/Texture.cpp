@@ -68,7 +68,7 @@ namespace SK
 	void Texture::genFromPath(const char* path, unsigned int nChannel)
 	{
 		int width, height, channels;
-		stbi_set_flip_vertically_on_load(true);
+		stbi_set_flip_vertically_on_load(false);
 		unsigned char* image = stbi_load(path,
 			&width,
 			&height,
@@ -170,7 +170,7 @@ namespace SK
 	//Save to PNG
 	bool Texture::savePNG(std::string filePath) const
 	{
-		stbi_flip_vertically_on_write(1);
+		stbi_flip_vertically_on_write(0);
 
 		unsigned char* ucData = new unsigned char[m_w * m_h * m_nChannel];
 		for (unsigned int i = 0; i < m_w * m_h * m_nChannel; i++)
@@ -213,10 +213,10 @@ namespace SK
 		int s2 = (int)(size / 2);
 
 		//Y
-		for (unsigned int y = startY; y < endY; y++)
+		for (unsigned int y = 0; y < m_h; y++)
 		{
 			//X
-			for (unsigned int x = startX; x < endY; x++)
+			for (unsigned int x = 0; x < m_w; x++)
 			{
 				//Color Channel
 				for (unsigned int c = 0; c < m_nChannel; c++)
@@ -235,7 +235,10 @@ namespace SK
 						}
 
 						//Multiply by coefficient to Set
-						modData[getArrayPosition(x, y, c)] = val * coef;
+						if(y >= startY && y < endY && x >= startX && x < endX)
+							modData[getArrayPosition(x, y, c)] = val * coef;
+						else
+							modData[getArrayPosition(x, y, c)] = getPixel(x, y, c);
 					}
 					//In border = same value
 					else
