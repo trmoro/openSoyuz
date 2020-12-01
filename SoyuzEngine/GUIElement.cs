@@ -135,18 +135,62 @@ namespace Soyuz
     /// </summary>
     public class Text : GUIElement
     {
+        //Text
+        public string Value { get; set; }
+        private string LastValue { get; set; }
+
+        //Max Width
+        public float MaxWidth { get; set; }
+        private float LastMaxWidth { get; set; }
+
+        //Line Spacing
+        public float LineSpacing { get; set; }
+        public float LastLineSpacing { get; set; }
+
+        //X Offset
+        public float X_Offset { get; set; }
+        public float LastX_Offset { get; set; }
+
+        //Y Offset
+        public float Y_Offset { get; set; }
+        public float LastY_Offset { get; set; }
+
+        //Font
+        public Font Font;
+        private Font LastFont;
+
         //Text Constructor
         public Text(float X, float Y, Vector4 Color, string Text, Font Font, float MaxWidth = float.MaxValue, float LineSpacing = 1, float xOffset = 0, float yOffset = 0) : base()
         {
-            //Set Value
+            //Set Values
             this.X = X;
             this.Y = Y;
             this.Color = Color;
+
+            Value = Text;
+            LastValue = Text;
+
+            this.MaxWidth = MaxWidth;
+            LastMaxWidth = MaxWidth;
+
+            this.LineSpacing = LineSpacing;
+            LastLineSpacing = LineSpacing;
+
+            X_Offset = xOffset;
+            LastX_Offset = xOffset;
+
+            Y_Offset = yOffset;
+            LastY_Offset = yOffset;
+
+            this.Font = Font;
+            LastFont = Font;
 
             //Set Text
             Engine.Core.AddTextAsMesh(Font.ID, ModelID, Text, xOffset, yOffset, MaxWidth, LineSpacing);
             UniformFont.Add("m_font", Font);
         }
+
+
 
         //Update
         public override void Update(Vector2 Mouse)
@@ -154,7 +198,18 @@ namespace Soyuz
             //Call Base Update
             base.Update(Mouse);
 
-            //Compare Changes to update (TO DO)
+            //Compare Changes
+            if(!Value.Equals(LastValue) || MaxWidth != LastMaxWidth || LineSpacing != LastLineSpacing || X_Offset != LastX_Offset || Y_Offset != LastY_Offset || LastFont.ID != Font.ID)
+            {
+                LastValue = Value;
+                LastMaxWidth = MaxWidth;
+                LastLineSpacing = LineSpacing;
+                LastX_Offset = X_Offset;
+                LastY_Offset = Y_Offset;
+                LastFont = Font;
+                DeleteHiddenMeshes();
+                Engine.Core.AddTextAsMesh(Font.ID, ModelID, Value, X_Offset, Y_Offset, MaxWidth, LineSpacing);
+            }
         }
 
         //

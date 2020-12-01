@@ -56,6 +56,9 @@ namespace SK
 		//Delete Mesh
 		void deleteMesh(Mesh* mesh);
 
+		//Delete Hiddden Meshes
+		void deleteHiddenMeshes();
+
 	private:
 
 		//Meshes

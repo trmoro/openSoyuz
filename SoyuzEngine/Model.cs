@@ -220,6 +220,14 @@ namespace Soyuz
             Engine.Core.DeleteModel(ModelID);
         }
 
+        /// <summary>
+        /// Delete Hidden Meshes
+        /// </summary>
+        public void DeleteHiddenMeshes()
+        {
+            Engine.Core.DeleteHiddenMeshes(ModelID);
+        }
+
         //End of Model Class
 
     }

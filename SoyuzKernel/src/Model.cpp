@@ -31,7 +31,7 @@ namespace SK
 	//Add Hidden Mesh
 	void Model::addHiddenMesh(Mesh* mesh)
 	{
-		m_meshes[m_meshes.size() * -1] = mesh;
+		m_meshes[ (m_meshes.size()+1) * -1] = mesh;
 	}
 
 	//Load with path
@@ -157,6 +157,23 @@ namespace SK
 				it->second = nullptr;
 		}
 
+	}
+
+	//Delete Hidden Meshes
+	void Model::deleteHiddenMeshes()
+	{
+		std::vector<int> keys = std::vector<int>();
+		std::map<int, Mesh*>::iterator it;
+		for (it = m_meshes.begin(); it != m_meshes.end(); it++)
+		{
+			if (it->first < 0)
+				keys.push_back(it->first);
+		}
+		for (int i : keys)
+		{
+			delete m_meshes[i];
+			m_meshes[i] = nullptr;
+		}
 	}
 
 	//

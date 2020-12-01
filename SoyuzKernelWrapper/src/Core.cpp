@@ -569,6 +569,12 @@ namespace SKW
 		m_Instance->deleteMesh(MeshID);
 	}
 
+	//Delete Hidden Meshes
+	void Core::DeleteHiddenMeshes(int ModelID)
+	{
+		m_Instance->deleteHiddenMeshes(ModelID);
+	}
+
 	//Delete Texture
 	void Core::DeleteTexture(int TextureID)
 	{

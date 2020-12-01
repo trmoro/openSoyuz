@@ -945,6 +945,12 @@ namespace SK
 		m_models[modelID] = nullptr;
 	}
 
+	//Delete Model
+	void Core::deleteHiddenMeshes(int modelID)
+	{
+		m_models[modelID]->deleteHiddenMeshes();
+	}
+
 	//Delete Mesh
 	void Core::deleteMesh(int meshID)
 	{

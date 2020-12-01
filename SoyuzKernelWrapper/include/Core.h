@@ -238,6 +238,9 @@ namespace SKW
 		//Delete Mesh
 		void DeleteMesh(int MeshID);
 
+		//Delete Hidden Meshes
+		void DeleteHiddenMeshes(int ModelID);
+
 		//Delete Texture
 		void DeleteTexture(int TextureID);
 
