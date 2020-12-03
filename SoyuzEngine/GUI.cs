@@ -36,10 +36,10 @@ namespace Soyuz
         public ReverseRender Render { get; set; }
 
         //AutoZ Step
-        public const float AutoZStep = -0.001f;
+        public const float AutoZStep = 0.001f;
 
-        //Z Index Start
-        public const float ZIndexStart = 127.0f;
+        //Z Index Start / End
+        public const float ZIndexStart = -127.0f;
 
         //Z Index
         public float ZIndex { get; set; }
@@ -50,8 +50,8 @@ namespace Soyuz
         public GUI()
         {
             //Init Cameras and Z Index
-            ZIndex = ZIndexStart;
-            Camera = new Camera() { Type = Camera.CameraType.Orthographic, Near = -ZIndex, Far = ZIndex, IfEmptyRenderAll = false };
+            ZIndex = ZIndexStart+AutoZStep;
+            Camera = new Camera() { Type = Camera.CameraType.Orthographic, Near = AutoZStep, Far = -ZIndexStart, IfEmptyRenderAll = false };
             TextRender = new Camera(false) { IfEmptyRenderAll = false};
             ElementRender = new Camera(false) { IfEmptyRenderAll = false};
 
@@ -247,25 +247,50 @@ namespace Soyuz
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
         /// <returns></returns>
-        public GUIElement Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
+        public Button Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
         {
-            //Box
-            Box b = new Box(X, Y, Width, Height, Color);
+            //Button
+            Button b = new Button(X, Y, Width, Height, Color, Text, Font, LineSpacing, xOffset, yOffset);
             Elements.Add(b);
             b.Depth = ZIndex;
             ZIndex += AutoZStep;
 
             //Text
-            Text t = new Text(X, Y, new Vector4(1), Text, Font, Width, LineSpacing, xOffset, yOffset);
-            Texts.Add(t);
-            t.Depth = ZIndex;
+            Texts.Add(b.Text);
+            b.Text.Depth = ZIndex;
             ZIndex += AutoZStep;
 
-            //Add Text to Box
-            b.Children.Add(t);
-
-            //Return Box
+            //Return Button
             return b;
+        }
+
+        /// <summary>
+        /// Slider
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Min"></param>
+        /// <param name="Max"></param>
+        /// <param name="Value"></param>
+        /// <param name="Color"></param>
+        /// <returns></returns>
+        public Slider Slider(float X, float Y, float Width, float Height, float Min, float Max, float Value, Vector4 Color)
+        {
+            //Slider
+            Slider s = new Slider(X, Y, Width, Height,Min,Max,Value,Color);
+            Elements.Add(s);
+            s.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
+            //Slider Cursor
+            Elements.Add(s.Cursor);
+            s.Cursor.Depth = ZIndex;
+            ZIndex += AutoZStep;
+
+            //Return Slider
+            return s;
         }
 
 

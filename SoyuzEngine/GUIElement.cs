@@ -37,6 +37,11 @@ namespace Soyuz
         //Is Triggered
         public bool IsTriggered { get; set; }
 
+        //Mouse Move
+        public Vector2 TriggerMouse { get; set; }
+        public bool MouseMoveX { get; set; }
+        public bool MouseMoveY { get; set; }
+
         //Reverse
         public bool Reverse { get; set; }
 
@@ -45,7 +50,9 @@ namespace Soyuz
 
         //Callback
         public Action<GUIElement> OnHover;
-        public Action<GUIElement> OnClick; 
+        public Action<GUIElement> OnClick;
+        public Action<GUIElement, float> OnMouseMoveX;
+        public Action<GUIElement, float> OnMouseMoveY;
 
         /// <summary>
         /// Constructor
@@ -64,6 +71,8 @@ namespace Soyuz
             IsTriggered = false;
             IsClicked = false;
             IsHovered = false;
+            MouseMoveX = false;
+            MouseMoveY = false;
             Reverse = false;
             UniformInt.Add("Reverse", 0);
         }
@@ -96,7 +105,10 @@ namespace Soyuz
 
                     //Left Click to Trigger
                     if (Engine.Core.IsMouseClicked(0) && !IsTriggered)
+                    {
                         IsTriggered = true;
+                        TriggerMouse = Mouse;
+                    }
 
                     //Left click released in the box
                     if (Engine.Core.IsMouseReleased(0) && IsTriggered)
@@ -120,6 +132,38 @@ namespace Soyuz
                         IsTriggered = false;
                 }
 
+                //Left Click during trigger
+                if(Engine.Core.IsMouseClicked(0) && IsTriggered && (MouseMoveX || MouseMoveY) )
+                {
+                    if (MouseMoveX)
+                    {
+                        X += Mouse.X - TriggerMouse.X;
+                        if (this.OnMouseMoveX != null)
+                            OnMouseMoveX(this, Mouse.X - TriggerMouse.X);
+                    }
+                    if (MouseMoveY)
+                    {
+                        Y += Mouse.Y - TriggerMouse.Y;
+                        if(this.OnMouseMoveY != null)
+                            OnMouseMoveY(this, Mouse.Y - TriggerMouse.Y);
+                    }
+                    foreach (GUIElement e in Children)
+                    {
+                        if (MouseMoveX)
+                        {
+                            e.X += Mouse.X - TriggerMouse.X;
+                            if (e.OnMouseMoveX != null)
+                                e.OnMouseMoveX(this, Mouse.X - TriggerMouse.X);
+                        }
+                        if (MouseMoveY)
+                        {
+                            e.Y += Mouse.Y - TriggerMouse.Y;
+                            if (e.OnMouseMoveY != null)
+                                e.OnMouseMoveY(this, Mouse.Y - TriggerMouse.Y);
+                        }
+                    }
+                    TriggerMouse = Mouse;
+                }
 
                 //Update Children
                 foreach (GUIElement g in Children)
@@ -241,6 +285,125 @@ namespace Soyuz
             Update();
         }
 
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="Mouse"></param>
+        public override void Update(Vector2 Mouse)
+        {
+            //Call Base Update
+            base.Update(Mouse);
+
+            //Auto-resize Box
+            Scale = new Vector3(Width, Height, 1);
+        }
+
+        //
+
+    }
+
+    /// <summary>
+    /// Button
+    /// </summary>
+    public class Button : GUIElement
+    {
+        //Text
+        public Text Text { get; set; }
+
+        /// <summary>
+        /// Button Constructor
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Color"></param>
+        /// <param name="Text"></param>
+        /// <param name="Font"></param>
+        /// <param name="LineSpacing"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        public Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
+        {
+            this.X = X;
+            this.Y = Y;
+            this.Width = Width;
+            this.Height = Height;
+            this.Color = Color;
+
+            Meshes.Add(Quad.Rect().Compile());
+            Update();
+
+            //Text
+            this.Text = new Text(X, Y, new Vector4(1), Text, Font, Width, LineSpacing, xOffset, yOffset);
+            Children.Add(this.Text);
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="Mouse"></param>
+        public override void Update(Vector2 Mouse)
+        {
+            //Call Base Update
+            base.Update(Mouse);
+
+            //Auto-resize Box
+            Scale = new Vector3(Width, Height, 1);
+
+        }
+
+    }
+
+    /// <summary>
+    /// Slider Class
+    /// </summary>
+    public class Slider : GUIElement
+    {
+        //Min Max
+        public float Min { get; set; }
+        public float Max { get; set; }
+
+        //Value
+        public float Value { get; set; }
+
+        //Cursor
+        public Box Cursor { get; set; }
+
+        /// <summary>
+        /// Slider
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Min"></param>
+        /// <param name="Max"></param>
+        /// <param name="Value"></param>
+        /// <param name="Color"></param>
+        public Slider(float X, float Y, float Width, float Height, float Min, float Max, float Value, Vector4 Color) : base()
+        {
+            this.X = X;
+            this.Width = Width;
+            this.Height = Height - 8;
+            this.Y = Y + 4;
+            if (this.Height < 4)
+                this.Height = Height;
+
+            this.Color = new Vector4(0.1f,0.1f,0.1f,0.9f);
+
+            this.Min = Min;
+            this.Max = Max;
+            this.Value = Value;
+
+            Cursor = new Box(X, Y, 8, Height, Color);
+            Cursor.MouseMoveX = true;
+            Children.Add(Cursor);
+
+            Meshes.Add(Quad.Rect().Compile());
+            Update();
+        }
+
         //Update
         public override void Update(Vector2 Mouse)
         {
@@ -249,6 +412,15 @@ namespace Soyuz
 
             //Auto-resize Box
             Scale = new Vector3(Width, Height, 1);
+
+            //Set Cursor Position
+            if (Cursor.X < X)
+                Cursor.X = X;
+            else if (Cursor.X > X + Width - Cursor.Width)
+                Cursor.X = X + Width - Cursor.Width;
+
+            //Set Value by Cursor Position
+            Value = (((Cursor.X - X) / (Width - Cursor.Width)) * (Max - Min)) + Min;
 
         }
 
