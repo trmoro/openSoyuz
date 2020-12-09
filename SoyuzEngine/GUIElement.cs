@@ -10,6 +10,9 @@ namespace Soyuz
     //GUIElement Base Class
     public class GUIElement : Model
     {
+        //GUI
+        public GUI GUI { get; set; }
+
         //X
         public float X { get; set; }
 
@@ -54,11 +57,15 @@ namespace Soyuz
         public Action<GUIElement, float> OnMouseMoveX;
         public Action<GUIElement, float> OnMouseMoveY;
 
+        //Hover Text
+        public string HoverText { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public GUIElement() : base()
+        public GUIElement(GUI gui) : base()
         {
+            GUI = gui;
             X = 0;
             Y = 0;
             Width = 0;
@@ -67,6 +74,7 @@ namespace Soyuz
             Color = new Vector4(1);
             Children = new List<GUIElement>();
             IsHidden = false;
+            HoverText = "";
 
             IsTriggered = false;
             IsClicked = false;
@@ -103,6 +111,14 @@ namespace Soyuz
                     if(OnHover != null)
                         OnHover(this);
 
+                    //Check for Hover Text
+                    if(GUI.HoverTextFrom == null && HoverText != "")
+                    {
+                        GUI.Show(GUI.HoverButton);
+                        GUI.HoverButton.Text.Value = HoverText;
+                        GUI.HoverTextFrom = this;
+                    }
+
                     //Left Click to Trigger
                     if (Engine.Core.IsMouseClicked(0) && !IsTriggered)
                     {
@@ -126,6 +142,14 @@ namespace Soyuz
                 {
                     //Not hovered
                     IsHovered = false;
+
+                    //Disable hover text
+                    if(GUI.HoverTextFrom == this)
+                    {
+                        GUI.Hide(GUI.HoverButton);
+                        GUI.HoverButton.Text.Value = "";
+                        GUI.HoverTextFrom = null;
+                    }
 
                     //Left click outside the box
                     if (Engine.Core.IsMouseReleased(0) && IsTriggered)
@@ -204,7 +228,7 @@ namespace Soyuz
         private Font LastFont;
 
         //Text Constructor
-        public Text(float X, float Y, Vector4 Color, string Text, Font Font, float MaxWidth = float.MaxValue, float LineSpacing = 1, float xOffset = 0, float yOffset = 0) : base()
+        public Text(GUI gui, float X, float Y, Vector4 Color, string Text, Font Font, float MaxWidth = float.MaxValue, float LineSpacing = 1, float xOffset = 0, float yOffset = 0) : base(gui)
         {
             //Set Values
             this.X = X;
@@ -273,7 +297,7 @@ namespace Soyuz
         /// <param name="Width"></param>
         /// <param name="Height"></param>
         /// <param name="Color"></param>
-        public Box(float X, float Y, float Width, float Height, Vector4 Color) : base()
+        public Box(GUI gui, float X, float Y, float Width, float Height, Vector4 Color) : base(gui)
         {
             this.X = X;
             this.Y = Y;
@@ -323,7 +347,7 @@ namespace Soyuz
         /// <param name="LineSpacing"></param>
         /// <param name="xOffset"></param>
         /// <param name="yOffset"></param>
-        public Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
+        public Button(GUI gui, float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0) : base(gui)
         {
             this.X = X;
             this.Y = Y;
@@ -335,7 +359,7 @@ namespace Soyuz
             Update();
 
             //Text
-            this.Text = new Text(X, Y, new Vector4(1), Text, Font, Width, LineSpacing, xOffset, yOffset);
+            this.Text = new Text(gui, X, Y, new Vector4(1), Text, Font, Width, LineSpacing, xOffset, yOffset);
             Children.Add(this.Text);
         }
 
@@ -350,6 +374,10 @@ namespace Soyuz
 
             //Auto-resize Box
             Scale = new Vector3(Width, Height, 1);
+
+            //Text Position
+            Text.X = X;
+            Text.Y = Y;
 
         }
 
@@ -381,7 +409,8 @@ namespace Soyuz
         /// <param name="Max"></param>
         /// <param name="Value"></param>
         /// <param name="Color"></param>
-        public Slider(float X, float Y, float Width, float Height, float Min, float Max, float Value, Vector4 Color) : base()
+        /// <param name="CursorColor"></param>
+        public Slider(GUI gui, float X, float Y, float Width, float Height, float Min, float Max, float Value, Vector4 Color, Vector4 CursorColor) : base(gui)
         {
             this.X = X;
             this.Width = Width;
@@ -390,15 +419,18 @@ namespace Soyuz
             if (this.Height < 4)
                 this.Height = Height;
 
-            this.Color = new Vector4(0.1f,0.1f,0.1f,0.9f);
+            this.Color = Color;
 
             this.Min = Min;
             this.Max = Max;
             this.Value = Value;
 
-            Cursor = new Box(X, Y, 8, Height, Color);
+            Cursor = new Box(gui,X, Y, 8, Height, CursorColor);
             Cursor.MouseMoveX = true;
             Children.Add(Cursor);
+
+            //Set cursor position
+            Cursor.X = (((Value - Min) / (Max - Min)) * (Width - Cursor.Width)) + X;
 
             Meshes.Add(Quad.Rect().Compile());
             Update();
@@ -421,7 +453,6 @@ namespace Soyuz
 
             //Set Value by Cursor Position
             Value = (((Cursor.X - X) / (Width - Cursor.Width)) * (Max - Min)) + Min;
-
         }
 
         //

@@ -44,6 +44,10 @@ namespace Soyuz
         //Z Index
         public float ZIndex { get; set; }
 
+        //Hover Button
+        public Button HoverButton { get; set; }
+        public GUIElement HoverTextFrom { get; set; }
+
         /// <summary>
         /// Graphic User Interface Actor
         /// </summary>
@@ -81,6 +85,9 @@ namespace Soyuz
             Shader elemShader = new Shader();
             elemShader.LoadPrefab(Engine.Core.Prefab_Shader_Gui);
             ElementRender.AddShader(elemShader, m => !m.IsHidden);
+
+            //Hover text from GUIElement
+            HoverTextFrom = null;
         }
 
         /// <summary>
@@ -160,7 +167,7 @@ namespace Soyuz
         /// <returns></returns>
         public Box Box(float X, float Y, float Width, float Height, Vector4 Color)
         {
-            Box b = new Box(X, Y, Width, Height, Color);
+            Box b = new Box(this,X, Y, Width, Height, Color);
             Elements.Add(b);
 
             b.Depth = ZIndex;
@@ -180,7 +187,7 @@ namespace Soyuz
         /// <returns></returns>
         public Box Texture(Texture t, float X, float Y, float Width, float Height)
         {
-            Box b = new Box(X, Y, Width, Height, new Vector4(1));
+            Box b = new Box(this,X, Y, Width, Height, new Vector4(1));
             b.Material.IsTextured = true;
             b.Material.Texture = t;
             Elements.Add(b);
@@ -224,7 +231,7 @@ namespace Soyuz
         /// <returns></returns>
         public Text Text(float X, float Y, Vector4 Color, string Text, Font Font, float MaxWidth = float.MaxValue, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
         {
-            Text t = new Text(X, Y, Color, Text, Font, MaxWidth, LineSpacing, xOffset, yOffset);
+            Text t = new Text(this,X, Y, Color, Text, Font, MaxWidth, LineSpacing, xOffset, yOffset);
             Texts.Add(t);
 
             t.Depth = ZIndex;
@@ -250,7 +257,7 @@ namespace Soyuz
         public Button Button(float X, float Y, float Width, float Height, Vector4 Color, string Text, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
         {
             //Button
-            Button b = new Button(X, Y, Width, Height, Color, Text, Font, LineSpacing, xOffset, yOffset);
+            Button b = new Button(this,X, Y, Width, Height, Color, Text, Font, LineSpacing, xOffset, yOffset);
             Elements.Add(b);
             b.Depth = ZIndex;
             ZIndex += AutoZStep;
@@ -265,6 +272,26 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Create Hover Text / Button
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="Color"></param>
+        /// <param name="Font"></param>
+        /// <param name="LineSpacing"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        public void CreateHoverText(float X, float Y, float Width, float Height, Vector4 Color, Font Font, float LineSpacing = 1, float xOffset = 0, float yOffset = 0)
+        {
+            HoverButton = Button(X, Y, Width, Height, Color, "", Font);
+            HoverButton.Depth = -AutoZStep*2;
+            HoverButton.Text.Depth = -AutoZStep;
+            Hide(HoverButton);
+        }
+
+        /// <summary>
         /// Slider
         /// </summary>
         /// <param name="X"></param>
@@ -275,11 +302,12 @@ namespace Soyuz
         /// <param name="Max"></param>
         /// <param name="Value"></param>
         /// <param name="Color"></param>
+        /// <param name="CursorColor"></param>
         /// <returns></returns>
-        public Slider Slider(float X, float Y, float Width, float Height, float Min, float Max, float Value, Vector4 Color)
+        public Slider Slider(float X, float Y, float Width, float Height, float Min, float Max, float Value, Vector4 Color, Vector4 CursorColor)
         {
             //Slider
-            Slider s = new Slider(X, Y, Width, Height,Min,Max,Value,Color);
+            Slider s = new Slider(this,X, Y, Width, Height,Min,Max,Value,Color, CursorColor);
             Elements.Add(s);
             s.Depth = ZIndex;
             ZIndex += AutoZStep;
@@ -309,6 +337,13 @@ namespace Soyuz
         {
             //Mouse Position
             Vector2 Mouse = new Vector2((float) Engine.Core.GetMouseX(), (float) Engine.Core.GetMouseY());
+
+            //Hover Text Position
+            if (HoverTextFrom != null)
+            {
+                HoverButton.X = Mouse.X;
+                HoverButton.Y = Mouse.Y;
+            }
 
             //Foreach Element
             foreach (GUIElement g in Elements)
