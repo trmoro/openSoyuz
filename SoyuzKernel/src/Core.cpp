@@ -47,10 +47,10 @@ namespace SK
 	}
 
 	//Init Core
-	void Core::init()
+	void Core::init(const char* window_title)
 	{
 		//Init GLFW and GLEW
-		initGLFW();
+		initGLFW(window_title);
 		initGLEW();
 
 		//Init OpenGL Settings
@@ -87,7 +87,7 @@ namespace SK
 	}
 
 	//Init GLFW
-	void Core::initGLFW()
+	void Core::initGLFW(const char* window_title)
 	{
 		//Initialization gone wrong ?
 		if (!glfwInit())
@@ -101,9 +101,9 @@ namespace SK
 		//glfwWindowHint(GLFW_SAMPLES, MSAA);
 
 		//Create Window
-		Input::Window_Width = 640;
-		Input::Window_Height = 480;
-		m_window = glfwCreateWindow(Input::Window_Width, Input::Window_Height, "Hello World", nullptr, nullptr);
+		Input::Window_Width = 1024;
+		Input::Window_Height = 768;
+		m_window = glfwCreateWindow(Input::Window_Width, Input::Window_Height, window_title, nullptr, nullptr);
 		glfwMakeContextCurrent(m_window);
 
 		//Set Callbacks

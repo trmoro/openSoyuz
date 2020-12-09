@@ -85,7 +85,7 @@ namespace SK
 		~Core();
 
 		//Init
-		void init();
+		void init(const char* window_title);
 
 		//Update
 		bool update();
@@ -326,7 +326,7 @@ namespace SK
 	private:
 
 		//GLFW init
-		void initGLFW();
+		void initGLFW(const char* window_title);
 
 		//GLEW init
 		void initGLEW();

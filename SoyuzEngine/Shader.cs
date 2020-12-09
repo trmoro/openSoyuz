@@ -36,9 +36,10 @@ namespace Soyuz
         /// Load Prefab
         /// </summary>
         /// <param name="PrefabID"></param>
-        public void LoadPrefab(int PrefabID)
+        public Shader LoadPrefab(int PrefabID)
         {
             Engine.Core.SetPrefabShader(ID, PrefabID);
+            return this;
         }
 
         /// <summary>
@@ -46,12 +47,14 @@ namespace Soyuz
         /// </summary>
         /// <param name="VertexPath"></param>
         /// <param name="FragmentPath"></param>
-        public void Load(string VertexPath, string FragmentPath)
+        public Shader Load(string VertexPath, string FragmentPath)
         {
             Vertex = File.ReadAllText(VertexPath);
             Fragment = File.ReadAllText(FragmentPath);
 
             Set(Vertex, Fragment);
+
+            return this;
         }
 
         /// <summary>
@@ -60,13 +63,15 @@ namespace Soyuz
         /// <param name="VertexPath"></param>
         /// <param name="GeometryPath"></param>
         /// <param name="FragmentPath"></param>
-        public void Load(string VertexPath, string GeometryPath, string FragmentPath)
+        public Shader Load(string VertexPath, string GeometryPath, string FragmentPath)
         {
             Vertex = File.ReadAllText(VertexPath);
             Fragment = File.ReadAllText(FragmentPath);
             Geometry = File.ReadAllText(GeometryPath);
 
             Set(Vertex, Geometry, Fragment);
+
+            return this;
         }
 
         /// <summary>

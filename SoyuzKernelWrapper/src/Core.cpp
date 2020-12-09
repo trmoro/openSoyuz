@@ -24,9 +24,11 @@ namespace SKW
 	}
 
 	//Init
-	void Core::Init()
+	void Core::Init(String^ WindowTitle)
 	{
-		m_Instance->init();
+		IntPtr str = Marshal::StringToHGlobalAnsi(WindowTitle);
+		m_Instance->init((const char*) str.ToPointer() );
+		Marshal::FreeHGlobal(str);
 	}
 
 	//Create FrameBuffer

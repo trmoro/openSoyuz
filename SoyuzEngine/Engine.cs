@@ -24,7 +24,8 @@ namespace Soyuz
         /// <summary>
         /// Engine Constructor
         /// </summary>
-        public Engine()
+        /// <param name="WindowTitle"></param>
+        public Engine(String WindowTitle = "Powered by openSoyuz")
         {
             //Scene and Renderer
             Scene = null;
@@ -35,7 +36,7 @@ namespace Soyuz
 
             //Init SKW Core
             Core = new Core();
-            Core.Init();
+            Core.Init(WindowTitle);
         }
 
         /// <summary>

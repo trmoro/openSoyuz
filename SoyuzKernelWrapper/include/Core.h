@@ -21,7 +21,7 @@ namespace SKW
 		!Core();
 
 		//Init
-		void Init();
+		void Init(String^ WindowTitle);
 
 		//Create FrameBuffer
 		int CreateFrameBuffer();
