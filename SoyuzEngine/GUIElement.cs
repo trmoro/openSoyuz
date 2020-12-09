@@ -83,6 +83,8 @@ namespace Soyuz
             MouseMoveY = false;
             Reverse = false;
             UniformInt.Add("Reverse", 0);
+
+            MultiShader_StrVal = GUI.Default_Element;
         }
 
         //Update
@@ -256,6 +258,8 @@ namespace Soyuz
             //Set Text
             Engine.Core.AddTextAsMesh(Font.ID, ModelID, Text, xOffset, yOffset, MaxWidth, LineSpacing);
             UniformFont.Add("m_font", Font);
+
+            MultiShader_StrVal = GUI.Default_Text;
         }
 
 
@@ -307,6 +311,8 @@ namespace Soyuz
 
             Meshes.Add(Quad.Rect().Compile() );
             Update();
+
+            MultiShader_StrVal = GUI.Default_Element;
         }
 
         /// <summary>
@@ -361,6 +367,8 @@ namespace Soyuz
             //Text
             this.Text = new Text(gui, X, Y, new Vector4(1), Text, Font, Width, LineSpacing, xOffset, yOffset);
             Children.Add(this.Text);
+
+            MultiShader_StrVal = GUI.Default_Element;
         }
 
         /// <summary>
@@ -434,6 +442,8 @@ namespace Soyuz
 
             Meshes.Add(Quad.Rect().Compile());
             Update();
+
+            MultiShader_StrVal = GUI.Default_Element;
         }
 
         //Update

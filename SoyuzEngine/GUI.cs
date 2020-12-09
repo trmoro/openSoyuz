@@ -48,6 +48,10 @@ namespace Soyuz
         public Button HoverButton { get; set; }
         public GUIElement HoverTextFrom { get; set; }
 
+        //Shader Condition
+        public const string Default_Text = "defText";
+        public const string Default_Element = "defElement";
+
         /// <summary>
         /// Graphic User Interface Actor
         /// </summary>
@@ -80,11 +84,11 @@ namespace Soyuz
             //Init Shader
             Shader fontShader = new Shader();
             fontShader.LoadPrefab(Engine.Core.Prefab_Shader_Font);
-            TextRender.AddShader(fontShader, m => !m.IsHidden);
+            TextRender.AddShader(fontShader, m => !m.IsHidden && m.MultiShader_StrVal == GUI.Default_Text);
 
             Shader elemShader = new Shader();
             elemShader.LoadPrefab(Engine.Core.Prefab_Shader_Gui);
-            ElementRender.AddShader(elemShader, m => !m.IsHidden);
+            ElementRender.AddShader(elemShader, m => !m.IsHidden && m.MultiShader_StrVal == GUI.Default_Element);
 
             //Hover text from GUIElement
             HoverTextFrom = null;
@@ -341,8 +345,8 @@ namespace Soyuz
             //Hover Text Position
             if (HoverTextFrom != null)
             {
-                HoverButton.X = Mouse.X;
-                HoverButton.Y = Mouse.Y;
+                HoverButton.X = Mouse.X + 12;
+                HoverButton.Y = Mouse.Y + 12;
             }
 
             //Foreach Element
