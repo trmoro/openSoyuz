@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
 using System.Text;
 
@@ -154,6 +155,54 @@ namespace Soyuz
         {
             for (int i = 0; i < Positions.Count; i++)
                 Positions[i] = Positions[i] * vector;
+            return this;
+        }
+
+        /// <summary>
+        /// Add OBJ model
+        /// </summary>
+        /// <param name="Path"></param>
+        /// <returns></returns>
+        public Mesh AddOBJ(string Path)
+        {
+            FileStream fileStream = new FileStream(Path, FileMode.Open);
+            using (StreamReader reader = new StreamReader(fileStream))
+            {
+                string line = reader.ReadLine();
+                string[] d = line.Split(" ");
+                Mesh tmp = new Mesh();
+
+                //Vertex
+                if (d.Length == 4 && d[0].Equals("v"))
+                    tmp.Positions.Add(new Vector3(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]) ) );
+                //UV
+                if (d.Length == 3 && d[0].Equals("vt"))
+                    tmp.UVs.Add(new Vector2(float.Parse(d[1]), float.Parse(d[2]) ) );
+                //Normal
+                if (d.Length == 4 && d[0].Equals("vn"))
+                    tmp.Normals.Add(new Vector3(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3])));
+                //Face
+                if(d.Length == 4 && d[0].Equals("f"))
+                {
+                    string[] tri1 = d[1].Split("/");
+                    string[] tri2 = d[2].Split("/");
+                    string[] tri3 = d[3].Split("/");
+
+                    Positions.Add(tmp.Positions[int.Parse(tri1[0]) - 1]);
+                    Positions.Add(tmp.Positions[int.Parse(tri2[0]) - 1]);
+                    Positions.Add(tmp.Positions[int.Parse(tri3[0]) - 1]);
+
+                    UVs.Add(tmp.UVs[int.Parse(tri1[1]) - 1]);
+                    UVs.Add(tmp.UVs[int.Parse(tri2[1]) - 1]);
+                    UVs.Add(tmp.UVs[int.Parse(tri3[1]) - 1]);
+
+                    Normals.Add(tmp.Normals[int.Parse(tri1[2]) - 1]);
+                    Normals.Add(tmp.Normals[int.Parse(tri2[2]) - 1]);
+                    Normals.Add(tmp.Normals[int.Parse(tri3[2]) - 1]);
+
+                }
+            }
+
             return this;
         }
 
