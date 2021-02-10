@@ -168,16 +168,24 @@ namespace Soyuz
         {
             for (int i = 0; i < Positions.Count; i++)
             {
-                //Transform
+                //Matrices
                 Matrix4x4 rx = Matrix4x4.CreateRotationX(vector.X);
                 Matrix4x4 ry = Matrix4x4.CreateRotationY(vector.Y);
                 Matrix4x4 rz = Matrix4x4.CreateRotationZ(vector.Z);
+
+                //Transform position
                 Vector3 pos = Vector3.Transform(Positions[i], rx);
                 pos = Vector3.Transform(pos, ry);
                 pos = Vector3.Transform(pos, rz);
 
+                //Transform normal
+                Vector3 nor = Vector3.Transform(Normals[i], rx);
+                nor = Vector3.Transform(nor, ry);
+                nor = Vector3.Transform(nor, rz);
+
                 //Set
                 Positions[i] = pos;
+                Normals[i] = nor;
             }
 
             return this;
