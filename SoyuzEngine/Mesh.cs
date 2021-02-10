@@ -184,6 +184,26 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Clone
+        /// </summary>
+        /// <returns></returns>
+        public Mesh Clone()
+        {
+            Mesh m = new Mesh();
+
+            foreach (Vector3 p in Positions)
+                m.Positions.Add(p);
+            foreach (Vector2 u in UVs)
+                m.UVs.Add(u);
+            foreach (Vector3 n in Normals)
+                m.Normals.Add(n);
+            foreach (int i in Indices)
+                m.Indices.Add(i);
+
+            return m;
+        }
+
+        /// <summary>
         /// Add OBJ model
         /// </summary>
         /// <param name="Path"></param>
