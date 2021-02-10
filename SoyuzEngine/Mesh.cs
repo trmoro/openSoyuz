@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Numerics;
 using System.Text;
@@ -159,6 +160,30 @@ namespace Soyuz
         }
 
         /// <summary>
+        /// Rotate all mesh vertex
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public Mesh Rotate(Vector3 vector)
+        {
+            for (int i = 0; i < Positions.Count; i++)
+            {
+                //Transform
+                Matrix4x4 rx = Matrix4x4.CreateRotationX(vector.X);
+                Matrix4x4 ry = Matrix4x4.CreateRotationY(vector.Y);
+                Matrix4x4 rz = Matrix4x4.CreateRotationZ(vector.Z);
+                Vector3 pos = Vector3.Transform(Positions[i], rx);
+                pos = Vector3.Transform(pos, ry);
+                pos = Vector3.Transform(pos, rz);
+
+                //Set
+                Positions[i] = pos;
+            }
+
+            return this;
+        }
+
+        /// <summary>
         /// Add OBJ model
         /// </summary>
         /// <param name="Path"></param>
@@ -168,38 +193,45 @@ namespace Soyuz
             FileStream fileStream = new FileStream(Path, FileMode.Open);
             using (StreamReader reader = new StreamReader(fileStream))
             {
-                string line = reader.ReadLine();
-                string[] d = line.Split(" ");
+                string line;
                 Mesh tmp = new Mesh();
 
-                //Vertex
-                if (d.Length == 4 && d[0].Equals("v"))
-                    tmp.Positions.Add(new Vector3(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3]) ) );
-                //UV
-                if (d.Length == 3 && d[0].Equals("vt"))
-                    tmp.UVs.Add(new Vector2(float.Parse(d[1]), float.Parse(d[2]) ) );
-                //Normal
-                if (d.Length == 4 && d[0].Equals("vn"))
-                    tmp.Normals.Add(new Vector3(float.Parse(d[1]), float.Parse(d[2]), float.Parse(d[3])));
-                //Face
-                if(d.Length == 4 && d[0].Equals("f"))
+                while ((line = reader.ReadLine()) != null)
                 {
-                    string[] tri1 = d[1].Split("/");
-                    string[] tri2 = d[2].Split("/");
-                    string[] tri3 = d[3].Split("/");
 
-                    Positions.Add(tmp.Positions[int.Parse(tri1[0]) - 1]);
-                    Positions.Add(tmp.Positions[int.Parse(tri2[0]) - 1]);
-                    Positions.Add(tmp.Positions[int.Parse(tri3[0]) - 1]);
+                    string[] d = line.Split(" ");
 
-                    UVs.Add(tmp.UVs[int.Parse(tri1[1]) - 1]);
-                    UVs.Add(tmp.UVs[int.Parse(tri2[1]) - 1]);
-                    UVs.Add(tmp.UVs[int.Parse(tri3[1]) - 1]);
+                    //Vertex
+                    if (d.Length == 4 && d[0].Equals("v"))
+                        tmp.Positions.Add(new Vector3(float.Parse(d[1], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(d[2], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(d[3], NumberStyles.Any, CultureInfo.InvariantCulture)));
+                    //UV
+                    if (d.Length == 3 && d[0].Equals("vt"))
+                        tmp.UVs.Add(new Vector2(float.Parse(d[1], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(d[2], NumberStyles.Any, CultureInfo.InvariantCulture)));
+                    //Normal
+                    if (d.Length == 4 && d[0].Equals("vn"))
+                        tmp.Normals.Add(new Vector3(float.Parse(d[1], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(d[2], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(d[3], NumberStyles.Any, CultureInfo.InvariantCulture)));
+                    //Face
+                    if (d.Length == 4 && d[0].Equals("f"))
+                    {
+                        string[] tri1 = d[1].Split("/");
+                        string[] tri2 = d[2].Split("/");
+                        string[] tri3 = d[3].Split("/");
 
-                    Normals.Add(tmp.Normals[int.Parse(tri1[2]) - 1]);
-                    Normals.Add(tmp.Normals[int.Parse(tri2[2]) - 1]);
-                    Normals.Add(tmp.Normals[int.Parse(tri3[2]) - 1]);
+                        Positions.Add(tmp.Positions[int.Parse(tri1[0]) - 1]);
+                        Positions.Add(tmp.Positions[int.Parse(tri2[0]) - 1]);
+                        Positions.Add(tmp.Positions[int.Parse(tri3[0]) - 1]);
 
+                        UVs.Add(tmp.UVs[int.Parse(tri1[1]) - 1]);
+                        UVs.Add(tmp.UVs[int.Parse(tri2[1]) - 1]);
+                        UVs.Add(tmp.UVs[int.Parse(tri3[1]) - 1]);
+
+                        Normals.Add(tmp.Normals[int.Parse(tri1[2]) - 1]);
+                        Normals.Add(tmp.Normals[int.Parse(tri2[2]) - 1]);
+                        Normals.Add(tmp.Normals[int.Parse(tri3[2]) - 1]);
+
+                        for (int i = 0; i < 3; i++)
+                            Indices.Add(Indices.Count);
+                    }
                 }
             }
 
