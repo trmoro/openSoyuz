@@ -12,7 +12,7 @@ namespace Soyuz
     public class Raycaster : Actor
     {
         //Ray
-        private Ray Ray { get; set; }
+        public Ray Ray { get; set; }
 
         //Render Ray
         public bool RenderRay { get; set; }
