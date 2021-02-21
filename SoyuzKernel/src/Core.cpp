@@ -941,28 +941,27 @@ namespace SK
 	//Delete Model
 	void Core::deleteModel(int modelID)
 	{
+		//m_models[modelID]->deleteMeshes();
 		delete m_models[modelID];
 		m_models[modelID] = nullptr;
+	}
+
+	//Delete Model Meshes
+	void Core::deleteModelMeshes(int modelID)
+	{
+		m_models[modelID]->deleteMeshes();
+	}
+
+	//Clear Model Meshes
+	void Core::discardModelMeshes(int modelID)
+	{
+		m_models[modelID]->discardMeshes();
 	}
 
 	//Delete Model
 	void Core::deleteHiddenMeshes(int modelID)
 	{
 		m_models[modelID]->deleteHiddenMeshes();
-	}
-
-	//Delete Mesh
-	void Core::deleteMesh(int meshID)
-	{
-		//CHANGES TODO
-
-		//for (Model* mod : m_models)
-		//	mod->deleteMesh(m_meshes[meshID]);
-		
-		//std::cout << meshID << " " << m_meshes.size() << std::endl;
-		
-		//delete m_meshes[meshID];
-		//m_meshes[meshID] = nullptr;
 	}
 
 	//Delete Texture

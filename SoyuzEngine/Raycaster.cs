@@ -84,13 +84,25 @@ namespace Soyuz
                 Scene.Models.Remove(Ray);    
         }
 
-        //Get Interval Commons Part
+        /// <summary>
+        ///  Get Interval Commons Part
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public Tuple<float,float> IntervalCommons(Tuple<float,float> a, Tuple<float,float> b)
         {
             return new Tuple<float, float>(Math.Max(a.Item1, b.Item1), Math.Min(a.Item2, b.Item2));
         }
 
-        //Check Interval Collision and return where the commons values are in percentages
+        /// <summary>
+        /// Check Interval Collision and return where the commons values are in percentages
+        /// </summary>
+        /// <param name="aMin"></param>
+        /// <param name="aMax"></param>
+        /// <param name="bMin"></param>
+        /// <param name="bMax"></param>
+        /// <returns></returns>
         public Tuple<float,float> IntervalCollision(float aMin, float aMax, float bMin, float bMax)
         {
             //Scaling
@@ -117,7 +129,7 @@ namespace Soyuz
             foreach (Model m in models)
             {
                 //Space Barycenter
-                Vector3 spaceBarycenter = m.Position + m.Barycenter;
+                Vector3 spaceBarycenter = m.Position + Vector3.Multiply(m.Barycenter, m.Scale);
 
                 //Centered Scaled-Vertex Length
                 Vector3 scaledLength = Vector3.Multiply(m.VertexLength, m.Scale) / 2.0f;
@@ -329,6 +341,8 @@ namespace Soyuz
 
             line.Indices.Add(0);
             line.Indices.Add(1);
+
+            Name = "Ray";
 
             //Add Line
             Meshes.Add(line);

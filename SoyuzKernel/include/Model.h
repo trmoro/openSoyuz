@@ -28,6 +28,8 @@ namespace SK
 		void addMesh(int meshID, Mesh* mesh);
 
 		//Add "Hidden" Mesh
+		//Hidden Mesh have negative id in the map
+		//They are created by loading Assimp model
 		void addHiddenMesh(Mesh* mesh);
 
 		///Source https://learnopengl.com/Model-Loading/Model
@@ -58,6 +60,12 @@ namespace SK
 
 		//Delete Hiddden Meshes
 		void deleteHiddenMeshes();
+
+		//Dicard Meshes
+		void discardMeshes();
+
+		//Delete Meshes
+		void deleteMeshes();
 
 	private:
 

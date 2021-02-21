@@ -123,6 +123,9 @@ namespace Soyuz
         /// </summary>
         public void Update()
         {
+            //Discard Meshes (not deleted from memory but removed from rendering if not added)
+            Engine.Core.DiscardModelMeshes(ModelID);
+
             //Barycenter Variables
             Vector3 bary = new Vector3(0);
             int nVertex = 0;
@@ -186,7 +189,8 @@ namespace Soyuz
             }
 
             //Compute Barycenter
-            Barycenter = bary / nVertex;
+            if(nVertex > 0)
+                Barycenter = bary / nVertex;
 
             //Compute Vertex Length
             VertexLength = new Vector3(Math.Abs(maxX - minX), Math.Abs(maxY - minY), Math.Abs(maxZ - minZ));

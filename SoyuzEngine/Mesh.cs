@@ -94,19 +94,7 @@ namespace Soyuz
         public void SetDrawMode(int DrawMode)
         {
             Engine.Core.SetMeshDrawMode(MeshID, DrawMode);
-        }
-
-        /// <summary>
-        /// Delete Mesh
-        /// </summary>
-        public void Delete()
-        {
-            Positions.Clear();
-            Normals.Clear();
-            UVs.Clear();
-            Indices.Clear();
-            Engine.Core.DeleteMesh(MeshID);
-        }       
+        }    
 
         /// <summary>
         /// Compile Mesh

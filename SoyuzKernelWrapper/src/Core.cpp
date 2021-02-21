@@ -565,10 +565,16 @@ namespace SKW
 		m_Instance->deleteModel(ModelID);
 	}
 
-	//Delete Mesh
-	void Core::DeleteMesh(int MeshID)
+	//Clear Model Meshes
+	void Core::DiscardModelMeshes(int ModelID)
 	{
-		m_Instance->deleteMesh(MeshID);
+		m_Instance->discardModelMeshes(ModelID);
+	}
+
+	//Delete Model Meshses
+	void Core::DeleteModelMeshes(int ModelID)
+	{
+		m_Instance->deleteModelMeshes(ModelID);
 	}
 
 	//Delete Hidden Meshes

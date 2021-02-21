@@ -311,11 +311,14 @@ namespace SK
 		//Delete Model
 		void deleteModel(int modelID);
 
+		//Delete Model Meshses
+		void deleteModelMeshes(int modelID);
+
+		//Discard Model Meshes
+		void discardModelMeshes(int modelID);
+
 		//Delete Hidden Meshes
 		void deleteHiddenMeshes(int modelID);
-
-		//Delete Mesh
-		void deleteMesh(int meshID);
 
 		//Delete Texture
 		void deleteTexture(int textureID);

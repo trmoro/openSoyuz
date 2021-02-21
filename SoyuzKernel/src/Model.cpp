@@ -154,7 +154,10 @@ namespace SK
 		for (it = m_meshes.begin(); it != m_meshes.end(); it++)
 		{
 			if (it->second != nullptr && it->second == mesh)
+			{
+				it->second->~Mesh();
 				it->second = nullptr;
+			}
 		}
 
 	}
@@ -172,8 +175,43 @@ namespace SK
 		for (int i : keys)
 		{
 			delete m_meshes[i];
-			m_meshes[i] = nullptr;
+			m_meshes.erase(i);
 		}
+		keys.clear();
+	}
+
+	//Clear Meshes
+	void Model::discardMeshes()
+	{
+		std::vector<int> keys = std::vector<int>();
+		std::map<int, Mesh*>::iterator it;
+		for (it = m_meshes.begin(); it != m_meshes.end(); it++)
+		{
+			if (it->first > 0)
+				keys.push_back(it->first);
+		}
+		for (int i : keys)
+			m_meshes.erase(i);
+
+		keys.clear();
+	}
+
+	//Delete Meshes
+	void Model::deleteMeshes()
+	{
+		std::vector<int> keys = std::vector<int>();
+		std::map<int, Mesh*>::iterator it;
+		for (it = m_meshes.begin(); it != m_meshes.end(); it++)
+		{
+			if (it->first > 0)
+				keys.push_back(it->first);
+		}
+		for (int i : keys)
+		{
+			delete m_meshes[i];
+			m_meshes.erase(i);
+		}
+		keys.clear();
 	}
 
 	//

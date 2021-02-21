@@ -235,8 +235,11 @@ namespace SKW
 		//Delete Model
 		void DeleteModel(int ModelID);
 
-		//Delete Mesh
-		void DeleteMesh(int MeshID);
+		//Discard Model Meshes
+		void DiscardModelMeshes(int ModelID);
+
+		//Delete Model Meshes
+		void DeleteModelMeshes(int ModelID);
 
 		//Delete Hidden Meshes
 		void DeleteHiddenMeshes(int ModelID);
